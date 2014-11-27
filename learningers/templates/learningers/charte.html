@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block css %}
+{{block.super}}
+<style type="text/css">
+body {
+	overflow:auto;
+}
+</style>
+{% endblock %}
+{% block main %}
+
+<h1>{% trans "Charte de l'apprentissage libre" %}</h1>
+
+{% endblock %}

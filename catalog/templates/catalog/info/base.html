@@ -1,0 +1,14 @@
+{% load inplace_edit %}
+{% load i18n %}
+
+<div class='ap-resource-info'>
+<h1>{% inplace_edit "resource.name" %}</h1>
+<p>
+{% trans 'Ajouter une description...' as add_desc %}
+{% inplace_edit "resource.description" adaptor="html", edit_empty_value=add_desc %}
+</p>
+<p>{% trans 'Langue(s)' %} : {% for lang in resource.languages.all %} {{ lang }} {% endfor %}</p>
+<p>{% trans 'Voir aussi' %} : {% for link in resource.see_also.all %} <a href="{{ link.get_absolute_url }}">{{ link.name }}</a>{% endfor %}</p>
+{% block info %}
+{% endblock %}
+</div>

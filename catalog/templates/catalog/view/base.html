@@ -1,0 +1,47 @@
+{% extends "catalog/base.html" %}
+{% load staticfiles %}
+{% load inplace_edit %}
+{% load i18n %}
+
+{% block css %}
+{{block.super}}
+ <link rel="stylesheet" href="{% static 'catalog/css/'|add:resource.data_type|add:'.css' %}" type="text/css"/>
+{% endblock %}
+
+{% block sidebar %}
+<div id='ap-resource-toolbar'>
+	<div class='ap-button' id='ap-delete-button'>
+	<a href='javascript:delete_resource("{% url 'catalog:resource-detail' pk=resource.pk %}");'><img class='ap-button-image' src='{% static 'catalog/images/toolbar-icons/delete.png' %}'/></a>
+	</div>
+	<div class='ap-button' id='ap-add-button'>
+	<a href='javascript:add_resource("{% url 'catalog:resource-detail' pk=resource.pk %}");'><img class='ap-button-image' src='{% static 'catalog/images/toolbar-icons/add.png' %}'/></a>
+	</div>
+{% block resource-toolbar %}
+{% endblock %}
+</div>
+{% include 'catalog/view/sidebar.html' %}
+{% endblock %}
+
+{% block entries %}
+<div id='ap-source-container'>
+{% block source %}
+{% endblock %}
+</div>
+
+<div id='ap-rightbar' class='secondary'>
+<div id='annotations'>
+{% block annotations %}
+{% endblock %}
+</div>
+</div>
+{% endblock %}
+
+{% block js %}
+{{block.super}}
+<script src="{% static 'catalog/makelayout2.js' %}"></script>
+<script src="{% static 'jquery.cookie.js' %}"></script>
+<script>
+setup_csrf_ajax();
+</script>
+{% endblock %}
+

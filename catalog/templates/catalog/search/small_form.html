@@ -1,0 +1,26 @@
+{% load i18n %}
+{{search_form.media}}
+<form method="GET" id='ap-small-searchform'  class="ap-searchform"action="{% url 'catalog:search' %}">  
+	{{ search_form.q }}
+	{{ search_form.a }}
+<input id='ap-recurrence-input' name="d" value="" />
+<div id='ap-recurrence-container'>
+{{ search_form.t }}
+</div>
+<button type="submit">{% trans 'Apprendre!' %}</button>
+</form>
+<script>
+$(window).load(function() {
+	$('#q').val("{% trans 'Quoi?' %}");
+	$('#a').val("{% trans 'Où?' %}");
+	$('#ap-recurrence-input').val("{% trans 'Quand?' %}");
+	$('#q,#a').on('focus', function() { this.value = '';});
+	$('#ap-recurrence-input').on('focus', function() {
+			var pos = $('#ap-recurrence-input').position();
+			var height = $('#ap-recurrence-input').outerHeight();
+			$('#ap-recurrence-container').css({top:pos.top + height, left:pos.left});
+			$('#ap-recurrence-container').show(); 
+		});
+});
+
+</script>

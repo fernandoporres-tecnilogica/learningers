@@ -1,0 +1,8 @@
+{% extends "learningers/base2.html" %}
+{% block frame %}
+{% load i18n %}
+<h2>{% trans "L'activation a échoué" %}</h2>
+{% blocktrans %}
+La clé d'activation {{ activation_key }} n'a pas été reconnue.
+{% endblocktrans %}
+{% endblock %}

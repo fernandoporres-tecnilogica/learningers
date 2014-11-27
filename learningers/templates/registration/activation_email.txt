@@ -1,0 +1,10 @@
+{% load i18n %}
+{% blocktrans %}
+Vous ou une tierce personne a demandé la création d'un compte utilisateur sur "Les apprentisseurs".
+Merci de suivre le lien suivant si vous souhaitez procéder à l'activation de ce compte:
+{% endblocktrans %}
+http://{{ site.domain }}{% url 'registration_activate' activation_key %}
+{% blocktrans %} 
+Dans le cas contraire, aucune action n'est requise de votre part,
+et le lien expirera automatiquement dans {{ expiration_days }} jour{{ expiration_days|pluralize }}.
+{% endblocktrans %}

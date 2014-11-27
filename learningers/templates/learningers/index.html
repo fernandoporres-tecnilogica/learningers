@@ -1,0 +1,47 @@
+{% extends "learningers/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block css %}
+{{block.super}}
+<style type="text/css">
+body {
+	overflow:auto;
+}
+</style>
+<link rel="stylesheet" href="{% static "catalog/web.css" %}" type="text/css"/>
+{% endblock %}
+{% block main %}
+<br>
+<br>
+<h1 id='ap-main-title'><div style="display:inline-block;" id='ap-main-title-text'>{% trans 'Les apprentisseu-ses-rs' %}</div></h1>
+<h3 id='ap-main-subtitle'>{% trans "le répertoire autogéré de l'apprentissage libre" %} </h3>
+<br>
+<div style="text-align:center;">
+{% include "catalog/search/big_form.html" %}
+</div>
+<br>
+<br>
+<p style="text-align:justify;width:70%;margin-left:15%;">
+</p>
+{% endblock %}
+
+{% block joyride %}
+<ol id="myjoyride" style='display:none;' data-joyride>
+  <li data-id="ap-main-title-text" data-options="tip_location: right;">
+  {% blocktrans %}
+  Ce site a pour but de répertorier les possibilités d'apprentissage libre partout, tout le temps. 
+  Il fonctionne comme un wiki et est donc alimenté par ses utilisatrices et utilisateurs. 
+  Pour les nouv-eaux-elles venu-e-s, nous avons préparé un petit <a href='{{ guide_url }}'>guide d'utilisation</a>. 
+  Les contenus répertoriés sont censés respecter la <a href='{{ charte_url }}'>charte de l'apprentissage libre</a>.
+  {% endblocktrans %}
+  </li>
+</ol>
+{% endblock %}
+
+{% url 'guide' as guide_url %}
+{% url 'charte' as charte_url %}
+
+{% block js %}
+{{block.super}}
+{% endblock %}

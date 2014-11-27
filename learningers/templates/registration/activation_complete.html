@@ -1,0 +1,8 @@
+{% extends "learningers/base2.html" %}
+{% block frame %}
+{% load i18n %}
+<h2>{% trans "L'activation a réussi" %}</h2>
+{% blocktrans %}
+Tu es maintenant connecté en tant que {{ request.user.username }}.
+{% endblocktrans %}
+{% endblock %}

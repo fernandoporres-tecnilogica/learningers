@@ -1,0 +1,21 @@
+{% extends "catalog/base.html" %}
+{% load i18n %}
+{% load inplace_edit %}
+{% load staticfiles %}
+{% block title %}
+{% trans 'Resources du catalogue' %}
+{% endblock %}
+
+
+
+{% block sidebar %}
+{% endblock %}
+
+{% block entries %}
+<ul>
+{% for resource in resources %}
+<li><a href="{{ resource.get_absolute_url }}">{{ resource.name }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

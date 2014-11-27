@@ -1,0 +1,25 @@
+{% extends "learningers/base2.html" %}
+{% load i18n %}
+{% load inplace_edit %}
+{% load staticfiles %}
+
+{% block css %}
+{{block.super}}
+{% inplace_css 0 %}
+{% endblock %}
+
+{% block frame %}
+<h2>{% trans 'Profil de' %} {{ object.user.username }}</h2>
+
+<ul>
+<li>{% trans 'Pseudonyme' %} : {% inplace_edit "object.user.username" adaptor="text" %}</li>
+<li>{% trans 'Prénom' %} : {% inplace_edit "object.user.first_name" adaptor="text" %}</li>
+<li>{% trans 'Nom' %} : {% inplace_edit "object.user.last_name" adaptor="text" %}</li>
+</ul>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+{% inplace_js 1 0 %}
+{% endblock %}
+

@@ -1,0 +1,30 @@
+{% extends "catalog/view/base.html" %}
+
+{% load i18n %}
+{% load staticfiles %}
+{% load inplace_edit %}
+
+{% block css %}
+{{block.super}}
+<link href="/static/ajax_select/css/ajax_select.css" type="text/css" media="all" rel="stylesheet" />
+{% endblock %}
+
+{% block resource-toolbar %}
+	<div class='ap-button' id='ap-edit-button'>
+	<a><img class='ap-button-image' src='{% static 'catalog/images/toolbar-icons/edit.png' %}'/></a>
+	</div>
+	<div class='ap-button' id='ap-save-button' style='display:none'>
+	<a><img class='ap-button-image' src='{% static 'catalog/images/toolbar-icons/save.png' %}'/></a>
+	</div>
+	<div class='ap-button' id='ap-add-button' style='display:none'>
+	<a><img class='ap-button-image' src='{% static 'catalog/images/toolbar-icons/add.png' %}'/></a>
+	</div>
+{% endblock %}
+
+{% block source %}
+{# {% include 'panel/panel.html' %} #}
+{% endblock %}
+
+{% block js %}
+{{block.super}}
+{% endblock %}

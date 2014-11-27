@@ -1,0 +1,77 @@
+
+/* Catalog left vertical sidebar */
+#ap-sidebar {	
+	position:fixed;
+	left:0;
+	width:19em;
+	top:2.5em;
+	overflow:auto;
+	padding:0.5em;
+}
+	
+/* List of search results */
+#ap-panel {
+	position:absolute;
+	margin-left:20em;
+	top:0em;
+	overflow-y:auto;
+	overflow-x:hidden;
+	padding-right:1em;
+}
+
+/* Toolbars */
+.ap-button-image {
+	width:2em;
+	height:2em;
+	border:1px solid white;
+}
+
+.ap-button-image:hover {
+	border:1px solid black;
+}
+
+/* recurrence */
+#ap-recurrence-container {
+	display:none;
+	position:absolute;
+}
+
+
+/* Search form */
+.ap-searchform button {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #0000FF;
+    text-align: center;
+    width: 10em;
+    height:1.8em;
+}
+
+#ap-small-searchform > input {
+	width:7em;
+}		
+
+#ap-small-searchform {
+	display:inline-block;
+	padding:0.3em;	
+	margin-top:0.2em;
+	position:absolute;
+}
+
+/* Toolbar */
+.ap-tabs {
+	width:15em;
+	height:95%;
+}
+
+#ap-resource-toolbar {
+	padding-top:0.3em;
+	position: absolute;
+	right: 0em;
+	top: 0em;
+	width: 2.2em;
+}
+
+.ap-resource-info h1 {
+	font-size:200%;
+	margin:0.2em;
+}

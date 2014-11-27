@@ -1,0 +1,17 @@
+{% load i18n lazysignup_tags %}
+{% if user.is_authenticated and not user|is_lazy_user %}
+<div class='ap-headbar-element ap-headbar-button'>
+<a href="#" >{{ user.username }}</a>
+<div class='ap-dropdown-menu' id='ap-user-menu'>
+<ul class='sub'>
+{# <li><a href="{% url 'catalog:parcours' %}">{% trans 'Ton parcours' %}</a></li> #}
+<li><a href="{% url 'profil' slug=user.username %}">{% trans 'Ton profil' %}</a></li>
+<li><a href="{% url 'auth_logout' %}?next={{ request.get_full_path }}">{% trans "Déconnexion" %}</a></li>
+</ul>
+</div>
+</div>
+{% else %}
+<div class='ap-headbar-element ap-headbar-button'><a href="{% url 'auth_login' %}">{% trans "Te connecter" %}</a></div>
+<div class='ap-headbar-element ap-headbar-button'><a href="{% url 'registration_register' %}" target="_parent">{% trans "T'inscrire" %}</a></div>
+{% endif %}
+</div>
