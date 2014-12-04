@@ -26,7 +26,7 @@ def run():
 	nicol,created = models.GeoLocation.objects.get_or_create(address='90 chemin de Nicol, 31200 Toulouse, France')
 	
 	# create parcours
-	enscene,created = models.Way.objects.get_or_create(name=u'En Scène', description=u'Atelier de théâtre', slug='En_Scene', geo=berlin)
-	impro,created = models.Way.objects.get_or_create(name=u'I.M.P.R.O.', description=u'Atelier d\'improvisation théâtrale', slug='I.M.P.R.O', geo=berlin)
+	enscene,created = models.Way.objects.get_or_create(name=u'En Scène', description=u'Atelier de théâtre', slug='En_Scene')
+	impro,created = models.Way.objects.get_or_create(name=u'I.M.P.R.O.', description=u'Atelier d\'improvisation théâtrale', slug='I.M.P.R.O')
 	revo,created = models.Way.objects.get_or_create(name=u'La révolution Russe',description=u'Documentation sur la révolution russe',slug='revolution-russe')
 	

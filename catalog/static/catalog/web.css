@@ -75,3 +75,36 @@
 	font-size:200%;
 	margin:0.2em;
 }
+
+/* Resource type selection when creating new resource */
+div.ap-select-resource-icon {
+	text-align:center;
+	height:100px;
+	width:100px;
+	display:inline-block;
+}
+
+/* Resource link display */
+.ap-resource, .ap-select-resource-type {
+	vertical-align:middle;
+	width: 13.3em;
+	height: 10.6em;
+	display: inline-block;
+	text-align:center;
+	border:1px solid black;
+	border-radius:0.5em;
+	padding:1px;
+	overflow:visible;
+	background: solid white;
+	position:relative;
+	margin-top:0.16em;
+	margin-bottom:0.16em;
+	margin-left:0.06em;
+	margin-right:0.06em;
+}
+
+.ap-resource:hover, .ap-select-resource-type:hover {
+    zoom: 1.04;
+    -moz-transform: scale(1.04);
+    -webkit-transform: scale(1.04);
+}

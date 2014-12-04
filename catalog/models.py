@@ -25,34 +25,43 @@ import reversion
 from django.contrib.gis.db.models import GeoManager, PointField
 from geopy import geocoders
 from django.contrib.gis.geos import fromstr
+from django.http.response import Http404
 
 class ResourceLanguage(models.Model):
+    """
+    Une langue utilisée dans une ou plusieurs resources répertoriées
+    """
     code = LanguageField()
     @staticmethod
     def get_mycurrent():
+        "Retourne la langue actuellement utilisée pour la session en cours"
         code = get_language().split('-')[0]
         language,created = ResourceLanguage.objects.get_or_create(code=code)
         return language        
     def __unicode__(self):
-        
+        "Retourne le nom de la langue"
         return self.get_code_display()
     
 add_introspection_rules([], ["^django_languages\.fields\.LanguageField"])
 
-# Model of a generic resource in the catalog
 class Resource(TimeStampedModel,ForkableModel):
+    """
+    Modèle abstrait de base pour les resources répertoriées dans le catalogue.
+    
+    Les modèles correspondant aux différents types de resources dérivent de celui-ci.
+    """
     # Resource name
-    name = models.CharField(max_length=200, verbose_name=__('Titre'))
+    name = models.CharField(max_length=200, verbose_name=__('Titre'), help_text=__(u'Le nom de la ressource dans le répertoire'))
     # Resource description
-    description = models.CharField(max_length=1000, verbose_name=__('Description'),blank=True)
+    description = models.CharField(max_length=1000, verbose_name=__('Description'),blank=True, help_text=__(u'Une brève description du contenu de la ressource'))
     # Resource parent
-    parent = models.ForeignKey('catalog.Way',blank=True,null=True,default=None,related_name='children')
+    parent = models.ForeignKey('catalog.Way',blank=True,null=True,default=None,related_name='children', help_text=__('Le parcours dont cette ressource fait partie'))
     # Resource slug
     slug = models.CharField(max_length=100,editable=False)  
     # Languages used in this resource
-    languages = models.ManyToManyField(ResourceLanguage,editable=False)
+    languages = models.ManyToManyField(ResourceLanguage,editable=False, help_text=__(u'Les langues à maîtriser pour comprendre cette ressource'))
     # Other entries related to this resource
-    see_also = models.ManyToManyField('catalog.Resource',blank=True,null=True,default=None) 
+    see_also = models.ManyToManyField('catalog.Resource',verbose_name=__('Voir aussi'),blank=True,null=True,default=None, help_text=__(u"D'autres resources liées à celle-ci")) 
     # Resource type
     resource_type = 'resource'
     # To manage inheritance
@@ -76,22 +85,28 @@ class Resource(TimeStampedModel,ForkableModel):
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.name
     def get_absolute_url(self):
-        return reverse('catalog:resource', kwargs={'pk':self.pk})
-    # return HTML code to display a small preview of this resource
+        raise Http404
+        #return reverse('catalog:resource-view', kwargs={'pk':self.pk})
     def preview(self):
+        "return HTML code to display a small preview of this resource"
         return self.description
     @classproperty
     def data_type(cls):
+        "L'identifiant du type de données contenu dans cette ressource"
         return cls.resource_type
     @classproperty 
     def user_friendly_data_type(cls):
+        "La description du type de données contenu dans cette ressource"
         return cls.user_friendly_type
 
 class GeoLocation(models.Model):
+    """
+    La localisation géographique d'une ressource
+    """
     # Entry associated address
-    address = models.CharField(max_length=200,verbose_name=__('Adresse'))
+    address = models.CharField(max_length=200,verbose_name=__('Adresse'),help_text=__("L'adresse postale du lieu"))
     # Entry associated location
-    location = PointField(editable=False,default=fromstr("POINT(0 0)"),verbose_name=__(u'Coordonnées'))
+    location = PointField(editable=False,default=fromstr("POINT(0 0)"),verbose_name=__(u'Coordonnées'),help_text=__("Les coordonnées GPS du lieu"))
     # manager
     objects = GeoManager()
     def save(self,*args,**kwargs):
@@ -110,26 +125,30 @@ class GeoLocation(models.Model):
 
 # A way is a resource composed of several other resources
 class Way(Resource):
-    user_friendly_type = __('Way')
+    """
+    Un parcours est une ressource composée d'une suite d'autres ressources à consulter dans un certain ordre
+    pour parvenir à un apprentissage.
+    """
+    user_friendly_type = __('Parcours')
     resource_type = 'way'
-    help_text = __('Un parcours est une suite d\'étapes élémentaires correspondant à un apprentissage')
-    geo = models.ForeignKey(GeoLocation,default=None,null=True,blank=True)
     def get_absolute_url(self):
         if self.parent:
             return self.parent.get_absolute_url() + self.slug + '/'
         elif not self.slug:
-            return reverse('catalog:way')            
+            return reverse('catalog:way-view')            
         else:
-            return reverse('catalog:way', kwargs={'slug':self.slug})
+            return reverse('catalog:way-view', kwargs={'slug':self.slug})
     @staticmethod
     def make_from_slug(parent,slug):
         name = deslugify(slug)
         return Way(name=name,slug=slug,parent=parent)
 
-# Model of a way which is attached to a session,
-# to which resources created on-the-fly get attached by default
 class SessionWay(Way):
-    user = models.OneToOneField(User,related_name='way')
+    """
+    Model of a way which is attached to a session,
+     to which resources created on-the-fly get attached by default
+    """
+    user = models.OneToOneField(User,related_name='way',help_text=__(u"L'utilisateur.rice propriétaire de la session"))
     def __init__(self, *args, **kwargs):
         if not 'name' in kwargs:
             kwargs['name'] = _('Ton parcours')
@@ -138,8 +157,6 @@ class SessionWay(Way):
         if not self.pk:
             self.slug = ''
         super(SessionWay, self).save(*args,**kwargs) 
-    def get_absolute_url(self):
-        return reverse('catalog:way')
 
 @receiver_subclasses(post_save, Resource,'resource-language')
 def resource_post_save(sender,**kwargs):

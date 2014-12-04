@@ -8,7 +8,7 @@
 {% inplace_edit "resource.description" adaptor="html", edit_empty_value=add_desc %}
 </p>
 <p>{% trans 'Langue(s)' %} : {% for lang in resource.languages.all %} {{ lang }} {% endfor %}</p>
-<p>{% trans 'Voir aussi' %} : {% for link in resource.see_also.all %} <a href="{{ link.get_absolute_url }}">{{ link.name }}</a>{% endfor %}</p>
+<p>{% trans 'Voir aussi' %} : {% for link in resource.see_also.select_subclasses.all %} <a href="{{ link.get_absolute_url }}">{{ link.name }}</a>{% endfor %}</p>
 {% block info %}
 {% endblock %}
 </div>

@@ -10,16 +10,17 @@
 <meta http-equiv="pragma" content="no-cache" />
 <title>{% trans "Les apprentisseurEs" %} : {% block title %}{% trans "Page d'accueil" %}{% endblock %}</title>
 {% block css %}
-<link rel="stylesheet" href="{% static 'learningers/jquery-ui.css' %}">
+<link rel="stylesheet" href="{% static 'commons/jquery-ui.css' %}">
 <link rel="stylesheet" href="{% static "learningers/web.css" %}" type="text/css"/>
-<link rel=" stylesheet" type="text/css" href="{% static 'learningers/jquery.joyride-2.1.css' %}">
+<link rel=" stylesheet" type="text/css" href="{% static 'commons/jquery.joyride-2.1.css' %}">
 <script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
-<script src="{% static 'learningers/jquery.js' %}"></script>
-<script src="{% static 'learningers/jquery-ui.js' %}"></script>
-<script src="{% static 'learningers/jquery.cookie.js' %}"></script>
-<script src="{% static 'learningers/jquery.joyride-2.1.js' %}"></script>
-<script src="{% static 'learningers/pxem.jQuery.js' %}"></script>
-<script src="{% static 'learningers/ap-utils.js' %}"></script>
+<script src="{% static 'commons/jquery.js' %}"></script>
+<script src="{% static 'commons/jquery-ui.js' %}"></script>
+<script src="{% static 'commons/jquery.cookie.js' %}"></script>
+<script src="{% static 'commons/jquery.joyride-2.1.js' %}"></script>
+<script src="{% static 'commons/pxem.jQuery.js' %}"></script>
+<script src="{% static 'commons/ap-utils.js' %}"></script>
+<script src="{% static 'learningers/learningers.js' %}"></script>
 {% endblock %}
 </head>
 <body>

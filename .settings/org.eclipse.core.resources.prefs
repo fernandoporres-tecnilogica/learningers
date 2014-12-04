@@ -1,6 +1,11 @@
 eclipse.preferences.version=1
 encoding//catalog/forms.py=utf-8
 encoding//catalog/models.py=utf-8
+encoding//catalog/serializers.py=utf-8
+encoding//catalog/urls.py=utf-8
+encoding//catalog/views.py=utf-8
+encoding//formfield/fields.py=utf-8
+encoding//learningers/models.py=utf-8
 encoding//learningers/settings.py=utf-8
 encoding//learningers/urls.py=utf-8
 encoding//learningers/views.py=utf-8

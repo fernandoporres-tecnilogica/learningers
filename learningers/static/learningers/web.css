@@ -22,7 +22,7 @@ body {
 #ap-content {
 	position:fixed;
 	width:100%;
-	overflow:visible;
+	overflow:auto;
 	top:2.5em;
 }
 
@@ -120,4 +120,20 @@ body.loading {
    ap-loading element will be visible */
 body.loading #ap-loading {
     display: block;
+}
+
+/******************************************
+------------- FORMS ----------------------
+*******************************************/
+
+.ap-ui-frame {
+	text-align:center;
+	width:100%;
+	display:block;
+}
+
+.ap-ui-text {
+	text-align:left;
+	width:50%;
+	display:inline-block;
 }

@@ -1,0 +1,36 @@
+{% extends "catalog/base.html" %}
+{% load i18n staticfiles %}
+{% load inplace_edit %}
+{% block title %}
+{% trans "Ajout d'une nouvelle resource" %}
+{% endblock %}
+
+{% block css %}
+{{block.super}}
+{% endblock %}
+
+{% block headbar %}
+{% endblock %}
+
+{% block main %}
+<div style="text-align:justify;margin-left:10em;margin-right:10em;">
+{% blocktrans %}
+<p>Bonjour!</p>
+<p>Quel type d'élément souhaitez vous ajouter au catalogue?</p>
+{% endblocktrans %}
+{% for type in resource_types %}
+<a href="{% url 'catalog:'|add:type.name|add:'-create' %}">
+<div class='ap-select-resource-type' title="{{type.help_text|safe}}">
+	<p>{{type.user_friendly_name}}</p>
+	<p>
+	<div class="ap-select-resource-icon">
+		<img style="width:100%;height:100%;" src="{% static 'catalog/images/resource-icons/'|add:type.name|add:'.png' %}"/>
+	</div>
+	</p>
+</div></a>{% endfor %}
+</div>
+{% endblock %}
+
+{% block js %}
+{{block.super}}
+{% endblock %}

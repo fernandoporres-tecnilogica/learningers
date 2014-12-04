@@ -1,14 +1,14 @@
 #!/bin/bash
 
-rm db.sqlite3 
+rm /home/rnguyen/db.sqlite3 
 rm -rvf */migrations
-spatialite essai.db "SELECT InitSpatialMetaData();"
+spatialite /home/rnguyen/db.sqlite3 "SELECT InitSpatialMetaData();"
 
-#for app in catalog panel annotations wikis;
-#do
-#	./manage.py schemamigration --initial $app
-#done
-#bash ./cleanmigrations.sh
+for app in catalog ;
+do
+	./manage.py schemamigration --initial $app
+done
+bash ./cleanmigrations.sh
 echo "yes
 
 

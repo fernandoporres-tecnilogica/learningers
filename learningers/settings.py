@@ -69,7 +69,6 @@ INSTALLED_APPS = (
     'reversion',
     # for autocomplete
     'ajax_select',
-    #'cities',
     # for axhwsulinf of events
     'recurrence',
     # for geolocalisation
@@ -85,12 +84,16 @@ INSTALLED_APPS = (
     # for in-place editing
     'inplaceeditform',
     'inplaceeditform_extra_fields',
+    'django_markdown',
     # our apps
     'learningers',
     'catalog',
     'commons',
+    'formfield',
     # for running custom scripts
      'django_extensions',
+    # for documentation
+     'giza',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -114,7 +117,7 @@ WSGI_APPLICATION = 'learningers.wsgi.application'
 DATABASES = {
     'default': {
        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
-       'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+       'NAME': os.path.join(BASE_DIR, '/home/rnguyen/db.sqlite3'),
     }
 }
 
@@ -162,6 +165,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 # for autocomplete
 AJAX_LOOKUP_CHANNELS = {
     'city' : ('learningers.lookups','CityLookup'),
+    'way' : ('catalog.lookups','WayLookup'),
  }
 
 ## Email conf
@@ -188,3 +192,6 @@ ADAPTOR_INPLACEEDIT = {
                        'html': 'inplaceeditform.fields.AdaptorTextAreaField',
                        'm2mcomma': 'inplaceeditform_extra_fields.fields.AdaptorAutoCompleteManyToManyField',
                        }
+# Giza conf
+GIZA_DOCS_ROOT = '/home/rnguyen/cpp/learningers/doc/source'
+

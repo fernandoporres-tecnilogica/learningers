@@ -11,10 +11,10 @@
 {% block sidebar %}
 <div id='ap-resource-toolbar'>
 	<div class='ap-button' id='ap-delete-button'>
-	<a href='javascript:delete_resource("{% url 'catalog:resource-detail' pk=resource.pk %}");'><img class='ap-button-image' src='{% static 'catalog/images/toolbar-icons/delete.png' %}'/></a>
+	<a href='javascript:delete_resource("{% url 'catalog:resource-data' pk=resource.pk %}");'><img class='ap-button-image' src='{% static 'catalog/images/toolbar-icons/delete.png' %}'/></a>
 	</div>
 	<div class='ap-button' id='ap-add-button'>
-	<a href='javascript:add_resource("{% url 'catalog:resource-detail' pk=resource.pk %}");'><img class='ap-button-image' src='{% static 'catalog/images/toolbar-icons/add.png' %}'/></a>
+	<a href='{% url 'catalog:resource-create' %}'><img class='ap-button-image' src='{% static 'catalog/images/toolbar-icons/add.png' %}'/></a>
 	</div>
 {% block resource-toolbar %}
 {% endblock %}

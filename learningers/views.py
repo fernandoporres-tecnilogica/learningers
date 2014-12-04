@@ -7,6 +7,9 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 
 class HomeView(generic.TemplateView):
+    """
+    La page d'accueil principale
+    """
     template_name =  'learningers/index.html'
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
@@ -14,6 +17,9 @@ class HomeView(generic.TemplateView):
         return context
 
 class UserProfileView(generic.DetailView):
+    """
+    Consultation/modification d'un profil
+    """
     template_name='registration/user_profile.html'
     model = UserProfile
     def get_object(self):

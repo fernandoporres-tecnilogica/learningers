@@ -1,8 +1,8 @@
-{% extends "learningers/base.html" %}
+{% extends "catalog/base.html" %}
 {% load i18n staticfiles %}
 {% load inplace_edit %}
 {% block title %}
-{% trans "Ajout d'un(e)" %} {{object.entry_type}}
+{% trans "Ajout d'un(e)" %} {{user_friendly_type}}
 {% endblock %}
 
 {% block css %}
@@ -14,15 +14,19 @@
 {% endblock %}
 
 {% block main %}
-<div style="text-align:justify;margin-left:10em;width:40em;">
+<div class='ap-ui-frame'>
+<div class='ap-ui-text'>
+<h2>{% trans "Ajout d'un(e)" %} {{user_friendly_type}}</h2>
 {% block intro %}
 {% endblock %}
-<form id='ap-create-form' action='.' method=POST>
+<form id='ap-create-form' action='.' method="POST" style="display:none;">
+{% csrf_token %}
 <ol>
 {{form.as_ul}}
-<button type="submit">{% trans 'Créer!' %}</button>
+<li><button type="submit">{% trans 'Créer!' %}</button></li>
 </ol>
 </form>
+</div>
 </div>
 {% endblock %}
 
@@ -31,14 +35,15 @@
 {{form.media.js}}
 <script>
 $(document).ready(function() {
-	$('#ap-create-form li').slice(1).hide();
-	$('#ap-create-form button').hide();
-	for(var i = 0; i < $('#ap-create-form li').length; i++)
-	{ 
-		$('#ap-create-form li').eq(i).change(function() {
-			$(this).next().show();
-		});
-	}
+//	$('#ap-create-form li').slice(1).hide();
+//	$('#ap-create-form button').hide();
+//	for(var i = 0; i < $('#ap-create-form li').length; i++)
+//	{ 
+//		$('#ap-create-form li').eq(i).on('change',function() {
+//			$(this).next().show();
+//		});
+//	}
+	$('#ap-create-form').show();
 });
 </script>
 {% endblock %}

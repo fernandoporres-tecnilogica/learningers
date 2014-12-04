@@ -1,9 +1,9 @@
 from ajax_select import LookupChannel
+import models
 import cities.models
- 
-class CityLookup(LookupChannel):
-    model = cities.models.City
+
+class WayLookup(LookupChannel):
+    model = models.Way
     search_field = 'name'
     def check_auth(self,request):
         pass
-    
