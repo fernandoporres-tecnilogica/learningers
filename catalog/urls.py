@@ -24,7 +24,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^list/$', views.CatalogView.as_view(), name='list'),
-    url(r'^search/$',  views.CatalogView.as_view(), name='search'),
+    url(r'^search/$',  views.SearchResultsView.as_view(), name='search'),
+    url(r'^search/data/$',  views.RequestMoreSearchResults.as_view(), name='search-data'),
 #    url(r'^revert/$', views.ResourceRevertView.as_view(), name='revert'),
     url(r'^view/$', views.make_resource_view('way'), name='way-view'),
     url(r'^(?P<pk>\d+)/$', views.ResourceDetailView.as_view(), name='resource-data'),

@@ -9,7 +9,6 @@
 {% block css %}
 {{block.super}}
 <link rel="stylesheet" href="{% static "catalog/web.css" %}" type="text/css"/>
-{% inplace_css 0 %}
 {% endblock %}
 
 {% block headbar %}
@@ -29,19 +28,10 @@
 		</div>
 		{% endblock %}
 	</div>
-	
-<div id='confirm-delete' style='display:none;'>
-{% trans "Voulez-vous vraiment supprimer cette entrée du catalogue?" %}
-</div>
-<div id='success-delete' style='display:none;'>
-{% trans "L'entrée a bien été supprimée. Vous allez être redirigé vers la page d'accueil" %}
-</div>
-	
 {% endblock %}
 
 {% block js %}
 {{block.super}}
 <script src="{% static 'commons/ap-utils.js' %}"></script>
 <script src="{% static 'catalog/catalog.js' %}"></script>
-{% inplace_js 1 0 %}
 {% endblock %}

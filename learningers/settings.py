@@ -69,16 +69,15 @@ INSTALLED_APPS = (
     'reversion',
     # for autocomplete
     'ajax_select',
-    # for axhwsulinf of events
+    # for scheduling of events
     'recurrence',
+    'schedule',
     # for geolocalisation
     'django.contrib.gis',
     # for model forking
     'forkit',
     # various model utilities
     'model_utils',
-    # for migrations
-    'south',
     # for translation
     'django_languages',
     # for in-place editing

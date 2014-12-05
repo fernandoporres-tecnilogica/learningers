@@ -9,7 +9,9 @@ from django.http import Http404
 from django.core.exceptions import ValidationError
 from rest_framework import generics
 import reversion
-from curses.ascii import ascii
+from itertools import chain, imap, groupby
+from operator import itemgetter
+import rest_framework
 
 class CatalogView(generic.ListView):
     """
@@ -146,3 +148,29 @@ def make_create_resource_view(resource_type):
             initial['parent'] = SessionWay.objects.get(user=self.request.user)
             return initial
     return HOP.as_view()
+
+class SearchResultsView(generic.TemplateView):
+    """
+    Affichage des résultats d'une recherche
+    """
+    template_name = 'catalog/search/results.html'
+    def get_context_data(self, **kwargs):
+        context = super(SearchResultsView, self).get_context_data(**kwargs)
+        # pass the search form to keep its contents
+        form =  forms.ResourceSearchForm(self.request.GET)
+        context['search_form'] = form
+        return context
+
+from rest_framework.response import Response
+    
+class RequestMoreSearchResults(rest_framework.views.APIView):
+    """
+    Affichage des résultats d'une recherche
+    """
+    serializer_class = serializers.ResourceSerializer
+    def get(self,request,*args,**kwargs):
+        # pass the search form to keep its contents
+        val = forms.ResourceSearchForm(self.request.GET).search().values('rendered')
+        return Response(val)
+
+        

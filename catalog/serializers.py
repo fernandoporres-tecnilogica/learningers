@@ -20,5 +20,4 @@ class ResourceSerializer(serializers.ModelSerializer):
     def getname(self,obj):
         return "<a href='" + obj.get_absolute_url() + "'>" + obj.name + "</a>"
     def getcontent(self,obj):
-        return "<p>" + obj.description + "</p>"
-    
+        return "<p>" + obj.name + "</p><p>" + obj.description + "</p>"

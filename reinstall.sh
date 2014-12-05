@@ -3,11 +3,6 @@
 rm /home/rnguyen/db.sqlite3 
 rm -rvf */migrations
 spatialite /home/rnguyen/db.sqlite3 "SELECT InitSpatialMetaData();"
-
-for app in catalog ;
-do
-	./manage.py schemamigration --initial $app
-done
 bash ./cleanmigrations.sh
 echo "yes
 

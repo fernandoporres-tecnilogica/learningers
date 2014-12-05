@@ -17,6 +17,7 @@ from django.contrib.auth.models import User
 from commons.signals import receiver_subclasses
 from django.db.models.signals import post_save
 from commons.templatetags.slug import deslugify#, wiki_slugify
+from schedule.models import Event 
 
 import geopy
 import reversion
@@ -85,8 +86,10 @@ class Resource(TimeStampedModel,ForkableModel):
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.name
     def get_absolute_url(self):
-        raise Http404
-        #return reverse('catalog:resource-view', kwargs={'pk':self.pk})
+        if self.parent:
+            return self.parent.get_absolute_url() + self.resource_type + '/' + self.slug + '/'
+        else:
+            raise Http404
     def preview(self):
         "return HTML code to display a small preview of this resource"
         return self.description
@@ -158,16 +161,31 @@ class SessionWay(Way):
             self.slug = ''
         super(SessionWay, self).save(*args,**kwargs) 
 
+class Initiative(Resource):
+    """
+    Resource based on some real-life initiative of individuals or groupes of people.
+    """
+    user_friendly_type = __('Initiative')
+    resource_type = 'initiative'
+    help_text = __('Une initiative est un évènement ou une séquence de plusieurs évènements pendant lesquels des personnes se rencontrent pour apprendre.')
+    event = models.OneToOneField(Event)
+    geo = models.ForeignKey(GeoLocation,default=None,null=True,blank=True)
+    #participants = models.ManyToManyField('catalog.HumanSource')
+    def save(self,*args,**kwargs):
+        if not self.name:
+            self.name = self.event.title
+        self.event.description = self.description
+        super(Initiative, self).save(*args,**kwargs)        
+    pass
+
 @receiver_subclasses(post_save, Resource,'resource-language')
 def resource_post_save(sender,**kwargs):
     if kwargs['instance'].languages.count() == 0:
         kwargs['instance'].languages.add(ResourceLanguage.get_mycurrent())
         kwargs['instance'].save()
 
-
-
 available_resource_models = dict((resource.resource_type,resource) for resource in (
-                                                                           Way,
+                                                                           Way, Initiative
 ))
 
 # register for version control

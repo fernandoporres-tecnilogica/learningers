@@ -1,0 +1,32 @@
+{% extends "catalog/base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}
+{% trans "Résultats de la recherche" %}
+{% endblock %}
+
+{% block sidebar %}
+	<h2>{% trans 'Affiner la recherche' %}</h2>
+	<form id="ap-affiner-recherche" >
+	</form>
+{% endblock %}
+
+{% block entries %}
+
+{% endblock %}
+
+{% block js %}
+{{block.super}}
+<script src="{% static 'catalog/search.js' %}"></script>
+<script>
+$(document).ready(function () {
+//	update_search_results("{% url 'catalog:search-data' %}");
+	$('#ap-small-searchform-submit').attr('type','button');
+	$('#ap-small-searchform-submit').on('click', function() { update_search_results("{% url 'catalog:search-data' %}"); });
+	$("#a,#q").keyup(function(event){ if(event.keyCode == 13){  $('#ap-small-searchform-submit').click(); }});
+	$('#ap-small-searchform-submit').click();
+});
+</script>
+
+{% endblock %}

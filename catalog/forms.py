@@ -23,6 +23,7 @@ class ResourceSearchForm(SearchForm):
         # First, store the SearchQuerySet received from other processing.
         sqs = super(ResourceSearchForm, self).search()
         address = self.cleaned_data.get('a')
+        print 'a : %s' % address
         if(address):
             g = geocoders.Nominatim() # this should be changed to openstreetmap
             place, (lat, lng) = g.geocode(address)  
