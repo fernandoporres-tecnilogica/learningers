@@ -1,0 +1,50 @@
+{% extends "catalog/view.html" %}
+
+{% load staticfiles i18n l10n %}
+{% load inplace_edit %}
+
+{% block source %}
+<!-- the map -->
+<div id="ap-osm-map"></div>
+<!-- the calendar -->
+<div id='ap-calendar'>
+{% include 'schedule/calendar_month.html' with calendar=resource.event.calendar mymonth=resource.parent.get_month %}
+</div>
+{% endblock %}
+
+{% block annotations %}
+{% endblock %}
+
+{% block js %}
+{{block.super}}
+<script src="{% static 'catalog/openlayers/OpenLayers.js' %}"></script>
+<script>
+	    
+$(window).load(function() {
+{% if resource.geo and resource.geo.location.x %}
+	var markerStyle = {
+	        externalGraphic: "{% static 'catalog/openlayers/img/marker.png' %}",
+	        graphicWidth: 20, graphicHeight: 24, graphicYOffset: -24
+	    };
+	    
+	var center = new OpenLayers.Geometry.Point({{ resource.geo.location.x|unlocalize }}, {{ resource.geo.location.y|unlocalize }})
+	.transform('EPSG:4326', 'EPSG:3857');
+	
+	var map = new OpenLayers.Map({
+		div: "ap-osm-map", 
+		projection: "EPSG:3857",
+		layers: [new OpenLayers.Layer.OSM()],
+		center: center.getBounds().getCenterLonLat(), zoom: 10
+	});	
+
+    var annotations = new OpenLayers.Layer.Vector('Overlay');
+	map.addLayer(annotations);
+
+	var marker = new OpenLayers.Feature.Vector(center, {tooltip: '{{ resource.geo.address }}'},$.extend({},markerStyle));
+   // We add the marker with a tooltip text to the overlay
+	annotations.addFeatures([marker]);
+{% endif %}	
+});
+</script>
+{% endblock %}
+

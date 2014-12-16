@@ -1,0 +1,17 @@
+{% extends "catalog/view.html" %}
+
+{% load staticfiles i18n l10n %}
+{% load inplace_edit %}
+
+{% block css %}
+{{block.super}}
+{% endblock %}
+
+{% block source %}
+<ul>
+{% for member in resource.get_all_members %}
+<li>{{member.1}} &lt;{{member.0}}&gt;
+{% endfor %}
+</ul>
+{% endblock %}
+

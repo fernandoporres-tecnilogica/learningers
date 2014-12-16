@@ -64,6 +64,10 @@ input {
 .ap-headbar-button:hover { background: #0000bb !important; }
 .ap-headbar-button:hover a { color: #3f6998; }
 
+.helptext {
+	font-size:90%;
+	color: #111111;
+}
 /**************************************
 ---------------HOMEPAGE---------------- 
 ***************************************/

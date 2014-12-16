@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load inplace_edit %}
+
+<div id='ap-tabs'>
+	<div id='ap-versions-tab' style='display:none;'>
+	{% for version in versions %}
+		<a href="{{ resource.get_absolute_url }}?version={{version.pk }}">{{ version.revision.date_created | date:"SHORT_DATETIME_FORMAT" }} </a> ({{ version.revision.user }}) :
+		<br>
+		{{ version.revision.comment }}
+		{% endfor %}
+	</div>
+	<div id='ap-info-tab'>		
+		<h2>{{ resource.user_friendly_type }}</h2>
+		{% with 'catalog/'|add:resource.resource_type|add:'/info.html' as resource_info %}
+		{% include resource_info %}
+		{% endwith %}
+	</div>
+</div>

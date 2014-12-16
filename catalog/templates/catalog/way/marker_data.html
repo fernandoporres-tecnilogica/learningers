@@ -1,0 +1,14 @@
+{% load l10n %}
+{% if resource.geo and resource.geo.location.x %}
+{	
+	"x" : {{ resource.geo.location.x|unlocalize }}, 
+	"y" : {{ resource.geo.location.y|unlocalize }},
+	"address" : '{{ resource.geo.address|escapejs }}',
+	"title" : "{{ resource.name|escapejs }}",
+},
+{% endif %}	
+{% for child in resource.children.all.select_subclasses %}
+{% with resource=child %}
+{% include 'catalog/way/marker_data.html' %}
+{% endwith %}
+{% endfor %}

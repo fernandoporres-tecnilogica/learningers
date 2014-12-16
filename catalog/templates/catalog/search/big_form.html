@@ -11,7 +11,7 @@
 <button type="submit">{% trans 'Apprendre!' %}</button>
 </form>
 <script>
-$(window).load(function() {
+$(document).ready(function() {
 	$('#ap-recurrence-input').on('focus', function() {
 		var pos = $('#ap-recurrence-input').position();
 		var height = $('#ap-recurrence-input').outerHeight();

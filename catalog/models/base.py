@@ -12,15 +12,10 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_lazy as __
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
 from commons.signals import receiver_subclasses
-from django.db.models.signals import post_save
-from commons.templatetags.slug import deslugify#, wiki_slugify
-from schedule.models import Event 
-
 import geopy
 import reversion
+from django.db.models.signals import post_save
 
 # for GeoLocation
 from django.contrib.gis.db.models import GeoManager, PointField
@@ -51,12 +46,14 @@ class Resource(TimeStampedModel,ForkableModel):
     
     Les modèles correspondant aux différents types de resources dérivent de celui-ci.
     """
+    # Resource id
+    resource_id = models.AutoField(primary_key=True)
     # Resource name
     name = models.CharField(max_length=200, verbose_name=__('Titre'), help_text=__(u'Le nom de la ressource dans le répertoire'))
     # Resource description
     description = models.CharField(max_length=1000, verbose_name=__('Description'),blank=True, help_text=__(u'Une brève description du contenu de la ressource'))
     # Resource parent
-    parent = models.ForeignKey('catalog.Way',blank=True,null=True,default=None,related_name='children', help_text=__('Le parcours dont cette ressource fait partie'))
+    parent = models.ForeignKey('catalog.Way',verbose_name=__('Parcours'),blank=True,null=True,default=None,related_name='children', help_text=__('Le parcours dont cette ressource fait partie'))
     # Resource slug
     slug = models.CharField(max_length=100,editable=False)  
     # Languages used in this resource
@@ -93,14 +90,6 @@ class Resource(TimeStampedModel,ForkableModel):
     def preview(self):
         "return HTML code to display a small preview of this resource"
         return self.description
-    @classproperty
-    def data_type(cls):
-        "L'identifiant du type de données contenu dans cette ressource"
-        return cls.resource_type
-    @classproperty 
-    def user_friendly_data_type(cls):
-        "La description du type de données contenu dans cette ressource"
-        return cls.user_friendly_type
 
 class GeoLocation(models.Model):
     """
@@ -118,77 +107,23 @@ class GeoLocation(models.Model):
             place, (lat,lng) = g.geocode(self.address)
             self.location = fromstr("POINT(%s %s)" % (lng, lat))
             self.address = place
-        except TypeError:
-            self.location = fromstr("POINT(0 0)")
         except geopy.exc.GeocoderServiceError:
-            self.location = fromstr("POINT(0 0)")            
+            self.location = fromstr("POINT(0 0)")
+            print "WARNING: could not geocode %s !!" % self.address            
         super(GeoLocation, self).save(*args,**kwargs)                
     def __unicode__(self):
         return self.address
 
-# A way is a resource composed of several other resources
-class Way(Resource):
-    """
-    Un parcours est une ressource composée d'une suite d'autres ressources à consulter dans un certain ordre
-    pour parvenir à un apprentissage.
-    """
-    user_friendly_type = __('Parcours')
-    resource_type = 'way'
-    def get_absolute_url(self):
-        if self.parent:
-            return self.parent.get_absolute_url() + self.slug + '/'
-        elif not self.slug:
-            return reverse('catalog:way-view')            
-        else:
-            return reverse('catalog:way-view', kwargs={'slug':self.slug})
-    @staticmethod
-    def make_from_slug(parent,slug):
-        name = deslugify(slug)
-        return Way(name=name,slug=slug,parent=parent)
+available_resource_models = {}
 
-class SessionWay(Way):
-    """
-    Model of a way which is attached to a session,
-     to which resources created on-the-fly get attached by default
-    """
-    user = models.OneToOneField(User,related_name='way',help_text=__(u"L'utilisateur.rice propriétaire de la session"))
-    def __init__(self, *args, **kwargs):
-        if not 'name' in kwargs:
-            kwargs['name'] = _('Ton parcours')
-        super(SessionWay, self).__init__(*args, **kwargs)
-    def save(self,*args,**kwargs):
-        if not self.pk:
-            self.slug = ''
-        super(SessionWay, self).save(*args,**kwargs) 
-
-class Initiative(Resource):
-    """
-    Resource based on some real-life initiative of individuals or groupes of people.
-    """
-    user_friendly_type = __('Initiative')
-    resource_type = 'initiative'
-    help_text = __('Une initiative est un évènement ou une séquence de plusieurs évènements pendant lesquels des personnes se rencontrent pour apprendre.')
-    event = models.OneToOneField(Event)
-    geo = models.ForeignKey(GeoLocation,default=None,null=True,blank=True)
-    #participants = models.ManyToManyField('catalog.HumanSource')
-    def save(self,*args,**kwargs):
-        if not self.name:
-            self.name = self.event.title
-        self.event.description = self.description
-        super(Initiative, self).save(*args,**kwargs)        
-    pass
+def register_resource(resource_model):
+    available_resource_models[resource_model.resource_type] = resource_model
 
 @receiver_subclasses(post_save, Resource,'resource-language')
 def resource_post_save(sender,**kwargs):
     if kwargs['instance'].languages.count() == 0:
         kwargs['instance'].languages.add(ResourceLanguage.get_mycurrent())
-        kwargs['instance'].save()
-
-available_resource_models = dict((resource.resource_type,resource) for resource in (
-                                                                           Way, Initiative
-))
-
+        kwargs['instance'].save() 
+        
 # register for version control
 reversion.register(Resource)
-for model in available_resource_models.values():
-    reversion.register(model, follow=['resource_ptr'])

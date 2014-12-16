@@ -4,13 +4,13 @@ from django.template.loader import render_to_string
 import sys
 
 class ResourceIndexBase(indexes.SearchIndex):
-    text = indexes.CharField(document=True)
+    text = indexes.NgramField(document=True)
     rendered = indexes.CharField(indexed=False)
+    event = indexes.CharField(indexed=False)
     def prepare_text(self,obj):
         return "%s %s" % (obj.name, obj.description)
     def prepare_rendered(self,obj):
         args = { 'resource_type': obj.resource_type, 
-                 'data_type' : obj.data_type,
                  'resource_source': 'internal',
                  'resource_name': obj.name,
                  'resource_description' : obj.preview(),
@@ -18,6 +18,11 @@ class ResourceIndexBase(indexes.SearchIndex):
                  'resource_url': obj.get_absolute_url(),
                 }
         return render_to_string('catalog/resource.html',args)
+    def prepare_event(self,obj):
+        if(hasattr(obj, 'event')):
+            return unicode(obj.event)
+        else:
+            return ''
         
 def make_search_index(model):
     if hasattr(model,'geo'):

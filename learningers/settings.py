@@ -69,9 +69,6 @@ INSTALLED_APPS = (
     'reversion',
     # for autocomplete
     'ajax_select',
-    # for scheduling of events
-    'recurrence',
-    'schedule',
     # for geolocalisation
     'django.contrib.gis',
     # for model forking
@@ -84,6 +81,8 @@ INSTALLED_APPS = (
     'inplaceeditform',
     'inplaceeditform_extra_fields',
     'django_markdown',
+    # for mailing list interface
+    'django_mailman',
     # our apps
     'learningers',
     'catalog',
@@ -93,6 +92,9 @@ INSTALLED_APPS = (
      'django_extensions',
     # for documentation
      'giza',
+    # for scheduling of events
+    'recurrence',
+    'schedule',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -146,10 +148,77 @@ STATIC_URL = '/static/'
 #     APP SETTINGS    #
 #######################
 
+ELASTICSEARCH_INDEX_SETTINGS = {
+    'settings': {
+        "analysis": {
+            "analyzer": {
+                "ngram_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "lowercase",
+                    "filter": ["haystack_ngram"]
+                },
+                "edgengram_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "lowercase",
+                    "filter": ["haystack_edgengram"]
+                },
+                "french_analyzer": {
+                    "type" : "custom",
+                    "tokenizer":    "standard",
+                    "filter"   :    ["stopwords", "asciifolding" ,"lowercase", "snowball", "elision", "worddelimiter"],
+                }                
+            },
+            "tokenizer": {
+                "haystack_ngram_tokenizer": {
+                    "type": "nGram",
+                    "min_gram": 3,
+                    "max_gram": 15,
+                },
+                "haystack_edgengram_tokenizer": {
+                    "type": "edgeNGram",
+                    "min_gram": 2,
+                    "max_gram": 15,
+                    "side": "front"
+                }
+            },
+            "filter": {
+                "haystack_ngram": {
+                    "type": "nGram",
+                    "min_gram": 3,
+                    "max_gram": 15
+                },
+                "haystack_edgengram": {
+                    "type": "edgeNGram",
+                    "min_gram": 2,
+                    "max_gram": 15
+                },
+                "snowball" : {
+                    "type" :"snowball",
+                    "language":"French",
+                },
+                "elision": {
+                    "type":     "elision",
+                    "articles": ["l", "m", "t", "qu", "n", "s", "j", "d"],
+                },
+                "stopwords": {
+                    "type":      "stop",
+                    "stopwords": ["_french_"],
+                    "ignore_case" : "true",
+                },
+                "worddelimiter" : {
+                    "type":      "word_delimiter",
+                },
+            }
+        }
+    }
+}
+
+ELASTICSEARCH_DEFAULT_ANALYZER = "french_analyzer"
+
 # HAYSTACK
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'ENGINE': 'catalog.search.ConfigurableElasticSearchEngine',
         'URL': 'http://127.0.0.1:9200/',
         'INDEX_NAME': 'haystack',
     },
@@ -163,8 +232,9 @@ ACCOUNT_ACTIVATION_DAYS = 7
 # AJAX_SELECT
 # for autocomplete
 AJAX_LOOKUP_CHANNELS = {
-    'city' : ('learningers.lookups','CityLookup'),
+    'location' : ('catalog.lookups','LocationLookup'),
     'way' : ('catalog.lookups','WayLookup'),
+    'user' : ('catalog.lookups','UserLookup'),
  }
 
 ## Email conf

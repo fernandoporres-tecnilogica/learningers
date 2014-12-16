@@ -30,6 +30,7 @@ urlpatterns = patterns('',
     url(r'^view/$', views.make_resource_view('way'), name='way-view'),
     url(r'^(?P<pk>\d+)/$', views.ResourceDetailView.as_view(), name='resource-data'),
     url(r'^create/$', views.CreateResourceView.as_view(), name='resource-create'),
+    url(r'^calendar/(?P<pk>\d+)/(?P<size>(regular|small))$', views.CalendarRenderView.as_view(), name='calendar-data'),
 )
 
 for resource_type in available_resource_models:

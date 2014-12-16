@@ -5,22 +5,25 @@
 
 {% block css %}
 {{block.super}}
- <link rel="stylesheet" href="{% static 'catalog/css/'|add:resource.data_type|add:'.css' %}" type="text/css"/>
+ <link rel="stylesheet" href="{% static 'catalog/'|add:resource.resource_type|add:'/web.css' %}" type="text/css"/>
  {% inplace_css 0 %}
 {% endblock %}
 
 {% block sidebar %}
 <div id='ap-resource-toolbar'>
 	<div class='ap-button' id='ap-delete-button'>
-	<a href='javascript:delete_resource("{% url 'catalog:resource-data' pk=resource.pk %}");'><img class='ap-button-image' src='{% static 'catalog/images/toolbar-icons/delete.png' %}'/></a>
+	<a href='javascript:delete_resource("{% url 'catalog:resource-data' pk=resource.pk %}");'><img class='ap-button-image' src='{% static 'catalog/toolbar-icons/delete.png' %}' title='{% trans "Supprimer cette ressource" %}'/></a>
 	</div>
 	<div class='ap-button' id='ap-add-button'>
-	<a href='{% url 'catalog:resource-create' %}'><img class='ap-button-image' src='{% static 'catalog/images/toolbar-icons/add.png' %}'/></a>
+	<a href='{% url 'catalog:resource-create' %}'><img class='ap-button-image' src="{% static 'catalog/toolbar-icons/add.png' %}" title='{% trans "Ajouter une ressource du même type" %}'/></a>
+	</div>
+	<div class='ap-button' id='ap-versions-button'>
+	<a href="javascript:switch_tabs()"><img class='ap-button-image' src="{% static 'catalog/toolbar-icons/versions.png' %}" title='{% trans "Voir les version précédentes de cette ressource" %}'/></a>
 	</div>
 {% block resource-toolbar %}
 {% endblock %}
 </div>
-{% include 'catalog/view/sidebar.html' %}
+{% include 'catalog/sidebar.html' %}
 {% endblock %}
 
 {% block entries %}
@@ -46,7 +49,6 @@
 {% block js %}
 {{block.super}}
 {% inplace_js 1 0 %}
-<script src="{% static 'catalog/makelayout2.js' %}"></script>
 <script src="{% static 'jquery.cookie.js' %}"></script>
 <script>
 setup_csrf_ajax();

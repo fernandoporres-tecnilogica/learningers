@@ -1,0 +1,56 @@
+{% extends "catalog/view.html" %}
+
+{% load staticfiles i18n l10n %}
+{% load inplace_edit %}
+
+{% block css %}
+{{block.super}}
+<link href="{% static 'openlayers/openlayers3.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'catalog/map.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'popover/popover.css' %}" type="text/css" media="all" rel="stylesheet" />
+{% endblock %}
+
+{% block source %}
+<!-- the participants -->
+{% for participant in resource.participants.all %}
+{% with resource_type='human' resource_source='internal' resource_name=participant.username resource_description='' resource_url='' resource_tooltip='' %}
+{% include 'catalog/resource.html' %}
+{% endwith %}
+{% endfor %}
+<!-- the map -->
+<div id="ap-osm-map"></div>
+<div style="display:none;">
+<div id="marker" class="ap-osm-marker"></div>
+<div id="popup" class="ap-osm-popup">
+<div class='popup-header'></div>
+<div class='popup-content'></div>
+</div>
+</div>
+<!-- the calendar -->
+<div id='ap-calendar'>
+</div>
+{% endblock %}
+
+{% block annotations %}
+{% endblock %}
+
+{% block js %}
+{{block.super}}
+<script src="{% static 'openlayers/openlayers3.js' %}"></script>
+<script src="{% static 'popover/popover.js' %}"></script>
+<script src="{% static 'catalog/map.js' %}"></script>
+<script src="{% static 'catalog/calendar.js' %}"></script>
+<script>
+var marker_data = [{
+	"x" : {{ resource.geo.location.x|unlocalize }}, 
+	"y" : {{ resource.geo.location.y|unlocalize }},
+	"address" : '{{ resource.geo.address|escapejs }}',
+	"title" : "{{ resource.name|escapejs }}",
+}];
+$(window).load(function() {
+	update_calendar("{% url 'catalog:calendar-data' pk=resource.parent.pk size="regular" %}");
+	initialize_map(marker_data);
+});
+</script>
+{% endblock %}
+

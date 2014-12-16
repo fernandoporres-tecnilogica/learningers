@@ -1,0 +1,65 @@
+{% extends "catalog/view.html" %}
+
+{% load i18n l10n %}
+{% load staticfiles %}
+{% load inplace_edit %}
+
+{% block css %}
+{{block.super}}
+<link href="{% static 'openlayers/openlayers3.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'popover/popover.css' %}" type="text/css" media="all" rel="stylesheet" />
+<link href="{% static 'catalog/map.css' %}" type="text/css" media="all" rel="stylesheet" />
+{% endblock %}
+
+{% block resource-toolbar %}
+	<div class='ap-button' id='ap-edit-button'>
+	<a><img class='ap-button-image' src='{% static 'catalog/toolbar-icons/edit.png' %}' title='{% trans "Modifier ce parcours" %}'/></a>
+	</div>
+	<div class='ap-button' id='ap-save-button' style='display:none'>
+	<a><img class='ap-button-image' src='{% static 'catalog/toolbar-icons/save.png' %}' title='{% trans "Sauvegarder les modifications" %}'/></a>
+	</div>
+{% endblock %}
+
+{% block source %}
+{# {% include 'panel/panel.html' %} #}
+{% for child in resource.children.all.select_subclasses %}
+{% with resource_type=child.resource_type resource_source='internal' resource_name=child.name resource_description=child.description resource_url=child.get_absolute_url resource_tooltip=child.description %}
+{% include 'catalog/resource.html' %}
+{% endwith %}
+{% endfor %}
+{% endblock %}
+{% block annotations %}
+{# calendar #}
+<div id='ap-calendar'>
+</div>
+<!-- the map -->
+<div id="ap-osm-map"></div>
+<div style="display:none;">
+<div id="marker" class="ap-osm-marker"></div>
+<div id="popup" class="ap-osm-popup">
+<div class='popup-header'></div>
+<div class='popup-content'></div>
+</div>
+</div>
+{# map #}
+{% endblock %}
+
+{% block js %}
+{{block.super}}
+<script src="{% static 'catalog/calendar.js' %}"></script>
+<script>
+$(window).load(function() { update_calendar("{% url 'catalog:calendar-data' pk=resource.pk size="small" %}"); });
+</script>
+<script src="{% static 'openlayers/openlayers3.js' %}"></script>
+<script src="{% static 'popover/popover.js' %}"></script>
+<script src="{% static 'catalog/map.js' %}"></script>
+<script>
+var marker_data = [
+{% include 'catalog/way/marker_data.html' %}
+];
+
+$(window).load(function() {
+	initialize_map(marker_data);
+});
+</script>
+{% endblock %}

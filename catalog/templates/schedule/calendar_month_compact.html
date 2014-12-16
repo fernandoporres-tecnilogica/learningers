@@ -1,0 +1,18 @@
+{% load scheduletags i18n staticfiles %}
+
+ {% block body %}
+<div class="tablewrapper">
+
+<div class="prevnext">
+    <div style="float:left;"><a href="#" id='ap-calendar-prev'>
+      &lt;
+    </a></div>
+    &nbsp; <b>{{period.start|date:"F Y"}}</b> &nbsp;
+    <div style="float:right;"><a href="#" id='ap-calendar-next'>
+      &gt;
+    </a></div>
+</div>
+  {% month_table calendar period size %}
+</div>
+{% endblock %}
+	

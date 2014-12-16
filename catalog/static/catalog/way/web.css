@@ -1,0 +1,39 @@
+#ap-osm-map {
+	display:inline-block;
+    width: 14.5em;
+    height: 14.5em;
+	margin:0.25em;
+    border: 1px solid #ccc;
+    overflow:visible;
+}
+
+.ap-annotation-edit {
+
+}
+
+#ap-calendar {
+	border : 1px solid black;
+	display:inline-block;
+	margin:0.25em;
+	padding:0.25em;
+	width:14em;
+	text-align:center;
+}
+
+#ap-calendar td {
+	font-size:80%;
+	background: #eeeeee;
+	border: 1px solid white;
+}
+
+#ap-calendar td:hover {
+	border: 1px solid blue;
+}
+
+#ap-calendar .busy {
+	background: #ffeeee;
+}
+
+#ap-calendar table {
+	width:100%;
+}

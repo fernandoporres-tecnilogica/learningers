@@ -27,6 +27,8 @@ urlpatterns = patterns('',
     url(r'^i18n/', include('django.conf.urls.i18n', namespace='lang')),
     # For in-place editing
     url(r'^inplaceeditform/', include('inplaceeditform.urls')),
+    # For testing calendars
+    url(r'^schedule/', include('schedule.urls')),
     url(r'^markdown/', include('django_markdown.urls')),
     # Catalog browsing and search
     url(r'^catalog/', include('catalog.urls', namespace='catalog')),    

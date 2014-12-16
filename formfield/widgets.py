@@ -58,7 +58,7 @@ class FormFieldWidget(forms.MultiWidget):
         """
         Format the help text for the bound field
         """
-        return '<p class="help">%s</p>' % field.help_text
+        return '<span class="helptext">%s</p>' % unicode(field.help_text)
         
     def format_output(self, attrs, rendered_widgets):
         """
@@ -71,7 +71,7 @@ class FormFieldWidget(forms.MultiWidget):
             label = self.format_label(field, id_, i)
             help_text = self.format_help_text(field, i)
             ret.append('<li>%s %s %s</li>' % (
-                label, rendered_widgets[i], field.help_text and help_text))
+                label, rendered_widgets[i], help_text))
             
         ret.append('</ul>')
         return u''.join(ret)
@@ -80,6 +80,7 @@ class FormFieldWidget(forms.MultiWidget):
         "We need to also add the media defined directly in the form."
         print 'tutu'
         print self.form_media
+        print super(FormFieldWidget,self).media
         return self.form_media + super(FormFieldWidget,self).media
     
     media = property(_get_media)

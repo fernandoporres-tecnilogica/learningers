@@ -1,0 +1,6 @@
+{% extends "catalog/info.html" %}
+{% load inplace_edit i18n %}
+
+{% block info %}
+<p>{% inplace_edit "resource.listname" %}</p>
+{% endblock %}

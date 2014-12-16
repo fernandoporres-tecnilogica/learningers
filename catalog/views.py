@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from catalog import forms, serializers
-from catalog.models import available_resource_models, SessionWay, Resource
+from catalog.models import available_resource_models, SessionWay, Resource, Way
 from django.views.generic.base import View
 from django.views import generic
 from django.http import HttpResponsePermanentRedirect
@@ -12,6 +12,11 @@ import reversion
 from itertools import chain, imap, groupby
 from operator import itemgetter
 import rest_framework
+from django.template.loader import render_to_string
+from schedule.utils import coerce_date_dict
+import datetime
+from django.utils import timezone
+from commons.versions import previous_version_instance
 
 class CatalogView(generic.ListView):
     """
@@ -95,11 +100,13 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
         else:
             if not 'slug' in self.kwargs:
                 return self.request.way
-            if 'rev' in self.request.GET:
-                version = reversion.models.Version.objects.get(pk=self.request.GET['rev'])
-                version.revision.revert()
-            obj = get_object_or_404(self.model,slug=self.kwargs['slug'],**self.make_parents_query(self.kwargs))
-            return obj
+            if 'version' in self.request.GET:
+                version = reversion.models.Version.objects.get(pk=self.request.GET['version'])
+                obj = previous_version_instance(self.model,version.field_dict)
+                return obj
+            else:
+                obj = get_object_or_404(self.model,slug=self.kwargs['slug'],**self.make_parents_query(self.kwargs))
+                return obj
       
 def make_resource_view(_resource_type):
     """
@@ -108,7 +115,7 @@ def make_resource_view(_resource_type):
     class HOP(BaseResourceView):
         model = available_resource_models[_resource_type]
         url = 'catalog:' + _resource_type
-        template_name = 'catalog/view/' + available_resource_models[_resource_type].data_type + '.html'
+        template_name = 'catalog/' + _resource_type + '/view.html'
         resource_type = _resource_type
     return HOP.as_view()
     
@@ -118,7 +125,7 @@ class CreateResourceView(generic.TemplateView):
     
     Charge les types de ressources disponibles à partir de available_resource_models.
     """
-    template_name= 'catalog/create/resource.html'
+    template_name= 'catalog/create_resource.html'
     def get_context_data(self, **kwargs):
         context = super(CreateResourceView, self).get_context_data(**kwargs)
         context['search_form'] = forms.ResourceSearchForm(self.request.GET)
@@ -131,14 +138,8 @@ def make_create_resource_view(resource_type):
     """
     class HOP(generic.CreateView):
         form_class = forms.make_resource_form(resource_type)
-        template_name= 'catalog/create/' + resource_type + '.html'
+        template_name= 'catalog/create.html'
         model = available_resource_models[resource_type]
-        def get_form(self, form_class):
-            print form_class
-            toto = generic.CreateView.get_form(self, form_class)
-            print "boing"
-            print (toto.as_ul())
-            return toto
         def get_context_data(self, **kwargs):
             context = generic.CreateView.get_context_data(self, **kwargs)
             context['user_friendly_type'] = self.model.user_friendly_type
@@ -173,4 +174,30 @@ class RequestMoreSearchResults(rest_framework.views.APIView):
         val = forms.ResourceSearchForm(self.request.GET).search().values('rendered')
         return Response(val)
 
+class CalendarRenderView(rest_framework.views.APIView):
+    """
+    Retourne le rendu HTML d'un calendrier
+    """
+    def get(self,request,*args,**kwargs):
+        way = Way.objects.get(pk=kwargs['pk'])
+        try:
+            date = coerce_date_dict(request.GET)
+        except ValueError:
+            raise Http404  
+        if date:
+            try:
+                date = datetime.datetime(**date)
+            except ValueError:
+                raise Http404
+        else:
+            date = timezone.now()
+        period = way.get_month(date)
+        args = { 'calendar':way.calendar, 'period':period, 'size':kwargs['size']  }
+        prev_date = period.prev().start
+        next_date = period.next().start
+        val = {'rendered':render_to_string('schedule/calendar_month_compact.html',args),
+               'prev_date': { 'year':prev_date.year, 'month':prev_date.month, 'day':prev_date.day, 'hour':prev_date.hour, 'minute':prev_date.minute,'second':prev_date.second },
+               'next_date': { 'year':next_date.year, 'month':next_date.month, 'day':next_date.day, 'hour':next_date.hour, 'minute':next_date.minute,'second':next_date.second }
+               }
+        return Response(val)        
         

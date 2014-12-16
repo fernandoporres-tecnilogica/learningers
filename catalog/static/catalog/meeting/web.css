@@ -1,0 +1,30 @@
+#ap-osm-map {
+    border: 1px solid #ccc;
+	position:absolute;
+	margin:0.5em;
+	width:27em;
+	height:21em;
+	left:0em;
+}
+
+.ap-annotation-edit {
+
+}
+
+#ap-calendar {
+	border : 1px solid black;
+	position:absolute;
+	margin:0.5em;
+	width:27em;
+	height:21em;
+	left:28em;
+}
+
+#ap-calendar td {
+	background: #eeeeee;
+	font-size:80%;
+}
+
+#ap-calendar .eventheader {
+	background: #ffeeeeee;
+}

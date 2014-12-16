@@ -1,0 +1,7 @@
+{% extends "catalog/info.html" %}
+{% load inplace_edit i18n %}
+
+{% block info %}
+<p>{% trans "Wiki d'origine" %}: {{ resource.wiki }}</p>
+<p>{% trans "Titre d'origine" %} : {{ resource.title }}</p>
+{% endblock %}
