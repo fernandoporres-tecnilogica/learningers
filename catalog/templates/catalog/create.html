@@ -1,6 +1,6 @@
 {% extends "catalog/base.html" %}
 {% load i18n staticfiles %}
-{% load inplace_edit %}
+{% load inplace_edit bootstrap3 %}
 {% block title %}
 {% trans "Ajout d'un(e)" %} {{user_friendly_type}}
 {% endblock %}
@@ -8,31 +8,36 @@
 {% block css %}
 {{block.super}}
 {{form.media.css}}
+{{form.media.js}}
 {% endblock %}
 
 {% block headbar %}
 {% endblock %}
 
 {% block main %}
-<div class='ap-ui-frame'>
-<div class='ap-ui-text'>
-<h2>{% trans "Ajout d'un(e)" %} {{user_friendly_type}}</h2>
+<div style="text-align:center;">
+<div class="panel panel-default" style="margin:1em;text-align:left;">
+<div class='panel-heading'>
+{% trans "Ajout d'un(e)" %} {{user_friendly_type}}
 {% block intro %}
 {% endblock %}
+</div>
+<div class='panel-body' style="padding:1em;">
 <form id='ap-create-form' action='.' method="POST" style="display:none;">
 {% csrf_token %}
-<ol>
-{{form.as_ul}}
-<li><button type="submit">{% trans 'Créer!' %}</button></li>
-</ol>
+<input type="hidden" name="next" value="{{ parent.get_absolute_url }}"/>
+{% bootstrap_form form %}
+{% buttons %}
+<button type="submit" class="btn btn-default">{% trans 'Créer!' %}</button>
+{% endbuttons %}
 </form>
+</div>
 </div>
 </div>
 {% endblock %}
 
 {% block js %}
 {{block.super}}
-{{form.media.js}}
 <script>
 $(document).ready(function() {
 //	$('#ap-create-form li').slice(1).hide();

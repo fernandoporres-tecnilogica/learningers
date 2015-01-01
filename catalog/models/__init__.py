@@ -3,8 +3,9 @@ import catalog.models.base
 import catalog.models.meeting
 import catalog.models.human
 import catalog.models.mailman
+import catalog.models.etherpad
+import catalog.models.wiki
 from catalog.models.way import SessionWay
-from catalog.models.wiki import Wiki
 from catalog.models.base import available_resource_models, GeoLocation, ResourceLanguage, Resource
 import reversion
 import sys

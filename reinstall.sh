@@ -1,7 +1,6 @@
 #!/bin/bash
 
 rm /home/rnguyen/db.sqlite3 
-spatialite /home/rnguyen/db.sqlite3 "SELECT InitSpatialMetaData();"
 echo "yes
 
 

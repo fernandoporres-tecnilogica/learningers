@@ -60,8 +60,6 @@ class Resource(TimeStampedModel,ForkableModel):
     languages = models.ManyToManyField(ResourceLanguage,editable=False, help_text=__(u'Les langues à maîtriser pour comprendre cette ressource'))
     # Other entries related to this resource
     see_also = models.ManyToManyField('catalog.Resource',verbose_name=__('Voir aussi'),blank=True,null=True,default=None, help_text=__(u"D'autres resources liées à celle-ci")) 
-    # Resource type
-    resource_type = 'resource'
     # To manage inheritance
     objects = InheritanceManager()    
     
@@ -84,8 +82,10 @@ class Resource(TimeStampedModel,ForkableModel):
         return self.name
     def get_absolute_url(self):
         if self.parent:
+            print "toto1 : %s" % self.resource_type
             return self.parent.get_absolute_url() + self.resource_type + '/' + self.slug + '/'
         else:
+            print "prout : %s" % self.name
             raise Http404
     def preview(self):
         "return HTML code to display a small preview of this resource"
@@ -117,7 +117,10 @@ class GeoLocation(models.Model):
 available_resource_models = {}
 
 def register_resource(resource_model):
-    available_resource_models[resource_model.resource_type] = resource_model
+    resource_type = resource_model.__name__.lower()
+    setattr(resource_model,'resource_type',resource_type)
+    setattr(resource_model,'user_friendly_type',resource_model._meta.verbose_name.title())
+    available_resource_models[resource_type] = resource_model
 
 @receiver_subclasses(post_save, Resource,'resource-language')
 def resource_post_save(sender,**kwargs):

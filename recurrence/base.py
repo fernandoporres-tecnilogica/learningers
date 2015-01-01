@@ -955,11 +955,13 @@ def deserialize(text):
 
     dtstart, dtend, rrules, exrules, rdates, exdates = None, None, [], [], [], []
 
+    if not text:
+        text = ''
+        
     tokens = re.compile(
         u'(DTSTART|DTEND|RRULE|EXRULE|RDATE|EXDATE)[^:]*:(.*)',
         re.MULTILINE).findall(text)
-
-    if not tokens and text:
+    if not tokens:
         raise exceptions.DeserializationError('malformed data')
 
     for label, param_text in tokens:

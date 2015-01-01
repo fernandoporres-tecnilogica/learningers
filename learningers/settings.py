@@ -83,6 +83,8 @@ INSTALLED_APPS = (
     'django_markdown',
     # for mailing list interface
     'django_mailman',
+    # for nice user interface
+    'bootstrap3',
     # our apps
     'learningers',
     'catalog',
@@ -95,6 +97,7 @@ INSTALLED_APPS = (
     # for scheduling of events
     'recurrence',
     'schedule',
+    'datetimewidget',
 )
 
 MIDDLEWARE_CLASSES = (

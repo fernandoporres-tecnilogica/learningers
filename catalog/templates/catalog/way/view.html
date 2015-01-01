@@ -15,6 +15,9 @@
 	<div class='ap-button' id='ap-edit-button'>
 	<a><img class='ap-button-image' src='{% static 'catalog/toolbar-icons/edit.png' %}' title='{% trans "Modifier ce parcours" %}'/></a>
 	</div>
+	<div class='ap-button' id='ap-add-child-button' style='display:none'>
+	<a href="{% url 'catalog:resource-create' %}?parent={{resource.pk}}"><img class='ap-button-image' src='{% static 'catalog/toolbar-icons/add-child.png' %}' title='{% trans "Ajouter une ressource à ce parcours" %}'/></a>
+	</div>
 	<div class='ap-button' id='ap-save-button' style='display:none'>
 	<a><img class='ap-button-image' src='{% static 'catalog/toolbar-icons/save.png' %}' title='{% trans "Sauvegarder les modifications" %}'/></a>
 	</div>
@@ -53,6 +56,7 @@ $(window).load(function() { update_calendar("{% url 'catalog:calendar-data' pk=r
 <script src="{% static 'openlayers/openlayers3.js' %}"></script>
 <script src="{% static 'popover/popover.js' %}"></script>
 <script src="{% static 'catalog/map.js' %}"></script>
+<script src="{% static 'catalog/way/view.js' %}"></script>
 <script>
 var marker_data = [
 {% include 'catalog/way/marker_data.html' %}
@@ -60,6 +64,7 @@ var marker_data = [
 
 $(window).load(function() {
 	initialize_map(marker_data);
+	initialize_toolbar();
 });
 </script>
 {% endblock %}

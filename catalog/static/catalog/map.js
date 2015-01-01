@@ -1,7 +1,9 @@
 function initialize_map(marker_data) {
 	
-	if(!marker_data.length)
+	if(!marker_data.length) {
+		$('#ap-osm-map').hide();
 		return;
+	}
 	
 	var map = new ol.Map({
 		  layers: [

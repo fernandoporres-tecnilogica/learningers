@@ -5,15 +5,13 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as __
 from django.utils.translation import ugettext as _
 from django_mailman.models import List
-
-# -*- coding: utf-8 -*-
 import re
 import urllib2
 import logging
 from types import UnicodeType
 from commons.webcall import MultipartPostHandler
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)    
 
 # Mailman-Messages for a successfull subscription
 SUBSCRIBE_MSG = (
@@ -106,10 +104,8 @@ def check_encoding(value, encoding):
         value = unicode(value, errors='replace')
     return value
 
-class MailmanResource(Resource):
+class MailmanList(Resource):
     """Une liste de diffusion hébergée sur un serveur mailman."""
-    user_friendly_type = __('Liste de diffusion')
-    resource_type = 'mailman'
     listname = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
@@ -117,8 +113,8 @@ class MailmanResource(Resource):
     encoding = models.CharField(max_length=20, choices=LANGUAGES)
 
     class Meta:
-        verbose_name = 'List-Installation'
-        verbose_name_plural = 'List-Installations'
+        verbose_name =  __('Liste de diffusion')
+        verbose_name_plural =  __('Listes de diffusion')
 
     def __unicode__(self):
         return u'%s' % (self.listname)
@@ -277,4 +273,4 @@ class MailmanResource(Resource):
                 return True
         raise Exception(content)
             
-register_resource(MailmanResource)
+register_resource(MailmanList)

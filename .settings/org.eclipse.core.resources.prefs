@@ -1,6 +1,14 @@
 eclipse.preferences.version=1
 encoding//catalog/forms.py=utf-8
-encoding//catalog/models.py=utf-8
+encoding//catalog/models/__init__.py=utf-8
+encoding//catalog/models/base.py=utf-8
+encoding//catalog/models/etherpad.py=utf-8
+encoding//catalog/models/human.py=utf-8
+encoding//catalog/models/mailman.py=utf-8
+encoding//catalog/models/meeting.py=utf-8
+encoding//catalog/models/way.py=utf-8
+encoding//catalog/models/wiki.py=utf-8
+encoding//catalog/search.py=utf-8
 encoding//catalog/serializers.py=utf-8
 encoding//catalog/urls.py=utf-8
 encoding//catalog/views.py=utf-8

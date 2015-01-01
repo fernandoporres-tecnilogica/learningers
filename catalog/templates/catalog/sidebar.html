@@ -4,6 +4,7 @@
 
 <div id='ap-tabs'>
 	<div id='ap-versions-tab' style='display:none;'>
+	<h2>{% trans 'Versions précédentes' %}</h2>
 	{% for version in versions %}
 		<a href="{{ resource.get_absolute_url }}?version={{version.pk }}">{{ version.revision.date_created | date:"SHORT_DATETIME_FORMAT" }} </a> ({{ version.revision.user }}) :
 		<br>

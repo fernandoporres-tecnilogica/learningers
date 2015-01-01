@@ -11,14 +11,17 @@ body {
 </style>
 <link rel="stylesheet" href="{% static "catalog/web.css" %}" type="text/css"/>
 {% endblock %}
+{% block title %}{% trans "Page d'accueil" %}{% endblock %}
 {% block main %}
 <br>
 <br>
-<h1 id='ap-main-title'><div style="display:inline-block;" id='ap-main-title-text'>{% trans 'Les apprentisseu-ses-rs' %}</div></h1>
-<h3 id='ap-main-subtitle'>{% trans "le répertoire autogéré de l'apprentissage libre" %} </h3>
+<h1 id='ap-main-title'><div style="display:inline-block;" id='ap-main-title-text'>{% trans 'Les apprentisseursEs' %}</div></h1>
+<h3 id='ap-main-subtitle'>{% trans "répertoire autogéré de l'apprentissage libre" %} </h3>
 <br>
 <div style="text-align:center;">
-{% include "catalog/search/big_form.html" %}
+<p>
+{% include "catalog/search/form.html" %}
+</p>
 <p>
 <a href="{% url 'catalog:resource-create' %}">{% trans 'Répertorier une nouvelle resource...' %}</a></p>
 </div>

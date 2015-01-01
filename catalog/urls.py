@@ -46,8 +46,9 @@ for i in range(0,4):
     urlpatterns += patterns('',url(p + r'(?P<slug>[^/]+)/$', views.make_resource_view('way'), name='way-view')) 
     # source slug lookup
     for resource_type in available_resource_models:
-        if resource_type is not 'way':
+        if resource_type != 'way':  
             urlpatterns += patterns('', 
                     url(p + resource_type + '/(?P<slug>[^/]+)/$', views.make_resource_view(resource_type), name=resource_type + '-view'),
                     )
 
+print urlpatterns

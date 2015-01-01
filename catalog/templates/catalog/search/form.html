@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load bootstrap3 %}
+{{search_form.media}}
+<form method="GET" id='ap-searchform' class="navbar-form {{ form_position }} ap-searchform" role="search" action="{% url 'catalog:search' %}">  
+	{% bootstrap_field search_form.q layout='inline' %}
+	{% bootstrap_field search_form.a layout='inline' %}
+	{% bootstrap_field search_form.d layout='inline' %}
+<div id='ap-recurrence-container'>
+<div class="panel panel-default">
+  <div class="panel-body">
+{{ search_form.t }}
+  </div>
+</div>
+</div>
+{% buttons %}
+<button type="submit" id='ap-small-searchform-submit' class="btn btn-primary">{% trans 'Apprendre!' %}</button>
+{% endbuttons %}
+</form>
+<script>
+$(document).ready(function() {
+	$('#d').on('focus', function() {
+			var pos = $('#d').position();
+			var height = $('#d').outerHeight();
+			$('#ap-recurrence-container').css({top:pos.top + height, left:pos.left});
+			$('#ap-recurrence-container').show(); 
+		});
+});
+
+</script>

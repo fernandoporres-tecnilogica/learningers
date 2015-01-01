@@ -80,7 +80,6 @@ class FormField(forms.MultiValueField):
         """
         Call the form is_valid to ensure every value supplied is valid
         """
-        print 'clean clean'
         if not value and self.required:
             raise ValidationError(
                 'Error found in Form Field: Nothing to validate')

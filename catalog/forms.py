@@ -13,7 +13,10 @@ from django.utils import six
 from django.forms.models import ModelFormMetaclass, BaseModelForm
 from schedule.models import Event, Rule
 from haystack.utils.geo import Point, D
+from datetimewidget.widgets import DateTimeWidget
+from django.forms.fields import DateTimeField
 import geopy
+from django.forms.widgets import HiddenInput
 
 class ResourceSearchForm(SearchForm):
     def __init__(self, *args, **kwargs):
@@ -23,7 +26,7 @@ class ResourceSearchForm(SearchForm):
     q = forms.CharField(label=__(u'Quoi?'), initial='',required=True)
     a = AutoCompleteField('location',help_text='',label=__(u'Où?'), initial='',required=False)
     t = RecurrenceField(label=__(u'Quand?'), initial='',required=False,max_rdates=0,max_exdates=0)
-    
+    d = forms.CharField(label=__(u'Quand?'), initial='',required=False)
     def search(self):
         # First, store the SearchQuerySet received from other processing.
         sqs = super(ResourceSearchForm, self).search()
@@ -54,11 +57,8 @@ def make_resource_form(resource_type):
     class BetterMetaClass(ModelFormMetaclass):
         def __new__(mcs, name, bases, attrs):
             new_attrs = {}
-            new_attrs['description'] = forms.CharField(widget=MarkdownWidget()) 
             if(hasattr(model_class,'geo')):
                 new_attrs['geo'] = FormField(GeoLocationForm)
-            if(hasattr(model_class,'picture')):
-                new_attrs['picture'] = FormField(ImageForm)  
             if(hasattr(model_class,'user')):
                 new_attrs['user'] = AutoCompleteSelectField('user',required=False)  
             opts = model_class._meta
@@ -70,13 +70,21 @@ def make_resource_form(resource_type):
             for key,value in new_attrs.items():
                 value.label = fields[key].verbose_name
                 value.help_text = fields[key].help_text
+                value.required = (fields[key].blank == False and fields[key].null == False) 
             attrs.update(new_attrs) 
             return super(BetterMetaClass, mcs).__new__(mcs, name, bases, attrs)   
     class BaseHOP(six.with_metaclass(BetterMetaClass, BaseModelForm)):
         pass
     class HOP(BaseHOP):
+        def __init__(self, *args, **kwargs):
+            super(HOP, self).__init__(*args, **kwargs)
+            self.fields['parent'].widget = HiddenInput()
+            self.fields['description'].widget = MarkdownWidget()
+            for field_name in self.fields:
+                if isinstance(self.fields[field_name],DateTimeField):
+                    self.fields[field_name].widget = DateTimeWidget()
         class Meta:
             model = model_class
-            exclude = ()
+            exclude = ('title','creator','see_also','participants','calendar')
     return HOP
 

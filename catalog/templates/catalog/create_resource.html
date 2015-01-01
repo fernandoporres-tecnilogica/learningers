@@ -19,7 +19,11 @@
 <p>Quel type de resource souhaitez vous ajouter au catalogue?</p>
 {% endblocktrans %}
 {% for type in resource_types %}
+{% if parent %}
+<a href="{% url 'catalog:'|add:type.name|add:'-create' %}?parent={{parent}}">
+{% else %}
 <a href="{% url 'catalog:'|add:type.name|add:'-create' %}">
+{% endif %}
 <div class='ap-select-resource-type' title="{{type.help_text|safe}}">
 	<p>{{type.user_friendly_name}}</p>
 	<p>

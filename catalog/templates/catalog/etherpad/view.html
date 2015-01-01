@@ -1,0 +1,24 @@
+{% extends "catalog/view.html" %}
+
+{% load staticfiles i18n l10n %}
+{% load inplace_edit %}
+{% load lazysignup_tags %}
+{% block css %}
+{{block.super}}
+{% endblock %}
+
+{% block source %}
+{# embed pad #}
+<iframe src="{{ resource.get_embed_url }}?showLineNumbers=false&lang={{ LANGUAGE_CODE }}{% if request.user.is_authenticated and not request.user|is_lazy_user %}&userName={{ request.user.username }}{%endif%}" width="95%" height="95%"></iframe>
+{% endblock %}
+
+{% block annotations %}
+{# Retrieve chat contents #}
+<script src="{% static 'catalog/etherpad/annotations.js' %}"></script>
+<script>
+$(document).ready(function() {
+	load_annotations("{{ resource.get_api_url }}");
+});
+</script>
+{% endblock %}
+

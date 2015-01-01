@@ -8,66 +8,24 @@ body {
 	font-family:sans-serif;
 }
 
-/* Upper navigation bar */
-#ap-headbar { 
-	position:fixed;
-	width:100%;
-	height:2.5em;
-	overflow:visible;
-	z-index:10000;
-	background:#AAAAAA;
-}
-
 /* Everything except upper bar*/
 #ap-content {
-	position:fixed;
 	width:100%;
-	overflow:auto;
-	top:2.5em;
 }
-
-/* Catalog left vertical sidebar */
-#ap-sidebar {	
-	position:fixed;
-	left:0;
-	width:19em;
-	top:2.5em;
-	overflow:auto;
-	padding-left:0.5em;
-	padding-right:0.5em;
-}
-
 
 /********************************************
  ---------- FORMS & CONTROLS ----------------
 ********************************************/
-input { 
-	border: 1px solid #5555FF;
-	height:1.5em;
-}
-
-/* An element in the headbar */
-.ap-headbar-element {
-	float:right;
-	display:inline;	
-	text-align:right;
-	padding:0.3em;
-	margin-top:0.2em;
-}
-		
-/* Language selector */
-#ap-language-selector {
-/*	width:10em; */
-}
-
-.ap-headbar-button { display:inline-block; }
-.ap-headbar-button:hover { background: #0000bb !important; }
-.ap-headbar-button:hover a { color: #3f6998; }
 
 .helptext {
 	font-size:90%;
 	color: #111111;
 }
+
+.navbar-brand {
+	padding:5px;
+}
+
 /**************************************
 ---------------HOMEPAGE---------------- 
 ***************************************/
@@ -80,15 +38,9 @@ input {
 	text-align:center;
 }
 
-#ap-big-searchform input {
-    border: 1px solid #5555FF;
-    padding: 0.2em;
-}
-
-#ap-big-searchform button {
-    display: block;
-    margin-left: 45%;
-    margin-top: 1em;
+#ap-searchform input {
+    width:15em !important;
+    display:inline;
 }
 
 /****************************************
@@ -130,14 +82,14 @@ body.loading #ap-loading {
 ------------- FORMS ----------------------
 *******************************************/
 
-.ap-ui-frame {
-	text-align:center;
-	width:100%;
-	display:block;
+.panel-body {
+	padding:0.2em;
 }
 
-.ap-ui-text {
-	text-align:left;
-	width:50%;
-	display:inline-block;
+.navbar {
+	margin-bottom:0.2em;
+}
+
+.navbar-right {
+	margin-right:0px;
 }

@@ -11,16 +11,17 @@ from schedule.periods import Month
 from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_lazy as __
 from django.utils.text import slugify
-from catalog.models.meeting import MeetingResource
+from catalog.models.meeting import Meeting
 from django.db.models import Q
 from schedule.models import Event
 
 # A way is a resource composed of several other resources
 class Way(Resource):
     """Une ressource composée d'une suite d'autres ressources à consulter dans un certain ordre pour parvenir à un apprentissage."""
-    user_friendly_type = __('Parcours')
-    resource_type = 'way'
     calendar = models.OneToOneField(Calendar,editable=False,verbose_name=__('Agenda'),help_text=__("Le calendrier des rencontres associées à ce parcours"))
+    class Meta:
+        verbose_name =  __('Parcours')
+        verbose_name_plural =  __('Parcours')        
     def get_absolute_url(self):
         if self.parent:
             return self.parent.get_absolute_url() + self.slug + '/'
@@ -42,7 +43,7 @@ class Way(Resource):
                 setattr(self,'calendar',calendar)
         super(Way, self).save(*args,**kwargs)
     def get_events(self):
-        meetings = MeetingResource.objects.filter(Q(parent=self.pk)|Q(parent__parent=self.pk)|Q(parent__parent__parent=self.pk)).values_list('event_ptr',flat=True)
+        meetings = Meeting.objects.filter(Q(parent=self.pk)|Q(parent__parent=self.pk)|Q(parent__parent__parent=self.pk)).values_list('event_ptr',flat=True)
         return Event.objects.filter(pk__in=list(meetings))
     def get_month(self,date=None):
         if date is None:

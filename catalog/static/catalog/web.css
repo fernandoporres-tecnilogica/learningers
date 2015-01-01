@@ -1,21 +1,15 @@
 
 /* Catalog left vertical sidebar */
-#ap-sidebar {	
-	position:fixed;
+#ap-sidebar {
+	position:absolute;	
 	left:0;
 	width:19em;
-	top:2.5em;
-	overflow:auto;
 	padding:0.5em;
 }
 	
 /* List of search results */
 #ap-panel {
-	position:absolute;
 	margin-left:20em;
-	top:0em;
-	overflow-y:auto;
-	overflow-x:hidden;
 	padding-right:1em;
 }
 
@@ -28,6 +22,7 @@
 
 .ap-button-image:hover {
 	border:1px solid black;
+	cursor:pointer;
 }
 
 /* recurrence */
@@ -38,24 +33,9 @@
 
 
 /* Search form */
-.ap-searchform button {
-    background: none repeat scroll 0 0 #EEEEEE;
-    border: 1px solid #0000FF;
-    text-align: center;
-    width: 10em;
-    height:1.8em;
-}
-
-#ap-small-searchform > input {
+#ap-searchform input {
 	width:7em;
 }		
-
-#ap-small-searchform {
-	display:inline-block;
-	padding:0.3em;	
-	margin-top:0.2em;
-	position:absolute;
-}
 
 /* Toolbar */
 #ap-resource-toolbar {
@@ -181,7 +161,6 @@ div.ap-resource-logo {
 #ap-rightbar {
 	position:absolute;
 	width:15em;
-	top:0em;
 	right:0.5em;
 	height:100%;
 	overflow:visible;
@@ -192,6 +171,8 @@ div.ap-resource-logo {
 #ap-source-container {
 	display:none;
 	overflow:visible;
+	height:100%;
+	margin:0.1em;
 }
 
 /* Tabs */

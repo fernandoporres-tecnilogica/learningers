@@ -11,14 +11,13 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _  
 from django.utils.translation import ugettext_lazy as __
-from django import template
-from django.template.defaultfilters import stringfilter
 from django.core.exceptions import ValidationError
 
+from django import template
+from django.template.defaultfilters import stringfilter
 register = template.Library()
-
-def upper_repl(match):
-    return match.group(1).upper()
+ 
+from commons.string import upper_repl
  
 @register.filter
 @stringfilter
@@ -162,30 +161,32 @@ class Wiki(models.Model):
         else:
             raise Http404
         
-class WikimediaHtmlResource(Resource):
+class WikimediaArticle(Resource):
     'Un article dans un Wiki fonctionnant sous Wikimedia, par exemple Wikipédia'
-    resource_type = 'wiki'
-    user_friendly_type = __('Article Wiki')
     wiki = models.ForeignKey(Wiki, verbose_name=__('Wiki d\'origine'))
     title = models.CharField(max_length=200, verbose_name =__('Titre d\'origine'))
 
+    class Meta:
+        verbose_name = __(u"Article Wiki")
+        verbose_name_plural = __(u"Articles Wiki")
+        
     def clean(self):
         # check if an article with this title exists in the provided wiki
         new_title = self.wiki.get_redirect_title(self.title)
         if new_title is '':
             raise ValidationError(_('L\'article "' + self.title + '" n\'existe pas sur ' + self.wiki.name ))
         self.title = new_title
-        super(WikimediaHtmlResource, self).clean()
+        super(WikimediaArticle, self).clean()
     def save(self,*args,**kwargs):
         if not self.pk:
             self.slug = self.wiki.slugify(self.title)
             self.name = self.title
-        super(WikimediaHtmlResource, self).save(*args,**kwargs)
+        super(WikimediaArticle, self).save(*args,**kwargs)
     @staticmethod
     def make_from_slug(parent,slug):
         wiki,name,snippet = Wiki.make_from_slug(slug)
-        return WikimediaHtmlResource(name=name,wiki=wiki,title=name,parent=parent,description=snippet)    
+        return WikimediaArticle(name=name,wiki=wiki,title=name,parent=parent,description=snippet)    
     def data(self):
         return {'wiki_html': self.wiki.get_page(self.title) }
 
-register_resource(WikimediaHtmlResource)
+register_resource(WikimediaArticle)

@@ -18,6 +18,13 @@ import datetime
 from django.utils import timezone
 from commons.versions import previous_version_instance
 
+def initialize_search_form(geget):
+    ret = forms.ResourceSearchForm()
+    for key in ret.fields:
+        if key in geget:
+            ret.fields[key].initial = geget[key]
+    return ret
+
 class CatalogView(generic.ListView):
     """
     Listing des resources du catalogue.
@@ -28,7 +35,7 @@ class CatalogView(generic.ListView):
     model = Resource
     def get_context_data(self, **kwargs):
         context = {}
-        context['search_form'] = forms.ResourceSearchForm(self.request.GET)
+        context['search_form'] = initialize_search_form(self.request.GET)
         context['resources'] = Resource.objects.select_subclasses()
         return context
     
@@ -66,7 +73,7 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
         return ret
     def get_context_data(self, **kwargs):
         context = {}
-        context['search_form'] = forms.ResourceSearchForm(self.request.GET)
+        context['search_form'] = initialize_search_form(self.request.GET)
         context['resource'] = kwargs['object']
         # Build a list of all previous versions, latest versions first, duplicates removed:
         context['versions'] = reversion.get_for_object(kwargs['object'])          
@@ -128,8 +135,10 @@ class CreateResourceView(generic.TemplateView):
     template_name= 'catalog/create_resource.html'
     def get_context_data(self, **kwargs):
         context = super(CreateResourceView, self).get_context_data(**kwargs)
-        context['search_form'] = forms.ResourceSearchForm(self.request.GET)
-        context['resource_types'] = [ { 'name': model.resource_type, 'user_friendly_name': model.user_friendly_type, 'help_text': model.__doc__ } for model in available_resource_models.values() ]
+        context['search_form'] = initialize_search_form(self.request.GET)
+        context['resource_types'] = [ { 'name': resource_type, 'user_friendly_name': model._meta.verbose_name.title(), 'help_text': model.__doc__ } for resource_type,model in available_resource_models.items() ]
+        if 'parent' in self.request.GET:
+            context['parent'] = self.request.GET['parent']
         return context
 
 def make_create_resource_view(resource_type):
@@ -142,11 +151,14 @@ def make_create_resource_view(resource_type):
         model = available_resource_models[resource_type]
         def get_context_data(self, **kwargs):
             context = generic.CreateView.get_context_data(self, **kwargs)
-            context['user_friendly_type'] = self.model.user_friendly_type
+            context['user_friendly_type'] = self.model._meta.verbose_name.title()
             return context
         def get_initial(self):
             initial = super(generic.CreateView, self).get_initial()
-            initial['parent'] = SessionWay.objects.get(user=self.request.user)
+            if 'parent' in self.request.GET:
+                initial['parent'] = Way.objects.get(pk=self.request.GET['parent'])
+            else:
+                initial['parent'] = SessionWay.objects.get(user=self.request.user)
             return initial
     return HOP.as_view()
 

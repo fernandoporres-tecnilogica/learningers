@@ -1,5 +1,5 @@
 function makeLayout() {
-	$('#ap-content').css({
+/*	$('#ap-content').css({
             height: $(window).height()-$('#ap-headbar').outerHeight()
         });
 	$('#ap-panel').css({
@@ -9,9 +9,11 @@ function makeLayout() {
 	$('#ap-sidebar').css({
         height: $(window).height()-$('#ap-headbar').outerHeight()
 	});
+*/
    	$('#ap-source-container').css({
             width: $(window).width()-$('#ap-sidebar').outerWidth()-$('#ap-rightbar').outerWidth(),
         });
+        
     $('#ap-rightbar').css({
             height: $(window).height()-$('#ap-headbar').outerHeight()
         }); 
