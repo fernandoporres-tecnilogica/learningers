@@ -3,13 +3,14 @@
 {% load staticfiles i18n l10n %}
 {% load inplace_edit %}
 
+{% block css %}
+{{block.super}}
+<link rel="stylesheet" href="{% static 'catalog/wikimediaarticle/web.css' %}" />
+<link rel="stylesheet" href="{% static 'annotator/annotator.css' %}" type="text/css"/>
+<link rel="stylesheet" href="{% static 'annotator/annotator-marginviewer.css' %}" type="text/css"/>
+{% endblock %}
 {% block source %}
-<!-- the map -->
-<div id="ap-osm-map"></div>
-<!-- the calendar -->
-<div id='ap-calendar'>
-{% include 'schedule/calendar_month.html' with calendar=resource.event.calendar mymonth=resource.parent.get_month %}
-</div>
+{{ resource.data.wiki_html|safe }}
 {% endblock %}
 
 {% block annotations %}
@@ -17,33 +18,34 @@
 
 {% block js %}
 {{block.super}}
-<script src="{% static 'catalog/openlayers/OpenLayers.js' %}"></script>
+<script src="{% static 'annotator/showdown.js' %}"></script>
+<script src="{% static 'annotator/annotator-full.js' %}"></script>
+<script src="{% static 'annotator/annotator.marginviewer.js' %}"></script>
 <script>
-	    
-$(window).load(function() {
-{% if resource.geo and resource.geo.location.x %}
-	var markerStyle = {
-	        externalGraphic: "{% static 'catalog/openlayers/img/marker.png' %}",
-	        graphicWidth: 20, graphicHeight: 24, graphicYOffset: -24
-	    };
-	    
-	var center = new OpenLayers.Geometry.Point({{ resource.geo.location.x|unlocalize }}, {{ resource.geo.location.y|unlocalize }})
-	.transform('EPSG:4326', 'EPSG:3857');
-	
-	var map = new OpenLayers.Map({
-		div: "ap-osm-map", 
-		projection: "EPSG:3857",
-		layers: [new OpenLayers.Layer.OSM()],
-		center: center.getBounds().getCenterLonLat(), zoom: 10
-	});	
-
-    var annotations = new OpenLayers.Layer.Vector('Overlay');
-	map.addLayer(annotations);
-
-	var marker = new OpenLayers.Feature.Vector(center, {tooltip: '{{ resource.geo.address }}'},$.extend({},markerStyle));
-   // We add the marker with a tooltip text to the overlay
-	annotations.addFeatures([marker]);
-{% endif %}	
+setup_csrf_ajax();
+jQuery(function ($) {
+    $('#ap-source-container').annotator({}).annotator('setupPlugins', {},
+                  { Tags: false, AnnotateItPermissions: false, Permissions: false, Auth: false, Filter: false, Store: {
+      // The endpoint of the store on your server.
+      prefix: '/catalog/annotations/written/htmlrange/', // for loading contents
+      loadFromSearch: {
+        resource: {{ resource.pk }}
+      },
+      urls:{
+	    // These are the default URLs.
+	    create:  '',
+	    read:    ':id/',
+	    update:  ':id/',
+	    destroy: ':id/',
+	    search:  ''
+  	},
+      // Attach the csrf_token
+      annotationData: {
+        resource: {{ resource.pk }},
+        csrfmiddlewaretoken: $.cookie('csrftoken'),
+      },
+   
+    }}).annotator('addPlugin','MarginViewer')
 });
 </script>
 {% endblock %}

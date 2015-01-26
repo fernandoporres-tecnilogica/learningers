@@ -1,12 +1,14 @@
 {% extends "learningers/base.html" %}
 {% load i18n %}
 {% block main %}
-<div style="text-align:center;width:100%;">
-<br>
-<br>
-<div class="ap-ui-frame">
-<div class="ap-ui-text">
- {% block frame %}
+<div style="text-align:center;">
+<div class="panel panel-default" style="margin:1em;text-align:left;max-width:50em;text-align:left;display:inline-block;">
+<div class='panel-heading'>
+{% block title %}
+{% endblock %}
+</div>
+<div class='panel-body' style="padding:1em;">
+ {% block body %}
  {% endblock %}
- </div></div></div>
+ </div></div></div></div>
 {% endblock %}

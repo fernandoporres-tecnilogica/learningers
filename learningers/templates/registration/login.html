@@ -1,23 +1,16 @@
 {% extends "learningers/base2.html" %}
 {% load i18n %}
-{% block frame %}
-<h2>{% trans 'Connexion' %}</h2>
-{% if form.errors %}
-<p>{% blocktrans %}Identifiant ou mot de passe incorrect.{% endblocktrans %}</p>
-{% endif %}
+{% load bootstrap3 %}
+{% block title %}
+{% trans 'Connexion' %}
+{% endblock %}
+{% block body %}
 <form method="post" action=".">
 {% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
-<input type="submit" value="{% trans 'Connexion' %}" />
+{% bootstrap_form form %}
 <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}" />
+{% buttons %}
+<button type="submit" class="btn btn-primary">{% trans 'Connexion' %}</button>
+{% endbuttons %}
 </form>
 {% endblock %}

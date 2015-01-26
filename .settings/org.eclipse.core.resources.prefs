@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//catalog/forms.py=utf-8
 encoding//catalog/models/__init__.py=utf-8
+encoding//catalog/models/annotations.py=utf-8
 encoding//catalog/models/base.py=utf-8
 encoding//catalog/models/etherpad.py=utf-8
 encoding//catalog/models/human.py=utf-8

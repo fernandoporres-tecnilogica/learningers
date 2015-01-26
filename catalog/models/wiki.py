@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from simplemediawiki import MediaWiki
-from catalog.models.base import ResourceLanguage, Resource, register_resource
+from catalog.models.base import ResourceLanguage, Resource, register_resource, register_annotation_range
 from django.http import Http404
 import re
 from django.core.urlresolvers import reverse
@@ -9,10 +9,9 @@ from itertools import chain
 import string
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from django.utils.translation import ugettext_lazy as _  
+from django.utils.translation import ugettext as _  
 from django.utils.translation import ugettext_lazy as __
 from django.core.exceptions import ValidationError
-
 from django import template
 from django.template.defaultfilters import stringfilter
 register = template.Library()
@@ -51,7 +50,7 @@ class Wiki(models.Model):
     url = models.URLField(help_text=_(u'Adresse du répertoire où se trouve api.php'))
     language = models.ForeignKey(ResourceLanguage)
     # the namespace we are interested in in this wiki
-    namespace = models.IntegerField(choices=NAMESPACE_CHOICES,default=MAIN_NAMESPACE,help_text=_('Type de médias présents sur ce wiki'))
+    namespace = models.IntegerField(choices=NAMESPACE_CHOICES,default=MAIN_NAMESPACE,help_text=_(u'Type de médias présents sur ce wiki'))
     # Resource slug
     slug = models.CharField(max_length=50,editable=False)
     
@@ -67,7 +66,7 @@ class Wiki(models.Model):
         
     def wiki_links_replacer(self,match):
         if match.group(1) == 'wiki':
-            return 'href="' + reverse('catalog:wiki',kwargs={'slug':self.slug}) + match.group(2) + '"'
+            return 'href="' + reverse('catalog:wikimediaarticle-view',kwargs={'slug':self.slug}) + match.group(2) + '"'
         elif match.group(1) == 'w':
             return 'href="' + self.url + match.group(2) + '" target="_blank"'
         else:
@@ -165,11 +164,10 @@ class WikimediaArticle(Resource):
     'Un article dans un Wiki fonctionnant sous Wikimedia, par exemple Wikipédia'
     wiki = models.ForeignKey(Wiki, verbose_name=__('Wiki d\'origine'))
     title = models.CharField(max_length=200, verbose_name =__('Titre d\'origine'))
-
     class Meta:
         verbose_name = __(u"Article Wiki")
         verbose_name_plural = __(u"Articles Wiki")
-        
+               
     def clean(self):
         # check if an article with this title exists in the provided wiki
         new_title = self.wiki.get_redirect_title(self.title)
@@ -189,4 +187,12 @@ class WikimediaArticle(Resource):
     def data(self):
         return {'wiki_html': self.wiki.get_page(self.title) }
 
+class HtmlRange(models.Model):
+    resource = models.ForeignKey('catalog.WikimediaArticle',verbose_name=_(u"Ressource concernée"),related_name='ranges',editable=False)
+    start = models.CharField(max_length=100)
+    end = models.CharField(max_length=100)
+    startOffset = models.IntegerField()
+    endOffset = models.IntegerField()
+
 register_resource(WikimediaArticle)
+register_annotation_range(HtmlRange)

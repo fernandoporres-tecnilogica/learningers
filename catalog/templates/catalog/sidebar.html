@@ -3,16 +3,80 @@
 {% load inplace_edit %}
 
 <div id='ap-tabs'>
-	<div id='ap-versions-tab' style='display:none;'>
+	<div class='ap-tab' id='ap-versions-tab' style='display:none;'>
 	<h2>{% trans 'Versions précédentes' %}</h2>
 	{% for version in versions %}
 		<a href="{{ resource.get_absolute_url }}?version={{version.pk }}">{{ version.revision.date_created | date:"SHORT_DATETIME_FORMAT" }} </a> ({{ version.revision.user }}) :
 		<br>
 		{{ version.revision.comment }}
-		{% endfor %}
+	{% endfor %}
 	</div>
-	<div id='ap-info-tab'>		
-		<h2>{{ resource.user_friendly_type }}</h2>
+	<div class='ap-tab' id='ap-charter-tab' style='display:none;'>
+	
+	
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          {% trans "Pas d'enfermement" %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        ****
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          {% trans "Pas d'autorité" %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body">
+        +++++
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingThree">
+      <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          {% trans "Respect de l'intimité" %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+      <div class="panel-body">
+        xxxx
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingFour">
+      <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+          {% trans "Respect de l'information" %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+      <div class="panel-body">
+        xxxx
+      </div>
+    </div>
+  </div>
+</div>
+	
+	
+	</div>
+	<div class='ap-tab' id='ap-info-tab'>		
+		<p>{{ resource.user_friendly_type }}</p>
 		{% with 'catalog/'|add:resource.resource_type|add:'/info.html' as resource_info %}
 		{% include resource_info %}
 		{% endwith %}

@@ -11,7 +11,7 @@ function makeLayout() {
 	});
 */
    	$('#ap-source-container').css({
-            width: $(window).width()-$('#ap-sidebar').outerWidth()-$('#ap-rightbar').outerWidth(),
+            width: $(window).width()-$('#ap-sidebar').outerWidth()-$('#ap-rightbar').outerWidth()-50,
         });
         
     $('#ap-rightbar').css({
@@ -48,17 +48,25 @@ function delete_resource(delete_url) {
 }
 
 var active_tab = 0;
-function switch_tabs() {
-	if(active_tab == 0)
-	{
-		$('#ap-info-tab').hide();
-		$('#ap-versions-tab').show();
-		active_tab = 1;
-		$('#ap-versions-button img').css({'border':'1px solid red'});
-	} else {
-		$('#ap-versions-tab').hide();
+function switch_tabs(tab) {
+	if(tab == active_tab){
+		$('.ap-tab').hide();
 		$('#ap-info-tab').show();
 		active_tab = 0;
 		$('#ap-versions-button img').css({'border':''});
+		$('#ap-charter-button img').css({'border':''});
+	} else if(tab == 1)
+	{
+		$('.ap-tab').hide();
+		$('#ap-versions-tab').show();
+		active_tab = 1;
+		$('#ap-versions-button img').css({'border':'1px solid red'});
+		$('#ap-charter-button img').css({'border':''});
+	} else  {
+		$('.ap-tab').hide();
+		$('#ap-charter-tab').show();
+		active_tab = 2;
+		$('#ap-versions-button img').css({'border':''});
+		$('#ap-charter-button img').css({'border':'1px solid red'});
 	}
 }

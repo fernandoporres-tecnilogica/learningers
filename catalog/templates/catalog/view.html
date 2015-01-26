@@ -18,7 +18,10 @@
 	<a href='{% url 'catalog:resource-create' %}'><img class='ap-button-image' src="{% static 'catalog/toolbar-icons/add.png' %}" title='{% trans "Ajouter une ressource du même type" %}'/></a>
 	</div>
 	<div class='ap-button' id='ap-versions-button'>
-	<a href="javascript:switch_tabs()"><img class='ap-button-image' src="{% static 'catalog/toolbar-icons/versions.png' %}" title='{% trans "Voir les version précédentes de cette ressource" %}'/></a>
+	<a href="javascript:switch_tabs(1)"><img class='ap-button-image' src="{% static 'catalog/toolbar-icons/versions.png' %}" title='{% trans "Voir les version précédentes de cette ressource" %}'/></a>
+	</div>
+	<div class='ap-button' id='ap-charter-button'>
+	<a href="javascript:switch_tabs(2)"><img class='ap-button-image' src="{% static 'catalog/toolbar-icons/charter.png' %}" title="{% trans "Voir l'adéquation de cette ressource avec la charte" %}"/></a>
 	</div>
 {% block resource-toolbar %}
 {% endblock %}

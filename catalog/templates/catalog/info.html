@@ -1,10 +1,11 @@
 {% load inplace_edit %}
 {% load i18n %}
-
+{% load staticfiles %}
 <div class='ap-resource-info'>
 <h1>{% inplace_edit "resource.name" %}</h1>
 <ul>
 <li>
+<script src="{% static 'commons/external/tinymce/tinymce.min.js' %}"></script>
 {% trans 'Ajouter une description...' as add_desc %}
 {% inplace_edit "resource.description" adaptor="html", edit_empty_value=add_desc %}
 </li>

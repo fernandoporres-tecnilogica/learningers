@@ -48,7 +48,19 @@ for i in range(0,4):
     for resource_type in available_resource_models:
         if resource_type != 'way':  
             urlpatterns += patterns('', 
-                    url(p + resource_type + '/(?P<slug>[^/]+)/$', views.make_resource_view(resource_type), name=resource_type + '-view'),
+                    url(p + resource_type + '/(?P<slug>.+)/$', views.make_resource_view(resource_type), name=resource_type + '-view'),
                     )
 
-print urlpatterns
+# FOR ANNOTATIONS
+from models import available_annotation_contents, available_annotation_ranges
+from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.routers import SimpleRouter
+
+router = SimpleRouter()
+
+for content_type in available_annotation_contents:
+    for range_type in available_annotation_ranges:
+        print content_type + '-' + range_type + '-annotation'
+        router.register('annotations/' + content_type + '/' + range_type,views.make_annotation_viewset(content_type,range_type), content_type + '-' + range_type + '-annotation')
+
+urlpatterns += format_suffix_patterns(router.urls) 

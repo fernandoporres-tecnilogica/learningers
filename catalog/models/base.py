@@ -130,3 +130,19 @@ def resource_post_save(sender,**kwargs):
         
 # register for version control
 reversion.register(Resource)
+
+available_annotation_contents = {}
+
+def register_annotation_content(content_model):
+    content_type = content_model.__name__.lower()
+    setattr(content_model,'content_type',content_type)
+    setattr(content_model,'user_friendly_type',content_model._meta.verbose_name.title())
+    available_annotation_contents[content_type] = content_model
+    
+available_annotation_ranges = {}
+
+def register_annotation_range(range_model):
+    range_type = range_model.__name__.lower()
+    setattr(range_model,'range_type',range_type)
+    setattr(range_model,'user_friendly_type',range_model._meta.verbose_name.title())
+    available_annotation_ranges[range_type] = range_model

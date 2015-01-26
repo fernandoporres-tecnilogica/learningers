@@ -2,6 +2,7 @@
 
 from django.conf.urls import patterns, include, url
 from learningers import views
+from django.views.generic import TemplateView
 from django.contrib import admin
 from ajax_select import urls as ajax_select_urls
 
@@ -13,6 +14,7 @@ js_info_dict = {
 
 urlpatterns = patterns('',
     url(r'^$', views.HomeView.as_view(), name='home'),
+    url(r'^charter/$', TemplateView.as_view(template_name='learningers/charte.html'), name='charter'),
     # admin interface
     url(r'^admin/', include(admin.site.urls)),
     # user registration

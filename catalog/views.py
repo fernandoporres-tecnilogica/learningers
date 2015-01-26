@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from catalog import forms, serializers
-from catalog.models import available_resource_models, SessionWay, Resource, Way
+from catalog.models import available_resource_models, SessionWay, Resource, Way, available_annotation_ranges, available_annotation_contents
 from django.views.generic.base import View
 from django.views import generic
 from django.http import HttpResponsePermanentRedirect
@@ -17,6 +17,10 @@ from schedule.utils import coerce_date_dict
 import datetime
 from django.utils import timezone
 from commons.versions import previous_version_instance
+from rest_framework.response import Response
+from rest_framework import viewsets
+from rest_framework import permissions
+from rest_framework import filters
 
 def initialize_search_form(geget):
     ret = forms.ResourceSearchForm()
@@ -173,8 +177,6 @@ class SearchResultsView(generic.TemplateView):
         form =  forms.ResourceSearchForm(self.request.GET)
         context['search_form'] = form
         return context
-
-from rest_framework.response import Response
     
 class RequestMoreSearchResults(rest_framework.views.APIView):
     """
@@ -213,3 +215,12 @@ class CalendarRenderView(rest_framework.views.APIView):
                }
         return Response(val)        
         
+
+def make_annotation_viewset(content_type,range_type):
+    class AnnotationViewSet(viewsets.ModelViewSet):
+        queryset = available_annotation_contents[content_type].objects.all()
+        serializer_class = serializers.make_annotation_serializer(content_type,range_type)
+        permission_classes = (permissions.AllowAny,)
+        filter_backends = (filters.DjangoFilterBackend,)
+        filter_fields = ('resource',)
+    return AnnotationViewSet

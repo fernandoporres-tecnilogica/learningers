@@ -67,8 +67,9 @@ INSTALLED_APPS = (
     'haystack',
     # for versioning
     'reversion',
-    # for autocomplete
+    # for autocomplete, AJAX
     'ajax_select',
+    'rest_framework',
     # for geolocalisation
     'django.contrib.gis',
     # for model forking
@@ -261,7 +262,8 @@ INPLACEEDIT_SUCCESS_TEXT = _(u'Enregistré')
 INPLACEEDIT_UNSAVED_TEXT = _(u'Il y a des modifications non-enregistrées')
 ADAPTOR_INPLACEEDIT_EDIT = 'learningers.perms.MyAdaptorEditInline'
 ADAPTOR_INPLACEEDIT = {
-                       'html': 'inplaceeditform.fields.AdaptorTextAreaField',
+#                       'html': 'inplaceeditform.fields.AdaptorTextAreaField',
+                       'html': 'inplaceeditform_extra_fields.fields.AdaptorSimpleTinyMCEField',
                        'm2mcomma': 'inplaceeditform_extra_fields.fields.AdaptorAutoCompleteManyToManyField',
                        }
 # Giza conf

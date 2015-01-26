@@ -9,8 +9,7 @@
 	
 /* List of search results */
 #ap-panel {
-	margin-left:20em;
-	padding-right:1em;
+	margin-left:19em;
 }
 
 /* Toolbars */
@@ -161,7 +160,8 @@ div.ap-resource-logo {
 #ap-rightbar {
 	position:absolute;
 	width:15em;
-	right:0.5em;
+	right:0em;
+	top:4em;
 	height:100%;
 	overflow:visible;
 	display:none;
