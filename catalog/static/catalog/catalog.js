@@ -11,7 +11,7 @@ function makeLayout() {
 	});
 */
    	$('#ap-source-container').css({
-            width: $(window).width()-$('#ap-sidebar').outerWidth()-$('#ap-rightbar').outerWidth()-50,
+            width: $(window).width()-$('#ap-sidebar').outerWidth()-$('#ap-rightbar').outerWidth()-10,
         });
         
     $('#ap-rightbar').css({

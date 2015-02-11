@@ -25,6 +25,10 @@ SECRET_KEY = '&t7i2jfuzmy^q3z)7vd0y0_w!1u_=*c6j3p43act_&qi=jlg+0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+LOCALE_PATHS = (
+    os.path.join(os.path.dirname(__file__), "locale"),
+)
+
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []

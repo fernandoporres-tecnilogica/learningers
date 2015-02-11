@@ -187,12 +187,4 @@ class WikimediaArticle(Resource):
     def data(self):
         return {'wiki_html': self.wiki.get_page(self.title) }
 
-class HtmlRange(models.Model):
-    resource = models.ForeignKey('catalog.WikimediaArticle',verbose_name=_(u"Ressource concernée"),related_name='ranges',editable=False)
-    start = models.CharField(max_length=100)
-    end = models.CharField(max_length=100)
-    startOffset = models.IntegerField()
-    endOffset = models.IntegerField()
-
 register_resource(WikimediaArticle)
-register_annotation_range(HtmlRange)

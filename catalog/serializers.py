@@ -12,14 +12,14 @@ class ResourceSerializer(serializers.ModelSerializer):
     
     Utilisé pour la suppression de ressources. 
     """
-    name = serializers.SerializerMethodField('getname')
-    content = serializers.SerializerMethodField('getcontent')
+    name = serializers.SerializerMethodField('get_name')
+    content = serializers.SerializerMethodField('get_content')
     class Meta:
         model = models.Resource
         fields = ('name','content',)
-    def getname(self,obj):
+    def get_name(self,obj):
         return "<a href='" + obj.get_absolute_url() + "'>" + obj.name + "</a>"
-    def getcontent(self,obj):
+    def get_content(self,obj):
         return "<p>" + obj.name + "</p><p>" + obj.description + "</p>"
     
 def make_content_serializer(content_type):
@@ -32,21 +32,17 @@ def make_range_serializer(range_type):
     class HOP(serializers.ModelSerializer):
         class Meta:
             model = models.available_annotation_ranges[range_type]
-            read_only_fields = ('resource',)
+            read_only_fields = ('annotation',)
     return HOP
                         
 def make_annotation_serializer(content_type,range_type):
     class HOP(serializers.ModelSerializer):
         #content = make_content_serializer(content_type)()
-        ranges = make_range_serializer(range_type)(read_only=True)
+        ranges = make_range_serializer(range_type)(many=True)
+        resource = serializers.PrimaryKeyRelatedField(source='resource',read_only=False)
+        links = serializers.PrimaryKeyRelatedField(source='links',required=False,many=True)
         class Meta:
             model = models.available_annotation_contents[content_type]
-        def create(self, validated_data):
-#            content_data = validated_data.pop('content')
-#            self.content.create(content_data)
-            content = super(HOP,self).create(self,validated_data)
-            range_data = validated_data.pop('range')
-            self.range.create(range_data,resource=content.resource)
-            return content
+            depth = 1
     return HOP
     

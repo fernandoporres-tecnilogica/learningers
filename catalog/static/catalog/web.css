@@ -180,3 +180,8 @@ div.ap-resource-logo {
 	width:16em;
 	height:95%;
 }
+
+.help-block {
+	display: inline;
+	margin-left: 1em;
+}

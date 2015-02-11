@@ -146,3 +146,4 @@ def register_annotation_range(range_model):
     setattr(range_model,'range_type',range_type)
     setattr(range_model,'user_friendly_type',range_model._meta.verbose_name.title())
     available_annotation_ranges[range_type] = range_model
+

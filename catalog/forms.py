@@ -82,7 +82,7 @@ def make_resource_form(resource_type):
             self.fields['description'].widget = MarkdownWidget()
             for field_name in self.fields:
                 if isinstance(self.fields[field_name],DateTimeField):
-                    self.fields[field_name].widget = DateTimeWidget()
+                    self.fields[field_name].widget = DateTimeWidget(usel10n=True)
         class Meta:
             model = model_class
             exclude = ('title','creator','see_also','participants','calendar')

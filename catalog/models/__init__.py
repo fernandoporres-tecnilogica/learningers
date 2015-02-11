@@ -14,3 +14,4 @@ import sys
 for model in available_resource_models.values():
     reversion.register(model, follow=['resource_ptr'])
     setattr(sys.modules[__name__],model.__name__, model)
+    

@@ -27,7 +27,7 @@ jQuery(function ($) {
     $('#ap-source-container').annotator({}).annotator('setupPlugins', {},
                   { Tags: false, AnnotateItPermissions: false, Permissions: false, Auth: false, Filter: false, Store: {
       // The endpoint of the store on your server.
-      prefix: '/catalog/annotations/written/htmlrange/', // for loading contents
+      prefix: '/catalog/annotations/note/htmlrange/', // for loading contents
       loadFromSearch: {
         resource: {{ resource.pk }}
       },
