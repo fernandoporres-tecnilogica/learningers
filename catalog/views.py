@@ -186,7 +186,7 @@ class RequestMoreSearchResults(rest_framework.views.APIView):
     def get(self,request,*args,**kwargs):
         # pass the search form to keep its contents
         val = forms.ResourceSearchForm(self.request.GET).search().values('rendered')
-        return Response(val)
+        return Response(list(val))
 
 class CalendarRenderView(rest_framework.views.APIView):
     """

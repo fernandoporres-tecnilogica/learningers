@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     # admin interface
     url(r'^admin/', include(admin.site.urls)),
     # user registration
-    url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^accounts/', include('registration.urls')),
     url(r'^profil/(?P<slug>[^/]+)/$', views.UserProfileView.as_view(), name='profil'),
     url(r'^convert/', include('lazysignup.urls')),
     # autocompletion

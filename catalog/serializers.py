@@ -37,10 +37,23 @@ def make_range_serializer(range_type):
                         
 def make_annotation_serializer(content_type,range_type):
     class HOP(serializers.ModelSerializer):
-        #content = make_content_serializer(content_type)()
         ranges = make_range_serializer(range_type)(many=True)
-        resource = serializers.PrimaryKeyRelatedField(source='resource',read_only=False)
-        links = serializers.PrimaryKeyRelatedField(source='links',required=False,many=True)
+        resource = serializers.PrimaryKeyRelatedField(read_only=False,queryset=models.Resource.objects.all())
+        links = serializers.PrimaryKeyRelatedField(required=False,many=True,queryset=models.Resource.objects.all())
+	def create(self,validated_data):
+		ranges = validated_data.pop('ranges')
+		ret = models.available_annotation_contents[content_type].objects.create(**validated_data)
+		for r in ranges:
+			r['annotation_id'] = ret.pk
+		self.fields['ranges'].create(ranges)
+		return ret
+	def update(self,instance,validated_data):
+		# ignore range because it cannot be changed!
+		validated_data.pop('ranges')
+	        for attr, value in validated_data.items():
+        	    setattr(instance, attr, value)
+	        instance.save()
+	        return instance
         class Meta:
             model = models.available_annotation_contents[content_type]
             depth = 1

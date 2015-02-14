@@ -125,7 +125,7 @@ WSGI_APPLICATION = 'learningers.wsgi.application'
 
 DATABASES = {
   'default': {
-    'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+    'ENGINE': 'django.contrib.gis.db.backends.mysql', # django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
     'NAME': 'apprentisseurses', # Or path to database file if using sqlite3.
     'USER': 'apprentisseurses', # Not used with sqlite3.
     'PASSWORD': 'dNqdFr2KyaCDrENe', # Not used with sqlite3.
@@ -156,10 +156,11 @@ LANGUAGES = (
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = '/var/www/static'
+
 #######################
 #     APP SETTINGS    #
 #######################
-
 ELASTICSEARCH_INDEX_SETTINGS = {
     'settings': {
         "analysis": {
@@ -231,7 +232,7 @@ ELASTICSEARCH_DEFAULT_ANALYZER = "french_analyzer"
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'catalog.search.ConfigurableElasticSearchEngine',
-        'URL': 'http://127.0.0.1:9200/',
+        'URL': 'http://89.234.156.208:9200/',
         'INDEX_NAME': 'haystack',
     },
 }

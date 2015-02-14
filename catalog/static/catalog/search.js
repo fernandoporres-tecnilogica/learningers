@@ -59,11 +59,13 @@ function update_search_results(search_url) {
 	    data: { q:qq, a:aa, t:$('#t').val()},
 	    success: function (data) {
 	    	// add results in listing
+		if($.isArray(data)) {
 	    	data.map(function(result) {
 	    		//alert(result['rendered']);
 	    		$('#ap-panel').append($(result['rendered']));
 	    	});
 	    	add_tooltips();
+		}
 	    },
 	    error: function(data) {
 	    	alert('error!')
