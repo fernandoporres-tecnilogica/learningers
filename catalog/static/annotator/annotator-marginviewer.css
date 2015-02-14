@@ -1,0 +1,111 @@
+.annotator-hl-active {
+        background: rgba(255, 255, 10, 0.8);
+}
+
+.annotator-hl-filtered {
+        background-color: transparent;
+}
+
+.annotator-hl-uber {
+        background: rgba(255, 255, 10, 0.95);
+}
+
+.annotator-hl-uber-temp {
+        background: rgba(255, 255, 10, 0.95);
+}
+
+
+.annotator-marginviewer-element {
+        border: 1px solid #b3b3b3;
+        margin: 0px;
+        margin-bottom: 15px;
+        width: 100%;
+        padding: 0px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        font-size: 12px;
+        -moz-box-shadow: 0px 4px 2px 0px rgba(0,0,0,0.25);
+        -webkit-box-shadow: 0px 4px 2px 0px rgba(0,0,0,0.25);
+        box-shadow: 0px 4px 2px 0px rgba(0,0,0,0.25);
+        cursor: pointer;
+}
+
+.annotator-marginviewer-element:hover .annotator-marginviewer-header {
+        background-color: #f3eea6;
+}
+
+.annotator-marginviewer-element:hover .annotator-marginviewer-text {
+        background-color: #efefef;
+}
+
+.annotator-marginviewer-header {
+        border-bottom: 1px solid #b3b3b3;
+        background-color: #e6e6e6;
+        padding-right: 0.5em;
+        padding-left: 0.5em;
+        padding-top: 0.4em;
+        padding-bottom: 0.4em;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+}
+.annotator-marginviewer-highlighted>.annotator-marginviewer-header {
+        background-color: #f3eea6;
+}
+.annotator-marginviewer-highlighted>.annotator-marginviewer-text {
+        background-color: #efefef;
+}
+.annotator-marginviewer-selected>.annotator-marginviewer-header {
+        background-color: #fbed20;
+}
+
+.annotator-marginviewer-text {
+        background-color: #e6e6e6;
+        padding: 0.5em;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+}
+
+.annotator-marginviewer-highlighted>.annotator-marginviewer-text {
+}
+.annotator-marginviewer-selected>.annotator-marginviewer-text {
+    /* Mozilla: */
+    background: -moz-linear-gradient(top, #fef8cd, #f6edb5);
+    /* Chrome, Safari:*/
+    background: -webkit-gradient(linear,
+                left top, left bottom, from(#fef8cd), to(#f6edb5));
+    /* MSIE */
+    filter: progid:DXImageTransform.Microsoft.Gradient(
+                StartColorStr='#fef8cd', EndColorStr='#f6edb5', GradientType=0);
+}
+.annotator-marginviewer-selected>.annotator-marginviewer-header:before {
+        content:"";
+        font-size: 0px; line-height: 0%; width: 0px;
+        height: 0px;
+        border-color: transparent transparent transparent black;
+        border-style: solid;
+        border-width: 10px 10px 10px 10px;
+        margin-right:-26px;
+        margin-top: 2px;
+}
+
+.annotator-marginviewer-delete {
+        margin-left: 0px;
+        margin-right: 2px;
+        color: red;
+        font-weight: bold;
+}
+
+    Status
+    API
+    Training
+    Shop
+    Blog
+    About
+
+    © 2013 GitHub, Inc.
+    Terms
+    Privacy
+    Security
+    Contact
+
