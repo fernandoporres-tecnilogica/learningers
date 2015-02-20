@@ -141,6 +141,8 @@ class RecurrenceField(forms.CharField):
         `recurrence.base.Recurrence` object falls within the
         parameters specified to the `RecurrenceField` constructor.
         """
+	if not value:
+		return None		
         try:
             recurrence_obj = recurrence.deserialize(value)
         except exceptions.DeserializationError as error:

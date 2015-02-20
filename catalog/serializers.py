@@ -59,3 +59,7 @@ def make_annotation_serializer(content_type,range_type):
             depth = 1
     return HOP
     
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Comment
+        

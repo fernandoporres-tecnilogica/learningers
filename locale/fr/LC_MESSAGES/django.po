@@ -1,0 +1,219 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-02-01 00:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: catalog/forms.py:17
+msgid "Address invalide"
+msgstr ""
+
+#: catalog/forms.py:29
+msgid "Apprendre"
+msgstr ""
+
+#: catalog/forms.py:29 catalog/templates/search/form.html:9
+#: essai/templates/index.html:12
+msgid "Quoi?"
+msgstr ""
+
+#: catalog/forms.py:30
+msgid "à"
+msgstr ""
+
+#: catalog/forms.py:30 catalog/templates/search/form.html:9
+#: essai/templates/index.html:13
+msgid "Où?"
+msgstr ""
+
+#: catalog/models.py:46
+msgid "Titre"
+msgstr ""
+
+#: catalog/models.py:48 catalog/templates/catalog/html_view.html:30
+#: catalog/templates/catalog/parcours_view.html:19
+msgid "Description"
+msgstr ""
+
+#: catalog/models.py:57
+msgid "Adresse"
+msgstr ""
+
+#: catalog/models.py:59
+msgid "Coordonnées"
+msgstr ""
+
+#: catalog/models.py:83
+msgid "Un parcours du même nom existe déjà sur cette plateforme."
+msgstr ""
+
+#: catalog/models.py:91
+msgid "Ton parcours"
+msgstr ""
+
+#: catalog/models.py:102
+msgid "Une plateforme du même nom existe déjà."
+msgstr ""
+
+#: catalog/models.py:110
+msgid "Une source du même nom existe déjà dans ce parcours."
+msgstr ""
+
+#: catalog/models.py:125 catalog/templates/catalog/html_view.html:28
+msgid "Wiki d'origine"
+msgstr ""
+
+#: catalog/models.py:126 catalog/templates/catalog/html_view.html:29
+msgid "Titre d'origine"
+msgstr ""
+
+#: catalog/models.py:131
+msgid "L'article \""
+msgstr ""
+
+#: catalog/templates/catalog/catalog_base.html:5
+msgid "Les apprentisseu.rs.ses"
+msgstr ""
+
+#: catalog/templates/catalog/catalog_base.html:5
+msgid "Résultats de la recherche"
+msgstr ""
+
+#: catalog/templates/catalog/catalog_base.html:17
+msgid "Retour"
+msgstr ""
+
+#: catalog/templates/catalog/catalog_base.html:31
+#: essai/templates/index.html:34
+msgid "Ajouter du contenu ici!"
+msgstr ""
+
+#: catalog/templates/catalog/gallery_view.html:8
+msgid "Gallerie"
+msgstr ""
+
+#: catalog/templates/catalog/parcours_view.html:13 panel/forms.py:10
+msgid "Parcours"
+msgstr ""
+
+#: catalog/templates/catalog/plateforme_view.html:8
+msgid "Addresse:"
+msgstr ""
+
+#: catalog/templates/search/form.html:6
+msgid "Apprendre!"
+msgstr ""
+
+#: essai/settings.py:43
+msgid "Français"
+msgstr ""
+
+#: essai/settings.py:44
+msgid "Anglais"
+msgstr ""
+
+#: essai/settings.py:297
+msgid "Insérer..."
+msgstr ""
+
+#: essai/settings.py:302
+msgid "Enregistré"
+msgstr ""
+
+#: essai/settings.py:303
+msgid "Il y a des modifications non-enregistrées"
+msgstr ""
+
+#: essai/templates/base.html:6
+#: essai/templates/registration/activation_email_subject.txt:2
+msgid "Les apprentisseurEs"
+msgstr ""
+
+#: essai/templates/base.html:6
+msgid "Page d'accueil"
+msgstr ""
+
+#: essai/templates/index.html:8
+msgid "Bienvenue chez les apprentisseurs-ses"
+msgstr ""
+
+#: essai/templates/index.html:19
+msgid "Mises à jours récentes"
+msgstr ""
+
+#: essai/templates/mybase.html:11
+msgid "Langue"
+msgstr ""
+
+#: essai/templates/registration/activation_email.txt:2
+msgid ""
+"\n"
+"Vous ou une tierce personne a demandé la création d'un compte utilisateur "
+"sur \"Les apprentisseurs\".\n"
+"Merci de suivre le lien suivant si vous souhaitez procéder à l'activation de "
+"ce compte:\n"
+msgstr ""
+
+#: essai/templates/registration/activation_email.txt:7
+#, python-format
+msgid ""
+" \n"
+"Dans le cas contraire, aucune action n'est requise de votre part,\n"
+"et le lien expirera automatiquement dans %(expiration_days)s jour"
+"%(expiration_days|pluralize)s.\n"
+msgstr ""
+
+#: essai/templates/registration/activation_email_subject.txt:2
+msgid "Activation de votre compte sur"
+msgstr ""
+
+#: essai/templates/registration/logged_in.html:4
+msgid "Déconnexion"
+msgstr ""
+
+#: essai/templates/registration/logged_in.html:6
+msgid "Connexion"
+msgstr ""
+
+#: essai/templates/registration/logged_in.html:8
+#: essai/templates/registration/registration_form.html:12
+msgid "Inscription"
+msgstr ""
+
+#: panel/forms.py:13
+msgid "Lien vers un parcours"
+msgstr ""
+
+#: panel/forms.py:17
+msgid "Plateforme"
+msgstr ""
+
+#: panel/forms.py:20
+msgid "Lien vers une plateforme"
+msgstr ""
+
+#: panel/forms.py:23
+msgid "Source"
+msgstr ""
+
+#: panel/forms.py:26
+msgid "Copie d'une source existante"
+msgstr ""
+
+#: panel/templates/panel/panel.html:3
+msgid "Ajouter un bloc"
+msgstr ""

@@ -40,6 +40,26 @@ class ResourceLanguage(models.Model):
     
 add_introspection_rules([], ["^django_languages\.fields\.LanguageField"])
 
+class Comment(TimeStampedModel):
+    """
+    A comment concerning a resource.
+    """
+    resource = models.ForeignKey('catalog.Resource',verbose_name=_(u'Ressource'),help_text=_(u"La ressource concernée"))
+    text = models.TextField()
+    COULOUR_CHOICES = (
+        (0, u'Vert'),
+        (1, u'Orange'),
+        (2, u'Rouge'),
+    ) 
+    colour = models.IntegerField(choices=COULOUR_CHOICES)
+    CATEGORY_CHOICES = (
+        (0, u"Pas d'enfermement"),
+        (1, u"Pas d'autorité"),
+        (2, u"Respect de l'intimité"),
+        (3, u"Respect de l'information")
+    )
+    category = models.IntegerField(choices=CATEGORY_CHOICES)
+    
 class Resource(TimeStampedModel,ForkableModel):
     """
     Modèle abstrait de base pour les resources répertoriées dans le catalogue.
@@ -59,7 +79,7 @@ class Resource(TimeStampedModel,ForkableModel):
     # Languages used in this resource
     languages = models.ManyToManyField(ResourceLanguage,editable=False, help_text=__(u'Les langues à maîtriser pour comprendre cette ressource'))
     # Other entries related to this resource
-    see_also = models.ManyToManyField('catalog.Resource',verbose_name=__('Voir aussi'),blank=True,null=True,default=None, help_text=__(u"D'autres resources liées à celle-ci")) 
+    see_also = models.ManyToManyField('catalog.Resource',verbose_name=__('Voir aussi'),blank=True,null=True,default=None, help_text=__(u"D'autres resources liées à celle-ci"))
     # To manage inheritance
     objects = InheritanceManager()    
     

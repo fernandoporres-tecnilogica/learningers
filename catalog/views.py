@@ -185,8 +185,18 @@ class RequestMoreSearchResults(rest_framework.views.APIView):
     serializer_class = serializers.ResourceSerializer
     def get(self,request,*args,**kwargs):
         # pass the search form to keep its contents
-        val = forms.ResourceSearchForm(self.request.GET).search().values('rendered')
-        return Response(list(val))
+        print "request"
+        print self.request.GET
+        f = forms.ResourceSearchForm(self.request.GET)
+        if(f.is_valid()):
+            print "data"
+            print f.cleaned_data
+            val = f.search().values('rendered')
+            return Response(list(val))
+        else:
+            print "not valid!!"
+            print f['t'].errors
+            return Response([])
 
 class CalendarRenderView(rest_framework.views.APIView):
     """
