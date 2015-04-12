@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 from catalog.models.base import Resource,GeoLocation,register_resource
 from django.db import models
@@ -8,7 +9,7 @@ from django.contrib.auth.models import User
 
 class Meeting(Resource,Event):
     """Un ou plusieurs évènements pendant lesquels des personnes se retrouvent pour agir, apprendre, échanger..."""
-    geo = models.ForeignKey(GeoLocation,default=None,null=True,blank=True,verbose_name=__(u'Où?'), help_text=__(u'Le lieu de rencontre'))
+    geo = models.ForeignKey(GeoLocation,verbose_name=__(u'Où?'), help_text=__(u'Le lieu de rencontre'))
     participants = models.ManyToManyField(User)
     class Meta:
         verbose_name =  __('Rencontre')

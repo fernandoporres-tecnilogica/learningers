@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 from catalog.models.base import Resource,GeoLocation,register_resource
 from django.db import models

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 from django.db import models
 from commons.coding import classproperty
 from model_utils.models import TimeStampedModel
@@ -16,6 +16,8 @@ from commons.signals import receiver_subclasses
 import geopy
 import reversion
 from django.db.models.signals import post_save
+from django.contrib.auth.models import User
+from django.conf import settings
 
 # for GeoLocation
 from django.contrib.gis.db.models import GeoManager, PointField
@@ -44,14 +46,17 @@ class Comment(TimeStampedModel):
     """
     A comment concerning a resource.
     """
-    resource = models.ForeignKey('catalog.Resource',verbose_name=_(u'Ressource'),help_text=_(u"La ressource concernée"))
-    text = models.TextField()
-    COULOUR_CHOICES = (
+    resource = models.ForeignKey('catalog.Resource',verbose_name=_(u'Ressource'),help_text=_(u"La ressource concernée"),related_name='comments')
+    text = models.TextField(verbose_name=_(u'Contenu'), blank=True)
+    COLOUR_CHOICES = (
         (0, u'Vert'),
         (1, u'Orange'),
         (2, u'Rouge'),
     ) 
-    colour = models.IntegerField(choices=COULOUR_CHOICES)
+
+    COLOUR_RGB = ('#AAFFAA','#FFDDAA','#FFAAAA')
+
+    colour = models.IntegerField(choices=COLOUR_CHOICES,verbose_name=_(u'Couleur'),help_text=_(u"Vert=OK,Orange=Avis mitigé,Rouge=Demande de veto"))
     CATEGORY_CHOICES = (
         (0, u"Pas d'enfermement"),
         (1, u"Pas d'autorité"),
@@ -59,6 +64,9 @@ class Comment(TimeStampedModel):
         (3, u"Respect de l'information")
     )
     category = models.IntegerField(choices=CATEGORY_CHOICES)
+    author = models.ForeignKey(User,verbose_name=_(u'AuteurE'))
+    def get_colour_rgb(self):
+        return self.COLOUR_RGB[self.colour]
     
 class Resource(TimeStampedModel,ForkableModel):
     """
@@ -109,7 +117,10 @@ class Resource(TimeStampedModel,ForkableModel):
             raise Http404
     def preview(self):
         "return HTML code to display a small preview of this resource"
-        return self.description
+        if self.description:
+            return self.description
+        else:
+            return '<div style="text-align:center;"><img style="border:none;" src="' + settings.STATIC_URL + ('catalog/' + self.resource_type + '/icon.png') + '" title="Source:{{ resource_source }}"/></div>'
 
 class GeoLocation(models.Model):
     """
@@ -118,7 +129,7 @@ class GeoLocation(models.Model):
     # Entry associated address
     address = models.CharField(max_length=200,verbose_name=__('Adresse'),help_text=__("L'adresse postale du lieu"))
     # Entry associated location
-    location = PointField(editable=False,default=fromstr("POINT(0 0)"),verbose_name=__(u'Coordonnées'),help_text=__("Les coordonnées GPS du lieu"))
+    location = PointField(editable=False,verbose_name=__(u'Coordonnées'),help_text=__(u"Les coordonnées GPS du lieu"))
     # manager
     objects = GeoManager()
     def save(self,*args,**kwargs):

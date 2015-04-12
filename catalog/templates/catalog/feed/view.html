@@ -1,0 +1,26 @@
+{% extends "catalog/view.html" %}
+
+{% load staticfiles i18n l10n %}
+{% load inplace_edit %}
+
+{% block css %}
+{{block.super}}
+<link rel="stylesheet" href="{% static 'catalog/feed/web.css' %}" />
+{% endblock %}
+{% block source %}
+<ol>
+{% for entry in resource.entries %}
+<li>
+<a href="{{entry.feedentry_url}}">{{ entry.title }}</a>
+</li>
+{% endfor %}
+</ol>
+{% endblock %}
+
+{% block annotations %}
+{% endblock %}
+
+{% block js %}
+{{block.super}}
+{% endblock %}
+

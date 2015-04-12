@@ -11,11 +11,11 @@ function makeLayout() {
 	});
 */
    	$('#ap-source-container').css({
-            width: $(window).width()-$('#ap-sidebar').outerWidth()-$('#ap-rightbar').outerWidth()-10,
+            width: $(window).width()-$('#ap-sidebar').outerWidth()-$('#ap-rightbar').outerWidth()-10
         });
         
     $('#ap-rightbar').css({
-            height: $(window).height()-$('#ap-headbar').outerHeight()
+            height: $(window).height()-$('#ap-headbar').outerHeight()-10
         }); 
     $('#ap-source-container').show();
     $('#ap-rightbar').show();

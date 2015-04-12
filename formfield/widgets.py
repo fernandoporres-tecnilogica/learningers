@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.safestring import mark_safe
 from django.forms.util import flatatt
+import re
 
 class FormFieldWidget(forms.MultiWidget):
     """
@@ -15,8 +16,11 @@ class FormFieldWidget(forms.MultiWidget):
         super(FormFieldWidget, self).__init__(widgets, attrs)
 
     def value_from_datadict(self, data, files, name):
-        return data.get(name,None)
-        #return [ f.widget.value_from_datadict(data.get(name,None), files, f.name) for f in self.fields ] 
+        N = len(name)
+        subdata = dict( (k[N+1:],v) for k,v in  data.items() if k[0:N] == name)
+        tmp = [ f.widget.value_from_datadict(subdata, files, k) for k,f in self.fields.items() ]
+        print "tmp : %s" % tmp
+        return tmp 
 
     def render(self, name, value, attrs=None):
         if self.is_localized: 
@@ -58,7 +62,7 @@ class FormFieldWidget(forms.MultiWidget):
         """
         Format the help text for the bound field
         """
-        return '<span class="helptext">%s</p>' % unicode(field.help_text)
+        return '<span class="helptext">%s</span>' % unicode(field.help_text)
         
     def format_output(self, attrs, rendered_widgets):
         """
@@ -78,9 +82,6 @@ class FormFieldWidget(forms.MultiWidget):
     
     def _get_media(self):
         "We need to also add the media defined directly in the form."
-        print 'tutu'
-        print self.form_media
-        print super(FormFieldWidget,self).media
         return self.form_media + super(FormFieldWidget,self).media
     
     media = property(_get_media)

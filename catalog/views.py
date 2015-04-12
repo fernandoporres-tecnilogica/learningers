@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from catalog import forms, serializers
-from catalog.models import available_resource_models, SessionWay, Resource, Way, available_annotation_ranges, available_annotation_contents
+from catalog.models import available_resource_models, SessionWay, Resource, Way, available_annotation_ranges, available_annotation_contents, Comment
 from django.views.generic.base import View
 from django.views import generic
 from django.http import HttpResponsePermanentRedirect
@@ -52,7 +52,25 @@ class ResourceDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Resource.objects.all()
     serializer_class = serializers.ResourceSerializer
-                        
+
+class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Accès AJAX aux données d'une resource.
+    
+    Utilisé surtout pour effacer des resources.
+    """
+    queryset = Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+
+class CommentCreateView(generics.ListCreateAPIView):
+    """
+    Accès AJAX aux données d'une resource.
+    
+    Utilisé surtout pour effacer des resources.
+    """
+    queryset = Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+                            
 class BaseResourceView(View,generic.base.TemplateResponseMixin):
     """
     Vue de base pour toutes les resources.
@@ -80,7 +98,8 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
         context['search_form'] = initialize_search_form(self.request.GET)
         context['resource'] = kwargs['object']
         # Build a list of all previous versions, latest versions first, duplicates removed:
-        context['versions'] = reversion.get_for_object(kwargs['object'])          
+        context['versions'] = reversion.get_for_object(kwargs['object'])
+        context['comment_categories'] = ({'name':c[1], 'queryset':context['resource'].comments.filter(category=c[0])} for c in Comment.CATEGORY_CHOICES)            
         return context
     
     def get(self, request, **kwargs):
@@ -99,8 +118,8 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
                  slug=self.kwargs['slug']
             )            
             if(qs.count() == 0):
-                obj = self.model.make_from_slug(self.request.way,self.kwargs['slug'])
                 try:
+                    obj = self.model.make_from_slug(self.request.way,self.kwargs['slug'])
                     obj.full_clean()
                 except ValidationError as e:
                     raise Http404(e)
@@ -116,8 +135,17 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
                 obj = previous_version_instance(self.model,version.field_dict)
                 return obj
             else:
-                obj = get_object_or_404(self.model,slug=self.kwargs['slug'],**self.make_parents_query(self.kwargs))
-                return obj
+                qs = self.model.objects.filter(slug=self.kwargs['slug'],**self.make_parents_query(self.kwargs))
+                if(qs.count() == 0):
+                    try:
+                        obj = self.model.make_from_slug(self.request.way,self.kwargs['slug'])
+                        obj.full_clean()
+                    except ValidationError as e:
+                        raise Http404(e)
+                    obj.save() 
+                    return obj
+                else:
+                    return qs.get()
       
 def make_resource_view(_resource_type):
     """

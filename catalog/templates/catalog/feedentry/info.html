@@ -1,0 +1,8 @@
+{% extends "catalog/info.html" %}
+{% load inplace_edit i18n %}
+
+{% block info %}
+<p>{% trans "Adresse du flux" %}: {{ resource.url }}</p>
+<p>{% trans "Adresse de l'article" %}: {{ resource.link }}</p>
+<p>{% trans "Titre d'origine" %}: {{ resource.title }}</p>
+{% endblock %}

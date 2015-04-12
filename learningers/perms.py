@@ -5,7 +5,7 @@ class MyAdaptorEditInline(object):
     @classmethod
     def can_edit(cls, adaptor_field):
         obj = adaptor_field.obj
-        print obj.__class__
+#        print obj.__class__
         if isinstance(obj,UserProfile):
             if adaptor_field.request.user is obj.user:
                 return True

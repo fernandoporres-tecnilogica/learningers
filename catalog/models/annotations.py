@@ -6,15 +6,18 @@ Depending on the resource, the concept of range takes different meanings.
 For a textual resource, the range is a portion of the text,
 for an audio resource, it is a time interval, etc.
 """
+from __future__ import unicode_literals
 from django.db import models
 from model_utils.models import TimeStampedModel
 from django.utils.translation import ugettext as _
 from model_utils.managers import InheritanceManager
 from base import register_annotation_content, register_annotation_range
+from django.contrib.auth.models import User
 
 class Annotation(TimeStampedModel):
     "Generic model to hold the content of an annotation"
     resource = models.ForeignKey('catalog.Resource',verbose_name=_(u"Ressource concernée"),related_name='annotations')
+    authors = models.ManyToManyField(User,verbose_name=_(u'AuteurEs')) 
     links = models.ManyToManyField('catalog.Resource',verbose_name=_(u"Liens"),null=True,default=None)
     objects = InheritanceManager()
 
@@ -31,4 +34,10 @@ class HtmlRange(models.Model):
     startOffset = models.IntegerField()
     endOffset = models.IntegerField()
     
+class EventRange(models.Model):
+    annotation = models.ForeignKey('catalog.Annotation',related_name='event_ranges')
+    start = models.DateTimeField(_(u"Début"))
+    end = models.DateTimeField(_(u"Fin"), help_text=_(u"La date de fin doit être postérieure à la date de début"))
+    
 register_annotation_range(HtmlRange)
+register_annotation_range(EventRange)

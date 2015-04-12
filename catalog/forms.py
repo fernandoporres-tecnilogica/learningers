@@ -2,6 +2,7 @@
 
 from haystack.forms import SearchForm
 from recurrence.forms import RecurrenceField
+from recurrence.base import deserialize
 from django import forms
 from ajax_select.fields import AutoCompleteField, AutoCompleteSelectField
 from geopy import geocoders
@@ -17,13 +18,21 @@ from datetimewidget.widgets import DateTimeWidget
 from django.forms.fields import DateTimeField
 import geopy
 from django.forms.widgets import HiddenInput
+from datetime import datetime, timedelta
 
 class ResourceSearchForm(SearchForm):
+    """
+    Main search form.
+    
+    Ordering of results is computed according to the following:
+    
+    """
     def __init__(self, *args, **kwargs):
         kwargs['auto_id'] = True
         kwargs['label_suffix'] = ''
         super(ResourceSearchForm, self).__init__(*args, **kwargs)
-    q = forms.CharField(label=__(u'Quoi?'), initial='',required=True)
+    #q = forms.CharField(label=__(u'Quoi?'), initial='',required=True)
+    q = AutoCompleteField('resource',help_text='',label=__(u'Quoi?'), initial='',required=True)
     a = AutoCompleteField('location',help_text='',label=__(u'Où?'), initial='',required=False)
     t = RecurrenceField(label=__(u'Quand?'), initial='',required=False,max_rdates=0,max_exdates=0)
     d = forms.CharField(label=__(u'Quand?'), initial='',required=False)
@@ -38,9 +47,23 @@ class ResourceSearchForm(SearchForm):
                 print "address: %s, lat : %g, lng : %g" % (address, lat, lng)
                 loc = Point(lng,lat)
                 max_dist = D(km=10)
-                #return sqs.dwithin('location',loc,max_dist).distance('location',loc)
+                #sqs = sqs.dwithin('location',loc,max_dist).distance('location',loc)
             except geopy.exc.GeocoderServiceError:  
                 pass
+        time = self.cleaned_data.get('t')
+        if(time):
+            # extract serialized events from search query set index
+            events = sqs.exclude(event='toto')
+            excluded = list()
+            for e in events:
+                if e.event:
+                    # we only check if we can go to the next upcoming occurrence
+                    # checking all occurrences would be too costly
+                    ev = deserialize(e.event).after(datetime.now())
+                    if not ev in time.occurrences(dtstart = ev):
+                        excluded.append(e.pk)
+            if(excluded):
+                sqs = sqs.exclude(id__in=excluded)
         return sqs
     def no_query_found(self):
         return self.searchqueryset.all()
@@ -49,16 +72,16 @@ class GeoLocationForm(forms.ModelForm):
     "Formulaire pour la localisation"
     class Meta:
         model = GeoLocation
-        fields = '__all__'
+        fields = ('address',)
        
 def make_resource_form(resource_type):
     model_class = available_resource_models[resource_type]
     
     class BetterMetaClass(ModelFormMetaclass):
-        def __new__(mcs, name, bases, attrs):
+        def __new__(cls, name, bases, attrs):
             new_attrs = {}
             if(hasattr(model_class,'geo')):
-                new_attrs['geo'] = FormField(GeoLocationForm)
+                new_attrs['geo'] = FormField(GeoLocationForm,related=True)
             if(hasattr(model_class,'user')):
                 new_attrs['user'] = AutoCompleteSelectField('user',required=False)  
             opts = model_class._meta
@@ -72,7 +95,7 @@ def make_resource_form(resource_type):
                 value.help_text = fields[key].help_text
                 value.required = (fields[key].blank == False and fields[key].null == False) 
             attrs.update(new_attrs) 
-            return super(BetterMetaClass, mcs).__new__(mcs, name, bases, attrs)   
+            return super(BetterMetaClass, cls).__new__(cls, name, bases, attrs)   
     class BaseHOP(six.with_metaclass(BetterMetaClass, BaseModelForm)):
         pass
     class HOP(BaseHOP):

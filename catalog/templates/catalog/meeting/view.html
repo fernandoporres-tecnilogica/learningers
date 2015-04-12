@@ -7,13 +7,12 @@
 {{block.super}}
 <link href="{% static 'openlayers/openlayers3.css' %}" type="text/css" media="all" rel="stylesheet" />
 <link href="{% static 'catalog/map.css' %}" type="text/css" media="all" rel="stylesheet" />
-<link href="{% static 'popover/popover.css' %}" type="text/css" media="all" rel="stylesheet" />
 {% endblock %}
 
 {% block source %}
 <!-- the participants -->
 {% for participant in resource.participants.all %}
-{% with resource_type='human' resource_source='internal' resource_name=participant.username resource_description='' resource_url='' resource_tooltip='' %}
+{% with resource_type='human' resource_source='internal' resource_name=participant.username resource_description=participant.description resource_url=participant.get_absolute_url resource_tooltip=participant.description %}
 {% include 'catalog/resource.html' %}
 {% endwith %}
 {% endfor %}
@@ -32,12 +31,21 @@
 {% endblock %}
 
 {% block annotations %}
+<p>{% trans "Qu'as tu appris lors de cette rencontre ?" %}</p>
+{% for annotation in resource.annotations.select_subclasses %}
+{% include 'catalog/annotation.html' %}
+{% endfor %}
+<form class='annotation-form' style="display:none;">
+<textarea class='form-control annotation-text'></textarea>
+<button type="button" class="annotation-submit btn btn-default">{% trans 'Poster' %}</button>
+</form>
+<span class='annotation-add' >{% trans 'Ajouter une annotation...' %}</span>
+
 {% endblock %}
 
 {% block js %}
 {{block.super}}
 <script src="{% static 'openlayers/openlayers3.js' %}"></script>
-<script src="{% static 'popover/popover.js' %}"></script>
 <script src="{% static 'catalog/map.js' %}"></script>
 <script src="{% static 'catalog/calendar.js' %}"></script>
 <script>
@@ -48,9 +56,38 @@ var marker_data = [{
 	"title" : "{{ resource.name|escapejs }}",
 }];
 $(window).load(function() {
-	update_calendar("{% url 'catalog:calendar-data' pk=resource.parent.pk size="regular" %}");
+	update_calendar("{% url 'catalog:calendar-data' pk=resource.parent.pk size="small" %}");
 	initialize_map(marker_data);
 });
 </script>
+<script>
+$(window).load(function() {
+	$('.annotation-add').on('click', function() {
+		$(this).parent().find('.annotation-form').show();
+		$(this).hide();
+	});
+	$('.annotation-submit').on('click',function() {
+			var form = $(this).parent();
+			$.ajax({
+		    url: "{% url 'catalog:note-eventrange-annotation-list' %}",
+		    type: "POST",
+		    data: {
+		    	'resource': {{resource.pk}}, 
+		    	'author': {{request.user.pk}}, 
+		    	'text' : $(this).parent().find('.annotation-text').val() },
+		    success: function (data) {
+				form.hide();
+				form.parent().find('.annotation-add').show();
+				form.before($(data['rendered']));	
+		    },
+		    error: function(data) {
+		    	alert({% trans 'Erreur, réessayez' %});
+		    }
+		});
+	
+	});
+});
+</script>
+
 {% endblock %}
 

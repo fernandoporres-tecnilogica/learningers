@@ -26,7 +26,7 @@ SECRET_KEY = '&t7i2jfuzmy^q3z)7vd0y0_w!1u_=*c6j3p43act_&qi=jlg+0'
 DEBUG = True
 
 LOCALE_PATHS = (
-    os.path.join(os.path.dirname(__file__), "locale"),
+    os.path.join(os.path.dirname(__file__), "../locale"),
 )
 
 TEMPLATE_DEBUG = True
@@ -83,9 +83,11 @@ INSTALLED_APPS = (
     # for translation
     'django_languages',
     # for in-place editing
+    'inplaceeditform_bootstrap',
     'inplaceeditform',
     'inplaceeditform_extra_fields',
     'django_markdown',
+    'schedule',
     # for mailing list interface
     'django_mailman',
     # for nice user interface
@@ -101,7 +103,6 @@ INSTALLED_APPS = (
      'giza',
     # for scheduling of events
     'recurrence',
-    'schedule',
     'datetimewidget',
 )
 
@@ -145,7 +146,8 @@ LANGUAGE_CODE = 'fr'
 
 LANGUAGES = (
     ('fr', _(u'Français')),
-    ('en', _('Anglais')),
+    ('en', _(u'Anglais')),
+    ('de', _(u'Allemand')),
 )
 
 # Static files (CSS, JavaScript, Images)
@@ -242,6 +244,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 # for autocomplete
 AJAX_LOOKUP_CHANNELS = {
     'location' : ('catalog.lookups','LocationLookup'),
+    'resource' : ('catalog.lookups','ResourceLookup'),
     'way' : ('catalog.lookups','WayLookup'),
     'user' : ('catalog.lookups','UserLookup'),
  }

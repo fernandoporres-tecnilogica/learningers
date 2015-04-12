@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.db import models
 from simplemediawiki import MediaWiki
 from catalog.models.base import ResourceLanguage, Resource, register_resource, register_annotation_range
@@ -166,8 +168,7 @@ class WikimediaArticle(Resource):
     title = models.CharField(max_length=200, verbose_name =__('Titre d\'origine'))
     class Meta:
         verbose_name = __(u"Article Wiki")
-        verbose_name_plural = __(u"Articles Wiki")
-               
+        verbose_name_plural = __(u"Articles Wiki")               
     def clean(self):
         # check if an article with this title exists in the provided wiki
         new_title = self.wiki.get_redirect_title(self.title)
@@ -185,6 +186,6 @@ class WikimediaArticle(Resource):
         wiki,name,snippet = Wiki.make_from_slug(slug)
         return WikimediaArticle(name=name,wiki=wiki,title=name,parent=parent,description=snippet)    
     def data(self):
-        return {'wiki_html': self.wiki.get_page(self.title) }
+        return {'html': self.wiki.get_page(self.title) }
 
 register_resource(WikimediaArticle)

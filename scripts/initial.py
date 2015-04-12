@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from catalog import models
 from django.contrib.auth.models import User
 from django.utils.translation import activate
@@ -8,6 +9,8 @@ from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, HOURLY, MINUTELY, SEC
 from django_mailman.models import List
 from catalog.models.wiki import Wiki
 from django.contrib.auth.hashers import make_password
+import sys 
+import traceback
 
 def make_from_slug(model,parent,slug):
 	if not model.objects.filter(slug=slug).exists():
@@ -17,6 +20,8 @@ def make_from_slug(model,parent,slug):
 			o.save()
 			return o
 		except:
+			print sys.exc_info()[0]
+			print traceback.format_exc()
 			print 'Could not create ' + model.__name__ + ' source'
 	else:
 		return model.objects.get(slug=slug)
@@ -78,7 +83,15 @@ def run():
 	# install some mailing lists
 	mailing,created=models.MailmanList.objects.get_or_create(name=u'Mailing list de GASET', listname='g.a.s.e.t', password='73Vadziom!', email='g.a.s.e.t@listes.cooperative-integrale-toulouse.org',main_url='http://listes.cooperative-integrale-toulouse.org', encoding='iso-8859-1',parent=gaset)
 	
-	# install some PadString
-	pad,created=models.Etherpad.objects.get_or_create(name=u'Pad de GASET', padname='Guide de GASET', padserver='http://pad.tetaneutral.net/', parent=gaset)
+	# install some pad
+	#pad,created=models.Etherpad.objects.get_or_create(name=u'Pad de GASET', padname='Guide de GASET', padserver='pad.tetaneutral.net', parent=gaset)
+	make_from_slug(models.Etherpad,gaset,'pad.tetaneutral.net/p/Guide_de_GASET')
+	
+	# install some RSS feed resources
+	make_from_slug(models.Feed,fnc,'sansfoienilois.wordpress.com/feed/')
+	make_from_slug(models.Feed,gaset,'groupementsdachat.wordpress.com/feed/')
+	make_from_slug(models.FeedEntry,fnc,'sansfoienilois.wordpress.com/2015/03/27/sans-foie-ni-lois-la-cantine-autonome/')
+	
+	
 	
 	
