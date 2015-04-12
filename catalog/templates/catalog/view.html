@@ -17,6 +17,11 @@
 	<div class='ap-button' id='ap-add-button'>
 	<a href='{% url 'catalog:resource-create' %}'><img class='ap-button-image' src="{% static 'catalog/toolbar-icons/add.png' %}" title='{% trans "Ajouter une ressource du même type" %}'/></a>
 	</div>
+{% if resource.parent.pk != request.way.pk %}
+	<div class='ap-button' id='ap-copy-button'>
+ 	<a href='{% url 'catalog:copy' pk=resource.pk %}'><img class='ap-button-image' src="{% static 'catalog/toolbar-icons/copy.png' %}" title='{% trans "Copier cette ressource dans ton parcours personnel" %}'/></a>
+	</div>
+{% endif %}
 	<div class='ap-button' id='ap-versions-button'>
 	<a href="javascript:switch_tabs(1)"><img class='ap-button-image' src="{% static 'catalog/toolbar-icons/versions.png' %}" title='{% trans "Voir les version précédentes de cette ressource" %}'/></a>
 	</div>

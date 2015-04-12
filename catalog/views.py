@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.core.exceptions import ValidationError
 from rest_framework import generics
+from django.utils.translation import ugettext as _
 import reversion
 from itertools import chain, imap, groupby
 from operator import itemgetter
@@ -21,6 +22,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import filters
+from django.utils.text import slugify
 
 def initialize_search_form(geget):
     ret = forms.ResourceSearchForm()
@@ -112,7 +114,7 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
             return self.render_to_response(context)
 
     def get_object(self):
-        if not 'slug0' in self.kwargs and self.resource_type is not 'way':
+        if not 'slug0' in self.kwargs and not 'way' in self.resource_type:
             qs = self.model.objects.filter(
                  parent=self.request.way,
                  slug=self.kwargs['slug']
@@ -158,6 +160,40 @@ def make_resource_view(_resource_type):
         resource_type = _resource_type
     return HOP.as_view()
     
+class PublishView(generic.RedirectView):
+    permanent = False
+    pattern_name = 'catalog:way-view'
+    def get_redirect_url(self,*args,**kwargs):
+        # extract way from sessionway
+        toto = Way.objects.get(pk=self.request.way.way_ptr)
+        # fix slug
+        toto.slug = slugify(toto.name)
+        if(_('Ajouter un titre...') in toto.name):
+            raise ValidationError('Nom du parcours invalide!')
+        kwargs['slug'] = toto.slug
+        print "slug : %s" % toto.slug
+        # validate it
+        toto.full_clean()
+        # recreate empty way 
+        self.request.way.delete()
+        # save it
+        toto.save()
+        user_parcours = SessionWay(user=self.request.user)
+        user_parcours.save()
+        self.request.session['way'] = user_parcours.pk
+        url = super(PublishView, self).get_redirect_url(*args, **kwargs)
+        print "url : %s" % url
+        return url
+   
+class CopyView(generic.RedirectView):
+    permanent = False
+    def get_redirect_url(self,*args,**kwargs):
+        resource = Resource.objects.get_subclass(pk=kwargs['pk'])
+        resource.parent = self.request.way
+        resource.pk = None
+        resource.save()
+        return resource.get_absolute_url() 
+ 
 class CreateResourceView(generic.TemplateView):
     """
     Page de création d'une nouvelle ressource, sélection du type de ressource à créer.

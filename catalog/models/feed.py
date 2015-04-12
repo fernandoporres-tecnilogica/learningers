@@ -13,10 +13,11 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext as _  
 from django.utils.translation import ugettext_lazy as __
 from urlparse import urlparse
+import datetime
 
 class Feed(Resource):
     'An external syndication feed, in any format supported by feedparser'
-    url = models.URLField(verbose_name=__('Lien'))
+    url = models.URLField(verbose_name=__('Lien du flux'),help_text=__('Exemple: http://rawrfeminista.wordpress.com/feed/'))
     class Meta:
         verbose_name = __(u"Flux")
         verbose_name_plural = __(u"Flux")
@@ -43,7 +44,8 @@ class Feed(Resource):
                 if not(hasattr(e,'link')):
                     continue
                 u1 = urlparse(e.link)
-                e['feedentry_url'] = self.parent.get_absolute_url() + 'feedentry/' + u2.netloc + u1.path + u1.query 
+                e['feedentry_url'] = self.parent.get_absolute_url() + 'feedentry/' + u2.netloc + u1.path + u1.query
+                e['datetime'] = datetime.datetime(*e['published_parsed'][:6])
             self._entries = d.entries
             return d.entries
     @property

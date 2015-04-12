@@ -8,7 +8,7 @@
 {% endif %}
 <span class="caret"></span></a>
 <ul class='dropdown-menu' role='menu'>
-<li><a href="{% url 'catalog:way-view' %}">{% trans 'Ton parcours' %}</a></li>
+<li><a href="{% url 'catalog:sessionway-view' %}">{% trans 'Ton parcours' %}</a></li>
 {% if user.is_authenticated and not user|is_lazy_user %}
 	<li><a href="{% url 'profil' slug=user.username %}">{% trans 'Ton profil' %}</a></li>
 	<li><a href="{% url 'auth_logout' %}?next={{ request.get_full_path }}">{% trans "Déconnexion" %}</a></li>

@@ -27,7 +27,9 @@ urlpatterns = patterns('',
     url(r'^search/$',  views.SearchResultsView.as_view(), name='search'),
     url(r'^search/data/$',  views.RequestMoreSearchResults.as_view(), name='search-data'),
 #    url(r'^revert/$', views.ResourceRevertView.as_view(), name='revert'),
-    url(r'^view/$', views.make_resource_view('way'), name='way-view'),
+    url(r'^view/$', views.make_resource_view('sessionway'), name='sessionway-view'),
+    url(r'^copy/(?P<pk>\d+)/$', views.CopyView.as_view(), name='copy'),
+    url(r'^publish/$', views.PublishView.as_view(), name='publish'),
     url(r'^resource/(?P<pk>\d+)/$', views.ResourceDetailView.as_view(), name='resource-data'),
     url(r'^comment/(?P<pk>\d+)/$', views.CommentDetailView.as_view(), name='comment-data'),
     url(r'^comment/$', views.CommentCreateView.as_view(), name='comment-data'),
@@ -48,7 +50,7 @@ for i in range(0,4):
     urlpatterns += patterns('',url(p + r'(?P<slug>[^/]+)/$', views.make_resource_view('way'), name='way-view')) 
     # source slug lookup
     for resource_type in available_resource_models:
-        if resource_type != 'way':  
+        if resource_type != 'way' and resource_type != 'sessionway':  
             urlpatterns += patterns('', 
                     url(p + resource_type + '/(?P<slug>.+)/$', views.make_resource_view(resource_type), name=resource_type + '-view'),
                     )

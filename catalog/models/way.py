@@ -16,6 +16,7 @@ from django.utils.text import slugify
 from catalog.models.meeting import Meeting
 from django.db.models import Q
 from schedule.models import Event
+from django.core.exceptions import ValidationError
 
 # A way is a resource composed of several other resources
 class Way(Resource):
@@ -27,8 +28,8 @@ class Way(Resource):
     def get_absolute_url(self):
         if self.parent:
             return self.parent.get_absolute_url() + self.slug + '/'
-        elif not self.slug:
-            return reverse('catalog:way-view')            
+        elif SessionWay.objects.filter(pk=self.pk).exists():
+            return reverse('catalog:sessionway-view')
         else:
             return reverse('catalog:way-view', kwargs={'slug':self.slug})
     @staticmethod
@@ -59,13 +60,21 @@ class SessionWay(Way):
      to which resources created on-the-fly get attached by default
     """
     user = models.OneToOneField(User,related_name='way',help_text=__(u"L'utilisateur.rice propriétaire de la session"))
+    class Meta:
+        verbose_name =  __('Ton Parcours')
+        verbose_name_plural =  __('Parcours d\'utilisat.rice.eur')        
     def __init__(self, *args, **kwargs):
         if not 'name' in kwargs:
-            kwargs['name'] = _('Ton parcours')
+            kwargs['name'] = _('Ajouter un titre...')
+        if 'parent' in kwargs:
+            raise ValidationError('SessionWay cannot have a parent!')
         super(SessionWay, self).__init__(*args, **kwargs)
     def save(self,*args,**kwargs):
         if not self.pk:
             self.slug = ''
         super(SessionWay, self).save(*args,**kwargs) 
+    def get_absolute_url(self):
+        return reverse('catalog:sessionway-view')            
 
 register_resource(Way)
+register_resource(SessionWay)

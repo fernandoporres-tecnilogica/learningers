@@ -13,6 +13,7 @@ import reversion
 import sys
 
 for model in available_resource_models.values():
-    reversion.register(model, follow=['resource_ptr'])
+    if model is not SessionWay:
+        reversion.register(model, follow=['resource_ptr'])
     setattr(sys.modules[__name__],model.__name__, model)
     
