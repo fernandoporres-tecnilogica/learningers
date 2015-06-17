@@ -161,78 +161,11 @@ STATIC_ROOT = '/var/www/static'
 #######################
 #     APP SETTINGS    #
 #######################
-ELASTICSEARCH_INDEX_SETTINGS = {
-    'settings': {
-        "analysis": {
-            "analyzer": {
-                "ngram_analyzer": {
-                    "type": "custom",
-                    "tokenizer": "lowercase",
-                    "filter": ["haystack_ngram"]
-                },
-                "edgengram_analyzer": {
-                    "type": "custom",
-                    "tokenizer": "lowercase",
-                    "filter": ["haystack_edgengram"]
-                },
-                "french_analyzer": {
-                    "type" : "custom",
-                    "tokenizer":    "standard",
-                    "filter"   :    ["stopwords", "asciifolding" ,"lowercase", "snowball", "elision", "worddelimiter"],
-                }                
-            },
-            "tokenizer": {
-                "haystack_ngram_tokenizer": {
-                    "type": "nGram",
-                    "min_gram": 3,
-                    "max_gram": 15,
-                },
-                "haystack_edgengram_tokenizer": {
-                    "type": "edgeNGram",
-                    "min_gram": 2,
-                    "max_gram": 15,
-                    "side": "front"
-                }
-            },
-            "filter": {
-                "haystack_ngram": {
-                    "type": "nGram",
-                    "min_gram": 3,
-                    "max_gram": 15
-                },
-                "haystack_edgengram": {
-                    "type": "edgeNGram",
-                    "min_gram": 2,
-                    "max_gram": 15
-                },
-                "snowball" : {
-                    "type" :"snowball",
-                    "language":"French",
-                },
-                "elision": {
-                    "type":     "elision",
-                    "articles": ["l", "m", "t", "qu", "n", "s", "j", "d"],
-                },
-                "stopwords": {
-                    "type":      "stop",
-                    "stopwords": ["_french_"],
-                    "ignore_case" : "true",
-                },
-                "worddelimiter" : {
-                    "type":      "word_delimiter",
-                },
-            }
-        }
-    }
-}
-
-ELASTICSEARCH_DEFAULT_ANALYZER = "french_analyzer"
-
 # HAYSTACK
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'catalog.search.ConfigurableElasticSearchEngine',
-        'URL': 'http://89.234.156.208:9200/',
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://localhost:8080/solr/',
         'INDEX_NAME': 'haystack',
     },
 }
