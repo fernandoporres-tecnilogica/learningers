@@ -1,0 +1,16 @@
+{% extends "catalog/info.html" %}
+{% load i18n l10n %}
+{% block info %}
+<a href="#" onclick="publish()">{% trans 'Publier ce parcours' %}</a>
+<script>
+function publish()
+{
+	if($('#ap-resource-name').html().indexOf("{% trans 'Ajouter un titre...' %}") == -1)
+	{
+		location.href = "{% url 'catalog:publish' %}";
+	} else {
+		alert('{% trans "Veuillez choisir un nom pour le parcours" %}');
+	}
+}
+</script>
+{% endblock %}

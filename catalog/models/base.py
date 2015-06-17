@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 from django.db import models
 from commons.coding import classproperty
 from model_utils.models import TimeStampedModel
@@ -16,6 +16,8 @@ from commons.signals import receiver_subclasses
 import geopy
 import reversion
 from django.db.models.signals import post_save
+from django.contrib.auth.models import User
+from django.conf import settings
 
 # for GeoLocation
 from django.contrib.gis.db.models import GeoManager, PointField
@@ -40,6 +42,32 @@ class ResourceLanguage(models.Model):
     
 add_introspection_rules([], ["^django_languages\.fields\.LanguageField"])
 
+class Comment(TimeStampedModel):
+    """
+    A comment concerning a resource.
+    """
+    resource = models.ForeignKey('catalog.Resource',verbose_name=_(u'Ressource'),help_text=_(u"La ressource concernée"),related_name='comments')
+    text = models.TextField(verbose_name=_(u'Contenu'), blank=True)
+    COLOUR_CHOICES = (
+        (0, u'Vert'),
+        (1, u'Orange'),
+        (2, u'Rouge'),
+    ) 
+
+    COLOUR_RGB = ('#AAFFAA','#FFDDAA','#FFAAAA')
+
+    colour = models.IntegerField(choices=COLOUR_CHOICES,verbose_name=_(u'Couleur'),help_text=_(u"Vert=OK,Orange=Avis mitigé,Rouge=Demande de veto"))
+    CATEGORY_CHOICES = (
+        (0, u"Pas d'enfermement"),
+        (1, u"Pas d'autorité"),
+        (2, u"Respect de l'intimité"),
+        (3, u"Respect de l'information")
+    )
+    category = models.IntegerField(choices=CATEGORY_CHOICES)
+    author = models.ForeignKey(User,verbose_name=_(u'AuteurE'))
+    def get_colour_rgb(self):
+        return self.COLOUR_RGB[self.colour]
+    
 class Resource(TimeStampedModel,ForkableModel):
     """
     Modèle abstrait de base pour les resources répertoriées dans le catalogue.
@@ -59,7 +87,7 @@ class Resource(TimeStampedModel,ForkableModel):
     # Languages used in this resource
     languages = models.ManyToManyField(ResourceLanguage,editable=False, help_text=__(u'Les langues à maîtriser pour comprendre cette ressource'))
     # Other entries related to this resource
-    see_also = models.ManyToManyField('catalog.Resource',verbose_name=__('Voir aussi'),blank=True,null=True,default=None, help_text=__(u"D'autres resources liées à celle-ci")) 
+    see_also = models.ManyToManyField('catalog.Resource',verbose_name=__('Voir aussi'),blank=True,null=True,default=None, help_text=__(u"D'autres resources liées à celle-ci"))
     # To manage inheritance
     objects = InheritanceManager()    
     
@@ -89,7 +117,10 @@ class Resource(TimeStampedModel,ForkableModel):
             raise Http404
     def preview(self):
         "return HTML code to display a small preview of this resource"
-        return self.description
+        if self.description:
+            return self.description
+        else:
+            return '<div style="text-align:center;"><img style="border:none;" src="' + settings.STATIC_URL + ('catalog/' + self.resource_type + '/icon.png') + '" title="Source:{{ resource_source }}"/></div>'
 
 class GeoLocation(models.Model):
     """
@@ -98,7 +129,7 @@ class GeoLocation(models.Model):
     # Entry associated address
     address = models.CharField(max_length=200,verbose_name=__('Adresse'),help_text=__("L'adresse postale du lieu"))
     # Entry associated location
-    location = PointField(editable=False,default=fromstr("POINT(0 0)"),verbose_name=__(u'Coordonnées'),help_text=__("Les coordonnées GPS du lieu"))
+    location = PointField(editable=False,verbose_name=__(u'Coordonnées'),help_text=__(u"Les coordonnées GPS du lieu"))
     # manager
     objects = GeoManager()
     def save(self,*args,**kwargs):
@@ -115,12 +146,16 @@ class GeoLocation(models.Model):
         return self.address
 
 available_resource_models = {}
+available_search_engines = {}
 
 def register_resource(resource_model):
     resource_type = resource_model.__name__.lower()
     setattr(resource_model,'resource_type',resource_type)
     setattr(resource_model,'user_friendly_type',resource_model._meta.verbose_name.title())
     available_resource_models[resource_type] = resource_model
+    # Register external search engines if any are found
+    if hasattr(resource_model,'ExternalSearch'):
+        available_search_engines[resource_type] = resource_model.ExternalSearch
 
 @receiver_subclasses(post_save, Resource,'resource-language')
 def resource_post_save(sender,**kwargs):

@@ -1,0 +1,547 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Romain <linux2400@yahoo.fr>, 2013
+# Romain <linux2400@yahoo.fr>, 2013-2015
+msgid ""
+msgstr ""
+"Project-Id-Version: Les apprentisseur-ses\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-03-02 18:14+0100\n"
+"PO-Revision-Date: 2015-03-03 09:18+0000\n"
+"Last-Translator: Romain <linux2400@yahoo.fr>\n"
+"Language-Team: English (http://www.transifex.com/projects/p/les-apprentisseur-ses/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: catalog/models/annotations.py:19
+msgid "Ressource concernée"
+msgstr "Target resource"
+
+#: catalog/models/annotations.py:20
+msgid "AuteurEs"
+msgstr "Authors"
+
+#: catalog/models/annotations.py:21
+msgid "Liens"
+msgstr "Links"
+
+#: catalog/models/annotations.py:26
+msgid "Texte"
+msgstr "Text"
+
+#: catalog/models/annotations.py:39
+msgid "Début"
+msgstr "Start"
+
+#: catalog/models/annotations.py:40
+msgid "Fin"
+msgstr "End"
+
+#: catalog/models/annotations.py:40
+msgid "La date de fin doit être postérieure à la date de début"
+msgstr "The end date should be posterior to the start date"
+
+#: catalog/models/base.py:49
+msgid "Ressource"
+msgstr "Resource"
+
+#: catalog/models/base.py:49
+msgid "La ressource concernée"
+msgstr "The target resource"
+
+#: catalog/models/base.py:50
+msgid "Contenu"
+msgstr "Content"
+
+#: catalog/models/base.py:59
+msgid "Couleur"
+msgstr "Color"
+
+#: catalog/models/base.py:59
+msgid "Vert=OK,Orange=Avis mitigé,Rouge=Demande de veto"
+msgstr "Green=OK, Orange=Uncertain, Red=Veto"
+
+#: catalog/models/base.py:67
+msgid "AuteurE"
+msgstr "Author"
+
+#: catalog/models/base.py:104
+msgid "Une entrée du même slug et du même type existe déjà dans ce parcours."
+msgstr "A resource with the same slug and the same type already exists in this Way"
+
+#: catalog/models/base.py:106
+msgid "Une entrée du même nom et du même type existe déjà dans ce parcours."
+msgstr "A resource having the same name and type already exists in the Way"
+
+#: catalog/models/mailman.py:45
+msgid "Arabe"
+msgstr "Arab"
+
+#: catalog/models/mailman.py:46
+msgid "Catalan"
+msgstr "Catalan"
+
+#: catalog/models/mailman.py:47
+msgid "Tchèque"
+msgstr "Czech"
+
+#: catalog/models/mailman.py:48
+msgid "Danois"
+msgstr "Danish"
+
+#: catalog/models/mailman.py:49 learningers/settings.py:150
+msgid "Allemand"
+msgstr "German"
+
+#: catalog/models/mailman.py:50
+msgid "Anglais (USA)"
+msgstr "English (USA)"
+
+#: catalog/models/mailman.py:51
+msgid "Espagnol (Spain)"
+msgstr "Spanish (Spain)"
+
+#: catalog/models/mailman.py:52
+msgid "Estonien"
+msgstr "Estonian"
+
+#: catalog/models/mailman.py:53
+msgid "Basque"
+msgstr "Euskara"
+
+#: catalog/models/mailman.py:54
+msgid "Finnois"
+msgstr "Finnish"
+
+#: catalog/models/mailman.py:55
+msgid "Francais"
+msgstr "French"
+
+#: catalog/models/mailman.py:56
+msgid "Galicien"
+msgstr "Galician"
+
+#: catalog/models/mailman.py:57
+msgid "Hébreu"
+msgstr "Hebrew"
+
+#: catalog/models/mailman.py:58
+msgid "Croate"
+msgstr "Croatian"
+
+#: catalog/models/mailman.py:59
+msgid "Hongrois"
+msgstr "Hungarian"
+
+#: catalog/models/mailman.py:60
+msgid "Interlangue"
+msgstr "Interlingua"
+
+#: catalog/models/mailman.py:61
+msgid "Italien"
+msgstr "Italian"
+
+#: catalog/models/mailman.py:62
+msgid "Japonais"
+msgstr "Japanese"
+
+#: catalog/models/mailman.py:63
+msgid "Coréen"
+msgstr "Corean"
+
+#: catalog/models/mailman.py:64
+msgid "Lithuanien"
+msgstr "Lithuania"
+
+#: catalog/models/mailman.py:65
+msgid "Hollandais"
+msgstr "Dutch"
+
+#: catalog/models/mailman.py:66
+msgid "Norvégien"
+msgstr "Norvegian"
+
+#: catalog/models/mailman.py:67
+msgid "Polonais"
+msgstr "Polish"
+
+#: catalog/models/mailman.py:68
+msgid "Portuguais"
+msgstr "Portugese"
+
+#: catalog/models/mailman.py:69
+msgid "Portuguais (Brésil)"
+msgstr "Portugese (Brazil)"
+
+#: catalog/models/mailman.py:70
+msgid "Roumain"
+msgstr "Rumanian"
+
+#: catalog/models/mailman.py:71
+msgid "Russe"
+msgstr "Russian"
+
+#: catalog/models/mailman.py:72
+msgid "Slovaque"
+msgstr "Slovak"
+
+#: catalog/models/mailman.py:73
+msgid "Slovène"
+msgstr "Slovenian"
+
+#: catalog/models/mailman.py:74
+msgid "Serbe"
+msgstr "Serbian"
+
+#: catalog/models/mailman.py:75
+msgid "Suédois"
+msgstr "Swedish"
+
+#: catalog/models/mailman.py:76
+msgid "Turque"
+msgstr "Turkish"
+
+#: catalog/models/mailman.py:77
+msgid "Ukrainien"
+msgstr "Ukrainian"
+
+#: catalog/models/mailman.py:78
+msgid "Vietnamien"
+msgstr "Vietnamese"
+
+#: catalog/models/mailman.py:79
+msgid "Chinois (Chine)"
+msgstr "Chinese (China)"
+
+#: catalog/models/mailman.py:80
+msgid "Chinois (Taiwan)"
+msgstr "Chinese (Taiwan)"
+
+#: catalog/models/way.py:64
+#: learningers/templates/registration/logged_in.html:11
+msgid "Ton parcours"
+msgstr "Your way"
+
+#: catalog/models/wiki.py:50
+msgid "Nom sous lequel ce wiki est connu"
+msgstr "Wiki public name"
+
+#: catalog/models/wiki.py:51
+msgid "Identifiant du wiki (charactères ASCII et chiffres seulement)"
+msgstr "Wiki identifier (only ASCII characters)"
+
+#: catalog/models/wiki.py:52
+msgid "Adresse du répertoire où se trouve api.php"
+msgstr "URL of directory containing api.php"
+
+#: catalog/models/wiki.py:55
+msgid "Type de médias présents sur ce wiki"
+msgstr "Type of media served by this wiki"
+
+#: catalog/models/wiki.py:177
+msgid "L'article \""
+msgstr "Article \""
+
+#: catalog/templates/catalog/base.html:27
+msgid "Ajouter du contenu ici!"
+msgstr "Add content here!"
+
+#: catalog/templates/catalog/create.html:5
+#: catalog/templates/catalog/create.html:21
+msgid "Ajout d'un(e)"
+msgstr "Add a "
+
+#: catalog/templates/catalog/create.html:31
+msgid "Créer!"
+msgstr "Create!"
+
+#: catalog/templates/catalog/create_resource.html:5
+msgid "Ajout d'une nouvelle resource"
+msgstr "Add new resource"
+
+#: catalog/templates/catalog/create_resource.html:17
+msgid ""
+"\n"
+"<p>Bonjour!</p>\n"
+"<p>Quel type de resource souhaitez vous ajouter au catalogue?</p>\n"
+msgstr "\n<p>Hi!</p>\n<p>What type of resource would you like to add to the catalogue?</p>\n"
+
+#: catalog/templates/catalog/info.html:9
+msgid "Ajouter une description..."
+msgstr "Add description..."
+
+#: catalog/templates/catalog/info.html:13
+msgid "Langue(s)"
+msgstr "Language(s)"
+
+#: catalog/templates/catalog/info.html:16
+msgid "Parcours"
+msgstr "Way"
+
+#: catalog/templates/catalog/info.html:19
+msgid "Voir aussi"
+msgstr "See also"
+
+#: catalog/templates/catalog/meeting/view.html:34
+msgid "Qu'as tu appris lors de cette rencontre ?"
+msgstr "What did you learn at this meeting?"
+
+#: catalog/templates/catalog/meeting/view.html:40
+#: catalog/templates/catalog/sidebar.html:39
+msgid "Poster"
+msgstr "Post"
+
+#: catalog/templates/catalog/meeting/view.html:42
+msgid "Ajouter une annotation..."
+msgstr "Annotate..."
+
+#: catalog/templates/catalog/meeting/view.html:84
+#: catalog/templates/catalog/sidebar.html:82
+msgid "Erreur, réessayez"
+msgstr "Error, please try again"
+
+#: catalog/templates/catalog/resource_list.html:6
+msgid "Resources du catalogue"
+msgstr "Catalog resources"
+
+#: catalog/templates/catalog/search/form.html:18
+msgid "Apprendre!"
+msgstr "Learn!"
+
+#: catalog/templates/catalog/search/results.html:6
+msgid "Résultats de la recherche"
+msgstr "Search results"
+
+#: catalog/templates/catalog/search/results.html:10
+msgid "Affiner la recherche"
+msgstr "Refine search"
+
+#: catalog/templates/catalog/sidebar.html:7
+msgid "Versions précédentes"
+msgstr "Previous versions"
+
+#: catalog/templates/catalog/sidebar.html:41
+msgid "Ajouter un commentaire..."
+msgstr "Comment..."
+
+#: catalog/templates/catalog/view.html:15
+msgid "Supprimer cette ressource"
+msgstr "Delete this resource"
+
+#: catalog/templates/catalog/view.html:18
+msgid "Ajouter une ressource du même type"
+msgstr "Add another resource of the same type"
+
+#: catalog/templates/catalog/view.html:21
+msgid "Voir les version précédentes de cette ressource"
+msgstr "Display previous versions of this resource"
+
+#: catalog/templates/catalog/view.html:24
+msgid "Voir l'adéquation de cette ressource avec la charte"
+msgstr "Check if this resource agrees with our charter"
+
+#: catalog/templates/catalog/view.html:45
+msgid "Voulez-vous vraiment supprimer cette entrée du catalogue?"
+msgstr "Really delete this resource?"
+
+#: catalog/templates/catalog/view.html:48
+msgid ""
+"L'entrée a bien été supprimée. Vous allez être redirigé vers la page "
+"d'accueil"
+msgstr "Resource deleted. You will now be redirected to our homepage."
+
+#: catalog/templates/catalog/way/view.html:15
+msgid "Modifier ce parcours"
+msgstr "Edit this Way"
+
+#: catalog/templates/catalog/way/view.html:18
+msgid "Ajouter une ressource à ce parcours"
+msgstr "Add a new resource to this Way"
+
+#: catalog/templates/catalog/way/view.html:21
+msgid "Sauvegarder les modifications"
+msgstr "Save changes"
+
+#: catalog/templates/catalog/wikimediaarticle/info.html:5
+msgid "Wiki d'origine"
+msgstr "Source wiki"
+
+#: catalog/templates/catalog/wikimediaarticle/info.html:6
+msgid "Titre d'origine"
+msgstr "Source title"
+
+#: learningers/settings.py:148 learningers/settings_production.py:150
+msgid "Français"
+msgstr "French"
+
+#: learningers/settings.py:149 learningers/settings_production.py:151
+msgid "Anglais"
+msgstr "English"
+
+#: learningers/settings.py:264 learningers/settings_production.py:265
+msgid "Insérer..."
+msgstr "Insert..."
+
+#: learningers/settings.py:269 learningers/settings_production.py:270
+msgid "Enregistré"
+msgstr "Saved"
+
+#: learningers/settings.py:270 learningers/settings_production.py:271
+msgid "Il y a des modifications non-enregistrées"
+msgstr "There are unsaved changes"
+
+#: learningers/templates/learningers/base.html:11
+#: learningers/templates/learningers/index.html:18
+msgid "Les apprentisseursEs"
+msgstr "Learningers"
+
+#: learningers/templates/learningers/base.html:46
+msgid "Langue"
+msgstr "Language"
+
+#: learningers/templates/learningers/charte.html:15
+msgid "Charte de l'apprentissage libre"
+msgstr "Free learning charter"
+
+#: learningers/templates/learningers/guide.html:15
+msgid "Petit guide d'utilisation"
+msgstr "Short user manual"
+
+#: learningers/templates/learningers/index.html:14
+msgid "Page d'accueil"
+msgstr "Homepage"
+
+#: learningers/templates/learningers/index.html:19
+msgid "répertoire autogéré de l'apprentissage libre"
+msgstr "self-managed free learning repository"
+
+#: learningers/templates/learningers/index.html:26
+msgid "Répertorier une nouvelle resource..."
+msgstr "Commit a new resource..."
+
+#: learningers/templates/learningers/index.html:28
+msgid "Voir la charte"
+msgstr "Display our charter"
+
+#: learningers/templates/learningers/index.html:39
+#, python-format
+msgid ""
+"\n"
+"  Ce site a pour but de répertorier les possibilités d'apprentissage libre partout, tout le temps. \n"
+"  Il fonctionne comme un wiki et est donc alimenté par ses utilisatrices et utilisateurs. \n"
+"  Pour les nouv-eaux-elles venu-e-s, nous avons préparé un petit <a href='%(guide_url)s'>guide d'utilisation</a>. \n"
+"  Les contenus répertoriés sont censés respecter la <a href='%(charte_url)s'>charte de l'apprentissage libre</a>.\n"
+"  "
+msgstr "\nThis website offers the possibility to reference free learning opportunities everwhere and at anytime.\nLike a wiki, its content is brought and moderated by its users themselves.\nOur only condition is that all content and people using the website should be commited to the <a href='%(charte_url)s'>free learning charter</a>.\nFor newcomers, we have prepared a short <a href='%(guide_url)s'>user manual</a>."
+
+#: learningers/templates/registration/activate.html:4
+msgid "L'activation a échoué"
+msgstr "Sorry, your account could not be activated"
+
+#: learningers/templates/registration/activate.html:5
+#, python-format
+msgid ""
+"\n"
+"La clé d'activation %(activation_key)s n'a pas été reconnue.\n"
+msgstr "\nActivation key %(activation_key)s was not recognized.\n"
+
+#: learningers/templates/registration/activation_complete.html:4
+msgid "L'activation a réussi"
+msgstr "Activation successful"
+
+#: learningers/templates/registration/activation_complete.html:5
+#, python-format
+msgid ""
+"\n"
+"Tu es maintenant connecté en tant que %(request.user.username)s.\n"
+msgstr "\nYou are now logged in as %(request.user.username)s.\n"
+
+#: learningers/templates/registration/activation_email.txt:2
+msgid ""
+"\n"
+"Vous ou une tierce personne a demandé la création d'un compte utilisateur sur \"Les apprentisseurs\".\n"
+"Merci de suivre le lien suivant si vous souhaitez procéder à l'activation de ce compte:\n"
+msgstr "\nYou or someone else has requested a user account on \"Learningers\".\nPlease follow this link if you wish to proceed with activation:\n"
+
+#: learningers/templates/registration/activation_email.txt:7
+#, python-format
+msgid ""
+" \n"
+"Dans le cas contraire, aucune action n'est requise de votre part,\n"
+"et le lien expirera automatiquement dans %(expiration_days)s jour%(expiration_days|pluralize)s.\n"
+msgstr "No action is otherwise required on your part.\nThe link will expire automatically in %(expiration_days)s jour%(expiration_days|pluralize)s.\n"
+
+#: learningers/templates/registration/activation_email_subject.txt:2
+msgid "Activation de votre compte sur"
+msgstr "Activate your account on"
+
+#: learningers/templates/registration/activation_email_subject.txt:2
+msgid "Les apprentisseurEs"
+msgstr "Learningers"
+
+#: learningers/templates/registration/logged_in.html:7
+msgid "Utilisateur.trice"
+msgstr "User"
+
+#: learningers/templates/registration/logged_in.html:13
+msgid "Ton profil"
+msgstr "Your profile"
+
+#: learningers/templates/registration/logged_in.html:14
+msgid "Déconnexion"
+msgstr "Logout"
+
+#: learningers/templates/registration/logged_in.html:16
+msgid "Te connecter"
+msgstr "Log in"
+
+#: learningers/templates/registration/logged_in.html:17
+msgid "T'inscrire"
+msgstr "Sign up"
+
+#: learningers/templates/registration/login.html:5
+#: learningers/templates/registration/login.html:13
+msgid "Connexion"
+msgstr "Login"
+
+#: learningers/templates/registration/registration_complete.html:4
+msgid "Ta demande d'inscription a bien été prise en compte."
+msgstr "Your sign up request way taken into account."
+
+#: learningers/templates/registration/registration_complete.html:5
+msgid ""
+"\n"
+"Tu devrais très bientôt recevoir un email contenant un code,\n"
+"qui te permettra d'activer ton compte.\n"
+msgstr "\nYou should receive an email soon with a code\nwhich will allow you to activate your account.\n"
+
+#: learningers/templates/registration/registration_form.html:5
+#: learningers/templates/registration/registration_form.html:13
+msgid "Inscription"
+msgstr "Register"
+
+#: learningers/templates/registration/user_profile.html:7
+msgid "Profil de "
+msgstr "Profile of"
+
+#: learningers/templates/registration/user_profile.html:12
+msgid "Pseudonyme"
+msgstr "Nickname"
+
+#: learningers/templates/registration/user_profile.html:13
+msgid "Prénom"
+msgstr "First name"
+
+#: learningers/templates/registration/user_profile.html:14
+msgid "Nom"
+msgstr "Last name"
+
+#: learningers/templates/registration/user_profile.html:16
+msgid "Ressources"
+msgstr "Resources"

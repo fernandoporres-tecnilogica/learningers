@@ -28,7 +28,7 @@
 
 {% block content %}
 
-<nav class="navbar navbar-default" role="navigation">
+<nav id='ap-headbar' class="navbar navbar-default" role="navigation">
 <div class="container-fluid">
 <div class="navbar-header">
 <a class="navbar-brand" href="{% url 'home' %}"><img width="220" src="{% static 'learningers/logo1.png' %}"/></a>
@@ -36,19 +36,27 @@
 {% block headbar %}
 {% endblock %}
 <ul class="nav navbar-nav navbar-right">
-<form action="/i18n/setlang/" class="navbar-form  navbar-right" method="post">
+<form id='ap-language-form' action="/i18n/setlang/" style='display:none;' method="post">
 {% csrf_token %}
       <input name="next" type="hidden" value="{{request.get_full_path|safe}}" />
-      <select class="form-control" id="language" name="language" onchange="this.form.submit();">
-        {% for lang in LANGUAGES %}
-        {% if LANGUAGE_CODE == lang.0 %}
-          <option value="{{ lang.0 }}" selected="selected">{{ lang.1 }}</option>
-        {% else %}
-          <option value="{{ lang.0 }}">{{ lang.1 }}</option>
-        {% endif %}
-        {% endfor %}
-      </select>
+      <input name="language" id="ap-language" onchange="this.form.submit();"/>
 </form>
+<li class='dropdown'>
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+{% trans 'Langue' %}
+<span class="caret"></span></a>
+<ul class='dropdown-menu' role='menu'>
+        {% for lang in LANGUAGES %}
+        <li><a href="javascript:void(0)" onclick="$('#ap-language').val('{{lang.0}}');$('#ap-language-form').submit();">
+        {% if LANGUAGE_CODE == lang.0 %}
+          <b>{{ lang.1 }}</b>
+        {% else %}
+        {{ lang.1 }}
+        {% endif %}
+        </a></li>
+        {% endfor %}
+</ul>
+</li>
 {% include 'registration/logged_in.html' %}
 </ul>
 </div>
@@ -68,8 +76,14 @@
 <script>
 {% include 'learningers/settings.js' %}
 $(document).on({
-    ajaxStart: function() { $('body').addClass("loading");    },
-     ajaxStop: function() { $('body').removeClass("loading"); }    
+    ajaxStart: function() {
+    	if(!$('input').is(":focus")) {
+    		$('body').addClass("loading");
+    	}    
+    },
+    ajaxStop: function() {
+    	$('body').removeClass("loading"); 
+    }    
 });
    $(window).load(function() {
    $('#myjoyride').joyride({ 

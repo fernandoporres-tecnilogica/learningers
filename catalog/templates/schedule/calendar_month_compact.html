@@ -3,15 +3,18 @@
  {% block body %}
 <div class="tablewrapper">
 
-<div class="prevnext">
-    <div style="float:left;"><a href="#" id='ap-calendar-prev'>
-      &lt;
-    </a></div>
-    &nbsp; <b>{{period.start|date:"F Y"}}</b> &nbsp;
-    <div style="float:right;"><a href="#" id='ap-calendar-next'>
-      &gt;
-    </a></div>
+<nav class="prevnext navbar navbar-default">
+<div class="container-fluid">
+    <button type="button" class="btn btn-default btn-sm navbar-btn navbar-left" id='ap-calendar-prev'>
+  	<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+	</button>
+    <p class="navbar-text"><b>{{period.start|date:"M Y"}}</b></p>
+    <button type="button" class="btn btn-default btn-sm navbar-btn navbar-right" id='ap-calendar-next'>
+  	<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+	</button>
 </div>
+</nav>
+
   {% month_table calendar period size %}
 </div>
 {% endblock %}

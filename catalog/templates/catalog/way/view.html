@@ -7,7 +7,6 @@
 {% block css %}
 {{block.super}}
 <link href="{% static 'openlayers/openlayers3.css' %}" type="text/css" media="all" rel="stylesheet" />
-<link href="{% static 'popover/popover.css' %}" type="text/css" media="all" rel="stylesheet" />
 <link href="{% static 'catalog/map.css' %}" type="text/css" media="all" rel="stylesheet" />
 {% endblock %}
 
@@ -26,7 +25,7 @@
 {% block source %}
 {# {% include 'panel/panel.html' %} #}
 {% for child in resource.children.all.select_subclasses %}
-{% with resource_type=child.resource_type resource_source='internal' resource_name=child.name resource_description=child.description resource_url=child.get_absolute_url resource_tooltip=child.description %}
+{% with resource_type=child.resource_type resource_source='internal' resource_name=child.name resource_description=child.preview resource_url=child.get_absolute_url resource_tooltip=child.description %}
 {% include 'catalog/resource.html' %}
 {% endwith %}
 {% endfor %}
@@ -54,7 +53,6 @@
 $(window).load(function() { update_calendar("{% url 'catalog:calendar-data' pk=resource.pk size="small" %}"); });
 </script>
 <script src="{% static 'openlayers/openlayers3.js' %}"></script>
-<script src="{% static 'popover/popover.js' %}"></script>
 <script src="{% static 'catalog/map.js' %}"></script>
 <script src="{% static 'catalog/way/view.js' %}"></script>
 <script>

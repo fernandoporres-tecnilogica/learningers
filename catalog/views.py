@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from catalog import forms, serializers
-from catalog.models import available_resource_models, SessionWay, Resource, Way, available_annotation_ranges, available_annotation_contents
+from catalog.models import available_resource_models, SessionWay, Resource, Way, available_search_engines, available_annotation_ranges, available_annotation_contents, Comment
 from django.views.generic.base import View
 from django.views import generic
 from django.http import HttpResponsePermanentRedirect
@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.core.exceptions import ValidationError
 from rest_framework import generics
+from django.utils.translation import ugettext as _
 import reversion
 from itertools import chain, imap, groupby
 from operator import itemgetter
@@ -21,6 +22,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import filters
+from django.utils.text import slugify
 
 def initialize_search_form(geget):
     ret = forms.ResourceSearchForm()
@@ -52,7 +54,25 @@ class ResourceDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Resource.objects.all()
     serializer_class = serializers.ResourceSerializer
-                        
+
+class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Accès AJAX aux données d'une resource.
+    
+    Utilisé surtout pour effacer des resources.
+    """
+    queryset = Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+
+class CommentCreateView(generics.ListCreateAPIView):
+    """
+    Accès AJAX aux données d'une resource.
+    
+    Utilisé surtout pour effacer des resources.
+    """
+    queryset = Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+                            
 class BaseResourceView(View,generic.base.TemplateResponseMixin):
     """
     Vue de base pour toutes les resources.
@@ -80,7 +100,8 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
         context['search_form'] = initialize_search_form(self.request.GET)
         context['resource'] = kwargs['object']
         # Build a list of all previous versions, latest versions first, duplicates removed:
-        context['versions'] = reversion.get_for_object(kwargs['object'])          
+        context['versions'] = reversion.get_for_object(kwargs['object'])
+        context['comment_categories'] = ({'name':c[1], 'queryset':context['resource'].comments.filter(category=c[0])} for c in Comment.CATEGORY_CHOICES)            
         return context
     
     def get(self, request, **kwargs):
@@ -93,14 +114,14 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
             return self.render_to_response(context)
 
     def get_object(self):
-        if not 'slug0' in self.kwargs and self.resource_type is not 'way':
+        if not 'slug0' in self.kwargs and not 'way' in self.resource_type:
             qs = self.model.objects.filter(
                  parent=self.request.way,
                  slug=self.kwargs['slug']
             )            
             if(qs.count() == 0):
-                obj = self.model.make_from_slug(self.request.way,self.kwargs['slug'])
                 try:
+                    obj = self.model.make_from_slug(self.request.way,self.kwargs['slug'])
                     obj.full_clean()
                 except ValidationError as e:
                     raise Http404(e)
@@ -116,8 +137,17 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
                 obj = previous_version_instance(self.model,version.field_dict)
                 return obj
             else:
-                obj = get_object_or_404(self.model,slug=self.kwargs['slug'],**self.make_parents_query(self.kwargs))
-                return obj
+                qs = self.model.objects.filter(slug=self.kwargs['slug'],**self.make_parents_query(self.kwargs))
+                if(qs.count() == 0):
+                    try:
+                        obj = self.model.make_from_slug(self.request.way,self.kwargs['slug'])
+                        obj.full_clean()
+                    except ValidationError as e:
+                        raise Http404(e)
+                    obj.save() 
+                    return obj
+                else:
+                    return qs.get()
       
 def make_resource_view(_resource_type):
     """
@@ -130,6 +160,40 @@ def make_resource_view(_resource_type):
         resource_type = _resource_type
     return HOP.as_view()
     
+class PublishView(generic.RedirectView):
+    permanent = False
+    pattern_name = 'catalog:way-view'
+    def get_redirect_url(self,*args,**kwargs):
+        # extract way from sessionway
+        toto = Way.objects.get(pk=self.request.way.way_ptr)
+        # fix slug
+        toto.slug = slugify(toto.name)
+        if(_('Ajouter un titre...') in toto.name):
+            raise ValidationError('Nom du parcours invalide!')
+        kwargs['slug'] = toto.slug
+        print "slug : %s" % toto.slug
+        # validate it
+        toto.full_clean()
+        # recreate empty way 
+        self.request.way.delete()
+        # save it
+        toto.save()
+        user_parcours = SessionWay(user=self.request.user)
+        user_parcours.save()
+        self.request.session['way'] = user_parcours.pk
+        url = super(PublishView, self).get_redirect_url(*args, **kwargs)
+        print "url : %s" % url
+        return url
+   
+class CopyView(generic.RedirectView):
+    permanent = False
+    def get_redirect_url(self,*args,**kwargs):
+        resource = Resource.objects.get_subclass(pk=kwargs['pk'])
+        resource.parent = self.request.way
+        resource.pk = None
+        resource.save()
+        return resource.get_absolute_url() 
+ 
 class CreateResourceView(generic.TemplateView):
     """
     Page de création d'une nouvelle ressource, sélection du type de ressource à créer.
@@ -176,6 +240,7 @@ class SearchResultsView(generic.TemplateView):
         # pass the search form to keep its contents
         form =  forms.ResourceSearchForm(self.request.GET)
         context['search_form'] = form
+        context['available_search_engines'] = available_search_engines
         return context
     
 class RequestMoreSearchResults(rest_framework.views.APIView):
@@ -185,8 +250,18 @@ class RequestMoreSearchResults(rest_framework.views.APIView):
     serializer_class = serializers.ResourceSerializer
     def get(self,request,*args,**kwargs):
         # pass the search form to keep its contents
-        val = forms.ResourceSearchForm(self.request.GET).search().values('rendered')
-        return Response(list(val))
+        print "request"
+        print self.request.GET
+        f = forms.ResourceSearchForm(self.request.GET)
+        if(f.is_valid()):
+            print "data"
+            print f.cleaned_data
+            val = f.search().values('rendered')
+            return Response(list(val))
+        else:
+            print "not valid!!"
+            print f['t'].errors
+            return Response([])
 
 class CalendarRenderView(rest_framework.views.APIView):
     """
@@ -217,6 +292,7 @@ class CalendarRenderView(rest_framework.views.APIView):
         
 
 def make_annotation_viewset(content_type,range_type):
+    """Generate a Viewset to load annotations via AJAX"""
     class AnnotationViewSet(viewsets.ModelViewSet):
         queryset = available_annotation_contents[content_type].objects.all()
         serializer_class = serializers.make_annotation_serializer(content_type,range_type)
@@ -224,3 +300,17 @@ def make_annotation_viewset(content_type,range_type):
         filter_backends = (filters.DjangoFilterBackend,)
         filter_fields = ('resource',)
     return AnnotationViewSet
+
+import json
+from django.http import HttpResponse
+
+def make_externalsearch_view(SearchClass):
+    """Generate view for obtaining external search results via AJAX"""
+    class HOP(View,SearchClass):
+        def get(self,request):
+            querystring = self.request.GET['q']
+            queryloc = self.request.GET['a']
+            querylang = self.request.LANGUAGE_CODE
+            search_results = list({ 'rendered': render_to_string('catalog/resource.html', result) } for result in self.search(querystring,queryloc,querylang))
+            return HttpResponse(json.dumps(search_results, ensure_ascii=False), content_type='application/json; charset=UTF-8',)
+    return HOP.as_view()

@@ -5,13 +5,15 @@ import catalog.models.human
 import catalog.models.mailman
 import catalog.models.etherpad
 import catalog.models.wiki
+import catalog.models.feed
 import catalog.models.annotations
 from catalog.models.way import SessionWay
-from catalog.models.base import available_resource_models, GeoLocation, ResourceLanguage, Resource, available_annotation_contents, available_annotation_ranges
+from catalog.models.base import available_resource_models, available_search_engines, GeoLocation, ResourceLanguage, Resource, available_annotation_contents, available_annotation_ranges, Comment
 import reversion
 import sys
 
 for model in available_resource_models.values():
-    reversion.register(model, follow=['resource_ptr'])
+    if model is not SessionWay:
+        reversion.register(model, follow=['resource_ptr'])
     setattr(sys.modules[__name__],model.__name__, model)
     

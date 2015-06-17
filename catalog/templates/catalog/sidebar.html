@@ -14,63 +14,36 @@
 	<div class='ap-tab' id='ap-charter-tab' style='display:none;'>
 	
 	
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+{% for category in comment_categories %}
   <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingOne">
+    <div class="panel-heading" role="tab" id="heading{{forloop.counter0}}">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          {% trans "Pas d'enfermement" %}
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter0}}" aria-expanded="true" aria-controls="collapse{{forloop.counter0}}">
+          {% trans category.name %}
         </a>
       </h4>
     </div>
-    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+    <div id="collapse{{forloop.counter0}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{forloop.counter0}}">
       <div class="panel-body">
-        ****
+      {% for comment in category.queryset %}
+		{% include 'catalog/comment.html' %}
+      {% endfor %}
+      <form class='comment-form' style="display:none;">
+		<textarea class='form-control comment-text'></textarea>
+		<select class='form-control comment-colour'>
+		{% for colour in resource.comments.model.COLOUR_CHOICES %}
+		<option value="{{colour.0}}">{{colour.1}}</option>
+		{% endfor %}
+		</select>
+		<button type="button" data-category='{{forloop.counter0}}' class="comment-submit btn btn-default">{% trans 'Poster' %}</button>
+	  </form>
+      <span class='comment-add' >{% trans 'Ajouter un commentaire...' %}</span>
+
       </div>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h4 class="panel-title">
-        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          {% trans "Pas d'autorité" %}
-        </a>
-      </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-      <div class="panel-body">
-        +++++
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title">
-        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          {% trans "Respect de l'intimité" %}
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-      <div class="panel-body">
-        xxxx
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingFour">
-      <h4 class="panel-title">
-        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-          {% trans "Respect de l'information" %}
-        </a>
-      </h4>
-    </div>
-    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-      <div class="panel-body">
-        xxxx
-      </div>
-    </div>
-  </div>
+{% endfor %}  
 </div>
 	
 	
@@ -82,3 +55,34 @@
 		{% endwith %}
 	</div>
 </div>
+
+<script>
+$(window).load(function() {
+	$('.comment-add').on('click', function() {
+		$(this).parent().find('.comment-form').show();
+		$(this).hide();
+	});
+	$('.comment-submit').on('click',function() {
+			var form = $(this).parent();
+			$.ajax({
+		    url: "{% url 'catalog:comment-data' %}",
+		    type: "POST",
+		    data: {
+		    	'resource': {{resource.pk}}, 
+		    	'author': {{request.user.pk}}, 
+		    	'category': $(this).attr('data-category'),
+		    	'colour': $(this).parent().find('.comment-colour').val(),
+		    	'text' : $(this).parent().find('.comment-text').val() },
+		    success: function (data) {
+				form.hide();
+				form.parent().find('.comment-add').show();
+				form.before($(data['rendered']));
+		    },
+		    error: function(data) {
+		    	alert({% trans 'Erreur, réessayez' %});
+		    }
+		});
+	
+	});
+});
+</script>

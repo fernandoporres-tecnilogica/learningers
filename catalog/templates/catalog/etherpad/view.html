@@ -9,15 +9,20 @@
 
 {% block source %}
 {# embed pad #}
-<iframe src="{{ resource.get_embed_url }}?showLineNumbers=false&lang={{ LANGUAGE_CODE }}{% if request.user.is_authenticated and not request.user|is_lazy_user %}&userName={{ request.user.username }}{%endif%}" width="95%" height="95%"></iframe>
+<iframe id='ap-pad' src="{{ resource.get_embed_url }}?alwaysShowChat=true&showLineNumbers=false&lang={{ LANGUAGE_CODE }}{% if request.user.is_authenticated and not request.user|is_lazy_user %}&userName={{ request.user.username }}{%endif%}" width="95%" height="95%"></iframe>
 {% endblock %}
 
-{% block annotations %}
-{# Retrieve chat contents #}
-<script src="{% static 'catalog/etherpad/annotations.js' %}"></script>
+{% block js %}
 <script>
 $(document).ready(function() {
-	load_annotations("{{ resource.get_api_url }}");
+	//load_annotations("{{ resource.get_api_url }}");
+	$('#ap-rightbar').css({width:0});
+	$('#ap-pad').css({height:$(window).height()-$('#ap-headbar').outerHeight()-10});
+	$('#ap-source-container').show();
+});
+
+$(window).resize(function() {
+	$('#ap-pad').css({height:$(window).height()-$('#ap-headbar').outerHeight()-10});
 });
 </script>
 {% endblock %}

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 from catalog.models.base import Resource,register_resource
 from django.db import models
@@ -7,10 +8,14 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import get_language
 from django import template
 from django.template.defaultfilters import stringfilter
+from urllib2 import HTTPError
 register = template.Library()
 
 from commons.string import upper_repl
 import re
+from etherpad_lite import EtherpadLiteClient
+from urlparse import urlparse
+from django.core.exceptions import ValidationError
 
 @register.filter
 @stringfilter
@@ -37,9 +42,31 @@ class Etherpad(Resource):
         verbose_name_plural = __('Pads Etherpad')
         
     def get_embed_url(self):
-        return self.padserver + 'p/' + pad_slugify(self.padname)
+        return "http://" + self.padserver + '/p/' + pad_slugify(self.padname)
     
     def get_api_url(self):
-        return self.padserver + 'api/'
+        return "http://" + self.padserver + '/api/'
+    
+    def save(self,*args,**kwargs):
+        if not self.pk:
+            self.slug = self.padserver + '/p/' + pad_slugify(self.padname)  
+    
+    def preview(self):
+        try:
+            c = EtherpadLiteClient(base_url=self.get_api_url())
+            data = c.getHTML(padID=self.padname)
+            return data
+        except HTTPError:
+            return super(Etherpad,self).preview()
+        
+    @staticmethod
+    def make_from_slug(parent,slug):
+        tokens = slug.split('/p/')
+        if(len(tokens) != 2):
+            print "bouh"
+            print slug
+            raise ValidationError(_("Impossible de reconstruire l'adresse du PAD correspondant à " + slug ))
+        padname = pad_deslugify(tokens[1])
+        return Etherpad(parent=parent,name=padname,slug=slug,padserver="http://" + tokens[0],padname=padname)
 
 register_resource(Etherpad)

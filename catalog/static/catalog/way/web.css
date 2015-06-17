@@ -12,18 +12,26 @@
 }
 
 #ap-calendar {
-	border : 1px solid black;
+/*	border : 1px solid black; */
 	display:inline-block;
 	margin:0.25em;
 	padding:0.25em;
-	width:14em;
+	width:16.5em;
 	text-align:center;
+}
+
+#ap-calendar .container-fluid {
+	padding-left:0.5em;
+	padding-right:0.5em;
+}
+
+#ap-calendar .navbar-text {
+	margin-left:0.5em;
+	margin-right:0.5em;
 }
 
 #ap-calendar td {
 	font-size:80%;
-	background: #eeeeee;
-	border: 1px solid white;
 }
 
 #ap-calendar td:hover {

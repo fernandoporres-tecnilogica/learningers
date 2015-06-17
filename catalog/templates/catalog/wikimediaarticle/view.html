@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="{% static 'annotator/annotator-marginviewer.css' %}" type="text/css"/>
 {% endblock %}
 {% block source %}
-{{ resource.data.wiki_html|safe }}
+{{ resource.data.html|safe }}
 {% endblock %}
 
 {% block annotations %}

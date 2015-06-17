@@ -4,6 +4,8 @@ Les serializers utiles à l'interface REST framework du catalogue,
 utilisée pour la communication AJAX
 """
 from rest_framework import serializers
+from django.template.loader import render_to_string
+from django.contrib.auth.models import User
 import models
 
 class ResourceSerializer(serializers.ModelSerializer):
@@ -37,25 +39,45 @@ def make_range_serializer(range_type):
                         
 def make_annotation_serializer(content_type,range_type):
     class HOP(serializers.ModelSerializer):
-        ranges = make_range_serializer(range_type)(many=True)
-        resource = serializers.PrimaryKeyRelatedField(read_only=False,queryset=models.Resource.objects.all())
+        ranges = make_range_serializer(range_type)(many=True,required=True)
+        resource = serializers.PrimaryKeyRelatedField(required=True,read_only=False,queryset=models.Resource.objects.all())
         links = serializers.PrimaryKeyRelatedField(required=False,many=True,queryset=models.Resource.objects.all())
-	def create(self,validated_data):
-		ranges = validated_data.pop('ranges')
-		ret = models.available_annotation_contents[content_type].objects.create(**validated_data)
-		for r in ranges:
-			r['annotation_id'] = ret.pk
-		self.fields['ranges'].create(ranges)
-		return ret
-	def update(self,instance,validated_data):
-		# ignore range because it cannot be changed!
-		validated_data.pop('ranges')
-	        for attr, value in validated_data.items():
-        	    setattr(instance, attr, value)
-	        instance.save()
-	        return instance
+        authors = serializers.PrimaryKeyRelatedField(required=False,many=True,queryset=User.objects.all())
+        rendered = serializers.SerializerMethodField
+        def get_rendered(self,obj):
+            return render_to_string('catalog/annotation.html',{'annotation':obj})        
+        def create(self,validated_data):
+            ranges = validated_data.pop('ranges')
+            m2m_data = {}
+            # we need to take care separately of manytomany fields.
+            for name,field in self.fields.items():
+                if isinstance(field,serializers.ManyRelatedField) and name in validated_data:
+                    m2m_data[name] = validated_data.pop(name)
+            print "plouf : %s" % validated_data
+            ret = models.available_annotation_contents[content_type].objects.create(**validated_data)
+            for k,v in m2m_data.items():
+                rel = self.fields[k].queryset.model.objects.create(**v)
+                getattr(ret,k).add(rel)
+            for r in ranges:
+                r['annotation_id'] = ret.pk
+            self.fields['ranges'].create(ranges)
+            return ret
+        def update(self,instance,validated_data):
+            # ignore range because it cannot be changed!
+            validated_data.pop('ranges')
+            for attr, value in validated_data.items():
+                setattr(instance, attr, value)
+            instance.save()
+            return instance
         class Meta:
             model = models.available_annotation_contents[content_type]
             depth = 1
     return HOP
     
+class CommentSerializer(serializers.ModelSerializer):
+    rendered = serializers.SerializerMethodField()
+    def get_rendered(self,obj):
+        return render_to_string('catalog/comment.html',{'comment':obj})        
+    class Meta:
+        model = models.Comment
+        

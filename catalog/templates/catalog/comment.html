@@ -1,0 +1,7 @@
+{% load inplace_edit %}
+{% load i18n %}
+{% load staticfiles %}
+<div style="background:{{comment.get_colour_rgb}};">
+{{comment.author.name}}<br>
+{% inplace_edit "comment.text" %}
+</div>

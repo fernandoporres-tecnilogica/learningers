@@ -3,6 +3,8 @@
 	<name>learningers</name>
 	<comment></comment>
 	<projects>
+		<project>django-recurrence</project>
+		<project>django-scheduler</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

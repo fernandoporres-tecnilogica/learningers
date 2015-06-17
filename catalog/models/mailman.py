@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 from catalog.models.base import Resource,register_resource
 from django.db import models
 from django.utils.translation import ugettext_lazy as __
 from django.utils.translation import ugettext as _
-from django_mailman.models import List
 import re
 import urllib2
 import logging
@@ -42,42 +42,42 @@ UNSUBSCRIBE_BUTTON = {
 
 # Definition from the Mailman-Source ../Mailman/Default.py
 LANGUAGES = (
-    ('utf-8',       _('Arabic')),
+    ('utf-8',       _('Arabe')),
     ('utf-8',       _('Catalan')),
-    ('iso-8859-2',  _('Czech')),
-    ('iso-8859-1',  _('Danish')),
-    ('iso-8859-1',  _('German')),
-    ('us-ascii',    _('English (USA)')),
-    ('iso-8859-1',  _('Spanish (Spain)')),
-    ('iso-8859-15', _('Estonian')),
-    ('iso-8859-15', _('Euskara')),
-    ('iso-8859-1',  _('Finnish')),
-    ('iso-8859-1',  _('French')),
-    ('utf-8',       _('Galician')),
-    ('utf-8',       _('Hebrew')),
-    ('iso-8859-2',  _('Croatian')),
-    ('iso-8859-2',  _('Hungarian')),
-    ('iso-8859-15', _('Interlingua')),
-    ('iso-8859-1',  _('Italian')),
-    ('euc-jp',      _('Japanese')),
-    ('euc-kr',      _('Korean')),
-    ('iso-8859-13', _('Lithuanian')),
-    ('iso-8859-1',  _('Dutch')),
-    ('iso-8859-1',  _('Norwegian')),
-    ('iso-8859-2',  _('Polish')),
-    ('iso-8859-1',  _('Portuguese')),
-    ('iso-8859-1',  _('Portuguese (Brazil)')),
-    ('iso-8859-2',  _('Romanian')),
-    ('koi8-r',      _('Russian')),
-    ('utf-8',       _('Slovak')),
-    ('iso-8859-2',  _('Slovenian')),
-    ('utf-8',       _('Serbian')),
-    ('iso-8859-1',  _('Swedish')),
-    ('iso-8859-9',  _('Turkish')),
-    ('utf-8',       _('Ukrainian')),
-    ('utf-8',       _('Vietnamese')),
-    ('utf-8',       _('Chinese (China)')),
-    ('utf-8',       _('Chinese (Taiwan)')),
+    ('iso-8859-2',  _('Tchèque')),
+    ('iso-8859-1',  _('Danois')),
+    ('iso-8859-1',  _('Allemand')),
+    ('us-ascii',    _('Anglais (USA)')),
+    ('iso-8859-1',  _('Espagnol (Spain)')),
+    ('iso-8859-15', _('Estonien')),
+    ('iso-8859-15', _('Basque')),
+    ('iso-8859-1',  _('Finnois')),
+    ('iso-8859-1',  _('Francais')),
+    ('utf-8',       _('Galicien')),
+    ('utf-8',       _('Hébreu')),
+    ('iso-8859-2',  _('Croate')),
+    ('iso-8859-2',  _('Hongrois')),
+    ('iso-8859-15', _('Interlangue')),
+    ('iso-8859-1',  _('Italien')),
+    ('euc-jp',      _('Japonais')),
+    ('euc-kr',      _('Coréen')),
+    ('iso-8859-13', _('Lithuanien')),
+    ('iso-8859-1',  _('Hollandais')),
+    ('iso-8859-1',  _('Norvégien')),
+    ('iso-8859-2',  _('Polonais')),
+    ('iso-8859-1',  _('Portuguais')),
+    ('iso-8859-1',  _('Portuguais (Brésil)')),
+    ('iso-8859-2',  _('Roumain')),
+    ('koi8-r',      _('Russe')),
+    ('utf-8',       _('Slovaque')),
+    ('iso-8859-2',  _('Slovène')),
+    ('utf-8',       _('Serbe')),
+    ('iso-8859-1',  _('Suédois')),
+    ('iso-8859-9',  _('Turque')),
+    ('utf-8',       _('Ukrainien')),
+    ('utf-8',       _('Vietnamien')),
+    ('utf-8',       _('Chinois (Chine)')),
+    ('utf-8',       _('Chinois (Taiwan)')),
 )
 
 # POST-Data for a list subcription

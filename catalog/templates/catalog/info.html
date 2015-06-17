@@ -2,18 +2,22 @@
 {% load i18n %}
 {% load staticfiles %}
 <div class='ap-resource-info'>
-<h1>{% inplace_edit "resource.name" %}</h1>
+<h1 id="ap-resource-name">{% inplace_edit "resource.name" %}</h1>
 <ul>
 <li>
 <script src="{% static 'commons/external/tinymce/tinymce.min.js' %}"></script>
 {% trans 'Ajouter une description...' as add_desc %}
 {% inplace_edit "resource.description" adaptor="html", edit_empty_value=add_desc %}
 </li>
+{% if resource.languages.all %}
 <li>{% trans 'Langue(s)' %} : {% for lang in resource.languages.all %} {{ lang }} {% endfor %}</li>
+{% endif %}
 {% if resource.parent %}
 <li>{% trans 'Parcours' %} : <a href="{{ resource.parent.get_absolute_url }}">{{ resource.parent }}</a></li>
 {% endif %}
+{% if resource.see_also.select_subclasses.all %}
 <li>{% trans 'Voir aussi' %} : {% for link in resource.see_also.select_subclasses.all %} <a href="{{ link.get_absolute_url }}">{{ link.name }}</a>{% endfor %}</li>
+{% endif %}
 {% block info %}
 {% endblock %}
 </div>
