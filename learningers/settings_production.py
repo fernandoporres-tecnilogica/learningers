@@ -179,6 +179,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 # for autocomplete
 AJAX_LOOKUP_CHANNELS = {
     'location' : ('catalog.lookups','LocationLookup'),
+    'resource' : ('catalog.lookups','ResourceLookup'),
     'way' : ('catalog.lookups','WayLookup'),
     'user' : ('catalog.lookups','UserLookup'),
  }

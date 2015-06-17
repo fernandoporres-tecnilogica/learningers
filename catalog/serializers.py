@@ -56,7 +56,8 @@ def make_annotation_serializer(content_type,range_type):
             print "plouf : %s" % validated_data
             ret = models.available_annotation_contents[content_type].objects.create(**validated_data)
             for k,v in m2m_data.items():
-                rel = self.fields[k].queryset.model.objects.create(**v)
+		print "v : %s" % v
+                rel = self.fields[k].child_relation.queryset.model.objects.create(**v)
                 getattr(ret,k).add(rel)
             for r in ranges:
                 r['annotation_id'] = ret.pk

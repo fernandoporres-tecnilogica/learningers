@@ -67,8 +67,8 @@ $(window).load(function() {
 		$(this).hide();
 	});
 	$('.annotation-submit').on('click',function() {
-			var form = $(this).parent();
-			$.ajax({
+		var form = $(this).parent();
+		$.ajax({
 		    url: "{% url 'catalog:note-eventrange-annotation-list' %}",
 		    type: "POST",
 		    data: {
@@ -76,12 +76,12 @@ $(window).load(function() {
 		    	'author': {{request.user.pk}}, 
 		    	'text' : $(this).parent().find('.annotation-text').val() },
 		    success: function (data) {
-				form.hide();
-				form.parent().find('.annotation-add').show();
-				form.before($(data['rendered']));	
+			form.hide();
+			form.parent().find('.annotation-add').show();
+			form.before($(data['rendered']));	
 		    },
 		    error: function(data) {
-		    	alert({% trans 'Erreur, réessayez' %});
+		    	alert("{% trans 'Erreur, réessayez' %}");
 		    }
 		});
 	

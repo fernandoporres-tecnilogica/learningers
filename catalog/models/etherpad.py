@@ -56,7 +56,7 @@ class Etherpad(Resource):
             c = EtherpadLiteClient(base_url=self.get_api_url())
             data = c.getHTML(padID=self.padname)
             return data
-        except HTTPError, URLError:
+        except (HTTPError, URLError):
             return super(Etherpad,self).preview()
         
     @staticmethod
