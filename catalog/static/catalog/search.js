@@ -47,30 +47,32 @@ function add_tooltips() {
 	}
 }
 
-function update_search_results(search_url) {
+function update_search_results(search_urls) {
     var qq = '';
 	var aa = '';
     if($('#q').val() != $('#q').data('init')) { qq = $('#q').val(); }
     if($('#a').val() != $('#a').data('init')) { aa = $('#a').val(); }
     $('#ap-panel').html('');
-	$.ajax({
-	    url: search_url,
-	    type: "GET",
-	    data: { q:qq, a:aa, t:$('#t').val()},
-	    success: function (data) {
-	    	// add results in listing
-		if($.isArray(data)) {
-	    	data.map(function(result) {
-	    		//alert(result['rendered']);
-	    		$('#ap-panel').append($(result['rendered']));
-	    	});
-	    	add_tooltips();
-		}
-	    },
-	    error: function(data) {
-	    	alert('error!')
-	    }
-	}); 
+	// Interrogate search engines
+	$.each(search_urls,function(idx,url) {
+				$.ajax({
+			             url: url,
+			             type: "GET",
+			             data: { q:qq, a:aa, t:$('#t').val()},
+			             success: function (data) {
+			             	// add results in listing
+			             	data.map(function(result) {
+			    	    		$('#ap-panel').append($(result['rendered']));
+			             	});
+			             	finished_engines++;
+			             	add_tooltips();
+			             },
+			             error: function(data) {
+			             	finished_engines++;
+			             	add_tooltips();		             	
+			             }
+		        });
+	});
 }
 	
 		

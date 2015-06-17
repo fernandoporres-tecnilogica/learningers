@@ -16,6 +16,8 @@ from django.utils.translation import ugettext_lazy as __
 from django.core.exceptions import ValidationError
 from django import template
 from django.template.defaultfilters import stringfilter
+from urllib2 import URLError
+
 register = template.Library()
  
 from commons.string import upper_repl
@@ -45,7 +47,7 @@ class Wiki(models.Model):
                           (MAIN_NAMESPACE, 'Articles'),
                           (IMAGE_NAMESPACE, 'Images'),
                           )
-    NAMESPACE_TYPES = { MAIN_NAMESPACE: 'wiki', IMAGE_NAMESPACE:'linksgallery' }
+    NAMESPACE_TYPES = { MAIN_NAMESPACE: 'wikimediaarticle', IMAGE_NAMESPACE:'linksgallery' }
     
     name = models.CharField(max_length=200, help_text=_(u'Nom sous lequel ce wiki est connu'))
     shortname = models.SlugField(max_length=50,help_text=_(u'Identifiant du wiki (charactères ASCII et chiffres seulement)'))
@@ -117,7 +119,10 @@ class Wiki(models.Model):
         
     # retrieve a snippet for a single page
     def get_snippet(self,title):
-        data = self.wiki.call({'action':'query', 'list':'search','srsearch':title,'srprop':'snippet', 'srnamespace':"%d" % self.namespace,'srlimit':'1'})
+        try:
+            data = self.wiki.call({'action':'query', 'list':'search','srsearch':title,'srprop':'snippet', 'srnamespace':"%d" % self.namespace,'srlimit':'1'})
+        except URLError:
+            raise Http404    
         data = data['query']['search']
         # if we are searching imaging we need to retrieve the thumbnail URLs
         if not data:
@@ -136,7 +141,10 @@ class Wiki(models.Model):
             yield wiki['shortname']
     
     def search(self,querystring):
-        data = self.wiki.call({'action':'query', 'list':'search','srsearch':querystring,'srprop':'snippet', 'srnamespace':"%d" % self.namespace})
+        try:
+            data = self.wiki.call({'action':'query', 'list':'search','srsearch':querystring,'srprop':'snippet', 'srnamespace':"%d" % self.namespace})
+        except URLError:
+            raise Http404
         data = data['query']['search']
         # if we are searching imaging we need to retrieve the thumbnail URLs
         print data
@@ -147,10 +155,10 @@ class Wiki(models.Model):
             for idx,d in enumerate(data):
                 description = "<img src='" + urls[idx] + "'/>"
                 dummy,name = string.split(d['title'],':') 
-                yield {'resource_type':Wiki.NAMESPACE_TYPES[Wiki.IMAGE_NAMESPACE], 'source': self.shortname, 'name': name, 'slug': self.slugify(name), 'description': description }
+                yield {'resource_type':Wiki.NAMESPACE_TYPES[Wiki.IMAGE_NAMESPACE], 'resource_source': self.shortname, 'name': name, 'slug': self.slugify(name), 'description': description }
         else:
             for d in data:
-                yield {'resource_type':Wiki.NAMESPACE_TYPES[Wiki.MAIN_NAMESPACE], 'source': self.shortname, 'name': d['title'], 'slug': self.slugify(d['title']), 'description': d['snippet'] }
+                yield {'resource_type':Wiki.NAMESPACE_TYPES[Wiki.MAIN_NAMESPACE], 'resource_source': self.shortname, 'resource_name': d['title'], 'resource_url' : reverse('catalog:wikimediaarticle-view',kwargs={'slug':self.slugify(d['title'])}), 'resource_description': d['snippet'], 'resource_tooltip': d['snippet']}
         
     # retrieve the url of a given image, if it exists on the wiki, otherwise raise 404 error
     def get_image_info(self,name):
@@ -187,5 +195,10 @@ class WikimediaArticle(Resource):
         return WikimediaArticle(name=name,wiki=wiki,title=name,parent=parent,description=snippet)    
     def data(self):
         return {'html': self.wiki.get_page(self.title) }
+    class ExternalSearch:
+        "Search for articles matching a given query on available wikis"
+        sources = staticmethod(Wiki.list_all_wikis)
+        search = staticmethod(Wiki.search_all_wikis)
+    
 
 register_resource(WikimediaArticle)

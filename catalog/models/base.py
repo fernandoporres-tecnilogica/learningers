@@ -146,12 +146,16 @@ class GeoLocation(models.Model):
         return self.address
 
 available_resource_models = {}
+available_search_engines = {}
 
 def register_resource(resource_model):
     resource_type = resource_model.__name__.lower()
     setattr(resource_model,'resource_type',resource_type)
     setattr(resource_model,'user_friendly_type',resource_model._meta.verbose_name.title())
     available_resource_models[resource_type] = resource_model
+    # Register external search engines if any are found
+    if hasattr(resource_model,'ExternalSearch'):
+        available_search_engines[resource_type] = resource_model.ExternalSearch
 
 @receiver_subclasses(post_save, Resource,'resource-language')
 def resource_post_save(sender,**kwargs):

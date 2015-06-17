@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from catalog import forms, serializers
-from catalog.models import available_resource_models, SessionWay, Resource, Way, available_annotation_ranges, available_annotation_contents, Comment
+from catalog.models import available_resource_models, SessionWay, Resource, Way, available_search_engines, available_annotation_ranges, available_annotation_contents, Comment
 from django.views.generic.base import View
 from django.views import generic
 from django.http import HttpResponsePermanentRedirect
@@ -240,6 +240,7 @@ class SearchResultsView(generic.TemplateView):
         # pass the search form to keep its contents
         form =  forms.ResourceSearchForm(self.request.GET)
         context['search_form'] = form
+        context['available_search_engines'] = available_search_engines
         return context
     
 class RequestMoreSearchResults(rest_framework.views.APIView):
@@ -291,6 +292,7 @@ class CalendarRenderView(rest_framework.views.APIView):
         
 
 def make_annotation_viewset(content_type,range_type):
+    """Generate a Viewset to load annotations via AJAX"""
     class AnnotationViewSet(viewsets.ModelViewSet):
         queryset = available_annotation_contents[content_type].objects.all()
         serializer_class = serializers.make_annotation_serializer(content_type,range_type)
@@ -298,3 +300,17 @@ def make_annotation_viewset(content_type,range_type):
         filter_backends = (filters.DjangoFilterBackend,)
         filter_fields = ('resource',)
     return AnnotationViewSet
+
+import json
+from django.http import HttpResponse
+
+def make_externalsearch_view(SearchClass):
+    """Generate view for obtaining external search results via AJAX"""
+    class HOP(View,SearchClass):
+        def get(self,request):
+            querystring = self.request.GET['q']
+            queryloc = self.request.GET['a']
+            querylang = self.request.LANGUAGE_CODE
+            search_results = list({ 'rendered': render_to_string('catalog/resource.html', result) } for result in self.search(querystring,queryloc,querylang))
+            return HttpResponse(json.dumps(search_results, ensure_ascii=False), content_type='application/json; charset=UTF-8',)
+    return HOP.as_view()

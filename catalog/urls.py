@@ -18,7 +18,7 @@ slug1/slug2/.../book/harry-potter
 from django.conf.urls import patterns, url
 from django.contrib import admin
 from catalog import views
-from models import available_resource_models
+from models import available_resource_models, available_search_engines
 
 admin.autodiscover()
 
@@ -68,3 +68,10 @@ for content_type in available_annotation_contents:
         router.register('annotations/' + content_type + '/' + range_type,views.make_annotation_viewset(content_type,range_type), content_type + '-' + range_type + '-annotation')
 
 urlpatterns += format_suffix_patterns(router.urls) 
+
+# FOR EXTERNAL SEARCH
+for name,engine in available_search_engines.items():
+    name = 'externalsearch-' + name
+    toto = patterns('',  url(r'^externalsearch/' + name + '/$', views.make_externalsearch_view(engine), name=name))
+    urlpatterns += toto
+

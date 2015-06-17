@@ -8,7 +8,7 @@ import catalog.models.wiki
 import catalog.models.feed
 import catalog.models.annotations
 from catalog.models.way import SessionWay
-from catalog.models.base import available_resource_models, GeoLocation, ResourceLanguage, Resource, available_annotation_contents, available_annotation_ranges, Comment
+from catalog.models.base import available_resource_models, available_search_engines, GeoLocation, ResourceLanguage, Resource, available_annotation_contents, available_annotation_ranges, Comment
 import reversion
 import sys
 

@@ -23,7 +23,14 @@
 $(document).ready(function () {
 //	update_search_results("{% url 'catalog:search-data' %}");
 	$('#ap-small-searchform-submit').attr('type','button');
-	$('#ap-small-searchform-submit').on('click', function() { update_search_results("{% url 'catalog:search-data' %}"); });
+	var search_urls = [ "{% url 'catalog:search-data' %}", 
+	{% for engine_name in available_search_engines %}
+	{% with 'catalog:externalsearch-'|add:engine_name as engine_url %} 
+	"{% url engine_url %}",
+	{% endwith %}
+	{% endfor %}
+	];
+	$('#ap-small-searchform-submit').on('click', function() { update_search_results(search_urls); });
 	$("#a,#q").keyup(function(event){ if(event.keyCode == 13){  $('#ap-small-searchform-submit').click(); }});
 	$('#ap-small-searchform-submit').click();
 });
