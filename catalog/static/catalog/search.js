@@ -25,7 +25,7 @@ var finished_engines = 0;
 function add_tooltips() {
 	if(finished_engines >= 1)
 	{
-		alert('adding tooltips');
+		//alert('adding tooltips');
 		$(document).tooltip({
 			items: '.ap-with-tooltip',
 			content: function() {

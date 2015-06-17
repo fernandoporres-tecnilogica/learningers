@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import get_language
 from django import template
 from django.template.defaultfilters import stringfilter
-from urllib2 import HTTPError
+from urllib2 import HTTPError, URLError
 register = template.Library()
 
 from commons.string import upper_repl
@@ -56,7 +56,7 @@ class Etherpad(Resource):
             c = EtherpadLiteClient(base_url=self.get_api_url())
             data = c.getHTML(padID=self.padname)
             return data
-        except HTTPError:
+        except HTTPError, URLError:
             return super(Etherpad,self).preview()
         
     @staticmethod
