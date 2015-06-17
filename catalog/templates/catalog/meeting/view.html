@@ -76,9 +76,9 @@ $(window).load(function() {
 		    	'author': {{request.user.pk}}, 
 		    	'text' : $(this).parent().find('.annotation-text').val() },
 		    success: function (data) {
-			form.hide();
-			form.parent().find('.annotation-add').show();
-			form.before($(data['rendered']));	
+				form.hide();
+				form.parent().find('.annotation-add').show();
+				form.before($(data['rendered']));	
 		    },
 		    error: function(data) {
 		    	alert("{% trans 'Erreur, réessayez' %}");

@@ -43,7 +43,7 @@ def make_annotation_serializer(content_type,range_type):
         resource = serializers.PrimaryKeyRelatedField(required=True,read_only=False,queryset=models.Resource.objects.all())
         links = serializers.PrimaryKeyRelatedField(required=False,many=True,queryset=models.Resource.objects.all())
         authors = serializers.PrimaryKeyRelatedField(required=False,many=True,queryset=User.objects.all())
-        rendered = serializers.SerializerMethodField
+        rendered = serializers.SerializerMethodField()
         def get_rendered(self,obj):
             return render_to_string('catalog/annotation.html',{'annotation':obj})        
         def create(self,validated_data):
@@ -53,12 +53,11 @@ def make_annotation_serializer(content_type,range_type):
             for name,field in self.fields.items():
                 if isinstance(field,serializers.ManyRelatedField) and name in validated_data:
                     m2m_data[name] = validated_data.pop(name)
-            print "plouf : %s" % validated_data
             ret = models.available_annotation_contents[content_type].objects.create(**validated_data)
             for k,v in m2m_data.items():
-		print "v : %s" % v
-                rel = self.fields[k].child_relation.queryset.model.objects.create(**v)
-                getattr(ret,k).add(rel)
+                for elem in v:
+                    rel = self.fields[k].child_relation.queryset.model.objects.create(**elem)
+                    getattr(ret,k).add(rel)
             for r in ranges:
                 r['annotation_id'] = ret.pk
             self.fields['ranges'].create(ranges)
