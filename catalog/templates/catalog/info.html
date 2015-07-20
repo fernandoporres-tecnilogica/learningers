@@ -2,9 +2,11 @@
 {% load i18n %}
 {% load staticfiles %}
 <div class='ap-resource-info'>
-<h1 id="ap-resource-name">{% inplace_edit "resource.name" %}</h1>
-<ul>
-<li>
+<div class="ap-resource-logo"><img style="width:100%;height:100%;" src="{% static 'catalog/'|add:resource.resource_type|add:'/icon.png' %}" title="{{resource.user_friendly_type}}"/></div>
+<ul>	
+<li id="ap-resource-type-big">{{ resource.user_friendly_type }}</li>
+<li id="ap-resource-title-big">{% inplace_edit "resource.name" %}</li>
+<li id="ap-resource-description-big">
 <script src="{% static 'commons/external/tinymce/tinymce.min.js' %}"></script>
 {% trans 'Ajouter une description...' as add_desc %}
 {% inplace_edit "resource.description" adaptor="html", edit_empty_value=add_desc %}
@@ -20,4 +22,5 @@
 {% endif %}
 {% block info %}
 {% endblock %}
+</ul>
 </div>

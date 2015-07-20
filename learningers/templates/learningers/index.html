@@ -27,10 +27,14 @@ body {
 <p>
 <a href="{% url 'charter' %}">{% trans 'Voir la charte' %}</a></p>
 </div>
-<br>
-<br>
-<p style="text-align:justify;width:70%;margin-left:15%;">
-</p>
+<h3 id='ap-main-latest-title'>Dernières nouveautés</h3>
+<div id='ap-main-latest-container'>
+<div id='ap-main-latest'>
+{% for obj in latest_resources %}
+{% include 'catalog/resource.html' with resource_type=obj.resource_type resource_source='internal' resource_name=obj.name resource_description=obj.preview resource_tooltip=obj.description resource_url=obj.get_absolute_url %}
+{% endfor %}
+</div>
+</div>
 {% endblock %}
 
 {% block joyride %}

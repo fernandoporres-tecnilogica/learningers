@@ -19,6 +19,7 @@ from django.forms.fields import DateTimeField
 import geopy
 from django.forms.widgets import HiddenInput
 from datetime import datetime, timedelta
+from imaging.forms import ImageForm
 
 class ResourceSearchForm(SearchForm):
     """
@@ -83,7 +84,9 @@ def make_resource_form(resource_type):
             if(hasattr(model_class,'geo')):
                 new_attrs['geo'] = FormField(GeoLocationForm,related=True)
             if(hasattr(model_class,'user')):
-                new_attrs['user'] = AutoCompleteSelectField('user',required=False)  
+                new_attrs['user'] = AutoCompleteSelectField('user',required=False)
+            if(hasattr(model_class,'avatar')):
+                new_attrs['avatar'] = FormField(ImageForm,related=True,required=False)
             opts = model_class._meta
             # Avoid circular import
             from django.db.models.fields import Field as ModelField

@@ -8,9 +8,10 @@
 {% block body %}
 <form method="POST" action="."> 
 {% csrf_token %}
+<input name="next" type="hidden" value="{{request.GET.next}}">
 {% bootstrap_form form %}
 {% buttons %}
 <button type="submit" class="btn btn-primary">{% trans 'Inscription' %}</button>
 {% endbuttons %}
 </form>
-{% endblock %}
+{% endblock %}	

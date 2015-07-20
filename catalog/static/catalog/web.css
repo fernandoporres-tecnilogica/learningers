@@ -3,13 +3,13 @@
 #ap-sidebar {
 	position:absolute;	
 	left:0;
-	width:19em;
+	width:21em;
 	padding:0.5em;
 }
 	
 /* List of search results */
 #ap-panel {
-	margin-left:19em;
+	margin-left:21em;
 }
 
 /* Toolbars */
@@ -59,16 +59,18 @@
 /* Resource type selection when creating new resource */
 div.ap-select-resource-icon {
 	text-align:center;
-	height:100px;
-	width:100px;
+	height:11em;
+	width:11em;
 	display:inline-block;
 }
 
 /* Resource link display */
 .ap-resource, .ap-select-resource-type {
 	vertical-align:middle;
-	width: 13.3em;
-	height: 10.6em;
+/*	width: 13.3em;
+	height: 10.6em; */
+	width: 20em;
+	height: 16em;
 	display: inline-block;
 	text-align:center;
 	border:1px solid black;
@@ -93,12 +95,19 @@ div.ap-select-resource-icon {
 /*	width:11.6em; */
 	margin-left:0.3em;
 	margin-right:1.5em;
-	height:1.1em;
+	height:2em;
 	margin-top:0.3em;
 	text-align:left;
 	text-overflow:ellipsis;
+	font-weight:bold;
 	white-space:nowrap;
 	overflow:hidden;
+}
+
+.ap-select-resource-title {
+	font-size: 120%;
+	margin-top: 0.5em;
+	font-weight: bold;
 }
 
 .ap-resource-title > a:link {
@@ -177,8 +186,21 @@ div.ap-resource-logo {
 
 /* Tabs */
 #ap-tabs {
-	width:16em;
+	width:18em;
 	height:95%;
+	position:absolute;
+}
+
+#ap-resource-type-big {
+	font-size:70%;
+	font-style:italic;
+}
+
+#ap-resource-title-big {
+	font-size:150%;
+}
+
+#ap-resource-description-big {
 }
 
 .help-block {
@@ -188,6 +210,14 @@ div.ap-resource-logo {
 
 /* Annotations */
 
+.annotation-details {
+	display:none;
+	font-style:normal;
+}
+
+.annotation:hover > .annotation-details {
+	display:inline;
+}
 
 .annotation {
 	position:relative;

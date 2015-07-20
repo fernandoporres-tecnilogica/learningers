@@ -67,9 +67,9 @@ class Feed(Resource):
         self.set_defaults()            
         super(Feed, self).save(*args,**kwargs)  
     def preview(self):
-        print self.feed
-        if 'image' in self.feed and 'href'  in self.feed['image']:
-            return "<img src='" + self.feed['image']['href'] + "'/>"
+        #print self.feed
+        #if 'image' in self.feed and 'href'  in self.feed['image']:
+        #    return "<img src='" + self.feed['image']['href'] + "'/>"
         if not self.description:
             if 'description' in self.feed:
                 return self.feed['description']
@@ -131,6 +131,9 @@ class FeedEntry(Resource):
     def set_defaults(self):
         if not self.name:
             self.name = self.entry.title
+        if not self.description:
+            if 'description' in self.entry:
+                self.description = self.entry['description']            
     def save(self,*args,**kwargs):
         if not self.pk:
             u = urlparse(self.url)

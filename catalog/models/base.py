@@ -18,6 +18,7 @@ import reversion
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.conf import settings
+from imaging.models import Image
 
 # for GeoLocation
 from django.contrib.gis.db.models import GeoManager, PointField
@@ -88,6 +89,10 @@ class Resource(TimeStampedModel,ForkableModel):
     languages = models.ManyToManyField(ResourceLanguage,editable=False, help_text=__(u'Les langues à maîtriser pour comprendre cette ressource'))
     # Other entries related to this resource
     see_also = models.ManyToManyField('catalog.Resource',verbose_name=__('Voir aussi'),blank=True,null=True,default=None, help_text=__(u"D'autres resources liées à celle-ci"))
+    # Is this resource private or public ?
+    public = models.BooleanField(editable=False,default=True)
+    # A picture representing this resource 
+    avatar = models.ForeignKey(Image,blank=True,default=None,null=True,verbose_name=__(u'Avatar'), help_text=__(u"Une image représentant cette ressource"))
     # To manage inheritance
     objects = InheritanceManager()    
     
@@ -120,7 +125,7 @@ class Resource(TimeStampedModel,ForkableModel):
         if self.description:
             return self.description
         else:
-            return '<div style="text-align:center;"><img style="border:none;" src="' + settings.STATIC_URL + ('catalog/' + self.resource_type + '/icon.png') + '" title="Source:{{ resource_source }}"/></div>'
+            return '<div style="text-align:center;"><img style="border:none;" src="' + settings.STATIC_URL + ('catalog/' + self.resource_type + '/icon.png') + '" title="Source:{{ resource_source }}"/></div>'       
 
 class GeoLocation(models.Model):
     """
@@ -162,7 +167,7 @@ def resource_post_save(sender,**kwargs):
     if kwargs['instance'].languages.count() == 0:
         kwargs['instance'].languages.add(ResourceLanguage.get_mycurrent())
         kwargs['instance'].save() 
-        
+           
 # register for version control
 reversion.register(Resource)
 

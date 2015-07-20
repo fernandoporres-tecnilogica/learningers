@@ -104,6 +104,8 @@ INSTALLED_APPS = (
     # for scheduling of events
     'recurrence',
     'datetimewidget',
+    # for images, avatars, thumbnails...
+    'imaging'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -256,7 +258,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'romain.nguyenvanyen@gmail.com'
 EMAIL_HOST_PASSWORD = 'ceumdpd9c'
-EMAIL_USE_SSL = True
+#EMAIL_USE_SSL = True
 EMAIL_USE_TLS = True
 
 # In-place edit

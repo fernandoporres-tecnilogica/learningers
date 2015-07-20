@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as __
 
 class Human(Resource):
     """Une personne susceptible de contribuer à un apprentissage."""
-    geo = models.ForeignKey(GeoLocation,default=None,null=True,blank=True,verbose_name=__(u'Adresse physique'), help_text=__(u'Le lieu où se trouve la personne'))
+    geo = models.ForeignKey(GeoLocation,default=None,null=True,blank=True,verbose_name=__(u'Localisation'), help_text=__(u'Le lieu où se trouve la personne'))
     email = models.EmailField(blank=True,verbose_name=__(u'Adresse électronique'), help_text=__(u"Une adresse où joindre cette personne"))
     user = models.ForeignKey('auth.User',default=None,null=True,blank=True,verbose_name=__(u'Identifiant'),help_text=__(u"L'identifiant du compte associé à cette personne si elle en possède un"))
     class Meta:

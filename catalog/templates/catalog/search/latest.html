@@ -1,0 +1,39 @@
+
+<script src="{% static 'catalog/search.js' %}"></script>
+<script>
+$(document).ready(function () {
+		$.ajax({
+	             url: "{% url 'catalog:latest' %}",
+	             type: "GET",
+	             data: { q:qq, a:aa, t:$('#t').val()},
+	             success: function (data) {
+	             	// add results in listing
+	             	data.map(function(result) {
+	    	    		$('#ap-panel').append($(result['rendered']));
+	             	});
+	             	finished_engines++;
+	             	add_tooltips();
+	             },
+	             error: function(data) {
+	             	finished_engines++;
+	             	add_tooltips();		             	
+	             }
+        });
+}
+
+
+	$('#ap-small-searchform-submit').attr('type','button');
+	var search_urls = [ "{% url 'catalog:search-data' %}", 
+	{% for engine_name in available_search_engines %}
+	{% with 'catalog:externalsearch-'|add:engine_name as engine_url %} 
+	"{% url engine_url %}",
+	{% endwith %}
+	{% endfor %}
+	];
+	$('#ap-small-searchform-submit').on('click', function() { update_search_results(search_urls); });
+	$("#a,#q").keyup(function(event){ if(event.keyCode == 13){  $('#ap-small-searchform-submit').click(); }});
+	$('#ap-small-searchform-submit').click();
+});
+</script>
+
+{% endblock %}

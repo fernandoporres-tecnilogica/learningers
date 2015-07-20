@@ -1,9 +1,17 @@
 {% extends "learningers/base2.html" %}
-{% block frame %}
 {% load i18n %}
-<h2>{% trans "Ta demande d'inscription a bien été prise en compte." %}</h2>
+
+{% block title %}
+{% trans 'Inscription réussie!' %}
+{% endblock %}
+{% block body %}
+{% load i18n %}
+<b>{% trans "Ta demande d'inscription a bien été prise en compte." %}</b>
+<p>
 {% blocktrans %}
 Tu devrais très bientôt recevoir un email contenant un code,
 qui te permettra d'activer ton compte.
 {% endblocktrans %}
+</p>
+<a href='{{next}}' class='btn btn-success'>{% trans 'Retour' %}</a>
 {% endblock %}

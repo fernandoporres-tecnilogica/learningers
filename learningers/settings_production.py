@@ -103,6 +103,8 @@ INSTALLED_APPS = (
     'recurrence',
     'schedule',
     'datetimewidget',
+    # for images, avatars, thumbnails...
+    'imaging'
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,6 +1,16 @@
 {% load inplace_edit %}
 {% load i18n %}
 {% load staticfiles %}
-<div class='annotation'>
+<div class='annotation' pk="{{annotation.pk}}">
 {% inplace_edit "annotation.text" %}
+<div class='annotation-details'>
+{% for author in annotation.authors.all %}
+{{author}}, 
+{% endfor %}
+{% blocktrans with date=annotation.modified|date:"d F Y" time=annotation.modified|date:"H:i" %}
+Double-clique sur le texte pour le modifier. 
+Dernière modification le {{date}} à {{time}}.
+{% endblocktrans %}
+<a href='#' class='annotation-delete'>{% trans 'Supprimer' %}</a>
+</div>
 </div>

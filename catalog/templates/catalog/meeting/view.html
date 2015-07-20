@@ -2,6 +2,7 @@
 
 {% load staticfiles i18n l10n %}
 {% load inplace_edit %}
+{% load i18n lazysignup_tags %}
 
 {% block css %}
 {{block.super}}
@@ -11,11 +12,25 @@
 
 {% block source %}
 <!-- the participants -->
+<hr/>
+<h3>{% trans "Participant-e-s" %}</h3>
+<hr/>
+{% if not resource.participants.exist %}
+<p style="text-align:center;font-style:italics;">{% trans "Personne pour le moment..." %}</p>
+{% else %}
 {% for participant in resource.participants.all %}
 {% with resource_type='human' resource_source='internal' resource_name=participant.username resource_description=participant.description resource_url=participant.get_absolute_url resource_tooltip=participant.description %}
 {% include 'catalog/resource.html' %}
 {% endwith %}
 {% endfor %}
+{% endif %}
+<p style="text-align:center;font-style:italics;">
+<a href='#' id='ap-event-signup'>{% trans "S'inscrire!" %}</a>
+<div id='ap-event-signup-dialog1' style='display:none;' title='{% trans "Inscription" %}'>
+{% trans "Pour t'inscrire à la rencontre, il te faut un compte sur le site. Est-ce que tu souhaites le créer maintenant ?" %}
+</div> 
+</p>
+<hr/>
 <!-- the map -->
 <div id="ap-osm-map"></div>
 <div style="display:none;">
@@ -55,6 +70,7 @@ var marker_data = [{
 	"address" : '{{ resource.geo.address|escapejs }}',
 	"title" : "{{ resource.name|escapejs }}",
 }];
+var is_lazy = {% if request.user|is_lazy_user %} 1 {% else %} 0 {% endif %} ;
 $(window).load(function() {
 	update_calendar("{% url 'catalog:calendar-data' pk=resource.parent.pk size="small" %}");
 	initialize_map(marker_data);
@@ -86,7 +102,53 @@ $(window).load(function() {
 		});
 	
 	});
+	$('.annotation-delete').on('click',function() {
+		var ann = $(this).parents('.annotation');
+		$.ajax({
+		    url: "{% url 'catalog:note-eventrange-annotation-list' %}" + ann.attr('pk') + "/",
+		    type: "DELETE",
+		    data: {
+		    },
+		    success: function (data) {
+				ann.remove();
+		    },
+		    error: function(data) {
+		    	alert("{% trans 'Erreur, réessayez' %}");
+		    }
+		});
+	
+	});
+	// Sign up for event participation
+	$('#ap-event-signup').click(function()
+	{
+		// if user is not registered yet, ask if she wants to register now
+		if(is_lazy)
+		{
+			$( "#ap-event-signup-dialog1" ).dialog({
+			  buttons: [
+			    {
+			      text: gettext("Oui"),
+			      click: function() {
+			        $( this ).dialog( "close" );
+			        document.location.href = "{% url 'registration_register' %}?next=" + document.location.href; 
+			      }
+			    },
+			    {
+			      text: gettext("Non"),
+			      click: function() {
+			        $( this ).dialog( "close" );
+			      }
+			    }
+			  ]
+			});
+		} else {
+		// sign up
+		
+		
+		}
+	});
 });
+
 </script>
 
 {% endblock %}

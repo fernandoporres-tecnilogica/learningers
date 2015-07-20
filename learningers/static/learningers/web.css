@@ -38,12 +38,21 @@ a:hover,a.hover { text-decoration: underline; }
 ---------------HOMEPAGE---------------- 
 ***************************************/
 
-#ap-main-title {
+#ap-main-title, #ap-main-subtitle, #ap-main-latest-title, #ap-main-latest {
 	text-align:center;
 }
 
-#ap-main-subtitle {
-	text-align:center;
+#ap-main-latest-container {
+	width:100%;
+	overflow-x:auto;
+}
+
+#ap-main-latest {
+	width:105em;	
+}
+
+#ap-main-latest {
+	oversize-x : scroll;
 }
 
 #ap-searchform #q,#a,#d {

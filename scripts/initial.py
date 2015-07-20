@@ -81,7 +81,7 @@ def run():
 	make_from_slug(models.WikimediaArticle,enscene,'wikipedia.fr/Ubu_Roi')
 
 	# install some mailing lists
-	mailing,created=models.MailmanList.objects.get_or_create(name=u'Mailing list de GASET', listname='g.a.s.e.t', password='73Vadziom!', email='g.a.s.e.t@listes.cooperative-integrale-toulouse.org',main_url='http://listes.cooperative-integrale-toulouse.org', encoding='iso-8859-1',parent=gaset)
+	mailing,created=models.MailmanList.objects.get_or_create(name=u'Mailing list de GASET', listname='g.a.s.e.t', password='73Vadziom!', email='g.a.s.e.t@listes.cooperative-integrale-toulouse.org',main_url='http://listes.cooperative-integrale-toulouse.org', encoding='utf-8',parent=gaset)
 	
 	# install some pad
 	#pad,created=models.Etherpad.objects.get_or_create(name=u'Pad de GASET', padname='Guide de GASET', padserver='pad.tetaneutral.net', parent=gaset)

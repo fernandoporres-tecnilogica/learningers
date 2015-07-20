@@ -18,6 +18,9 @@ urlpatterns = patterns('',
     # admin interface
     url(r'^admin/', include(admin.site.urls)),
     # user registration
+    url(r'^accounts/register/$', views.CustomRegistrationView.as_view(), name='registration_register'),
+    # short circuit to allow passing of "next" parameter to registration_complete template    
+    url(r'^accounts/register/complete/$', views.CustomRegistrationCompleteView.as_view(), name='registration_complete'),
     url(r'^accounts/', include('registration.urls')),
     url(r'^profil/(?P<slug>[^/]+)/$', views.UserProfileView.as_view(), name='profil'),
     url(r'^convert/', include('lazysignup.urls')),
@@ -33,5 +36,5 @@ urlpatterns = patterns('',
     url(r'^schedule/', include('schedule.urls')),
     url(r'^markdown/', include('django_markdown.urls')),
     # Catalog browsing and search
-    url(r'^catalog/', include('catalog.urls', namespace='catalog')),    
+    url(r'^catalog/', include('catalog.urls', namespace='catalog')),
 )

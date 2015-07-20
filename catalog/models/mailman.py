@@ -52,7 +52,7 @@ LANGUAGES = (
     ('iso-8859-15', _('Estonien')),
     ('iso-8859-15', _('Basque')),
     ('iso-8859-1',  _('Finnois')),
-    ('iso-8859-1',  _('Francais')),
+    ('utf-8',  _('Francais')),
     ('utf-8',       _('Galicien')),
     ('utf-8',       _('Hébreu')),
     ('iso-8859-2',  _('Croate')),

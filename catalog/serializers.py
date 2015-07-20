@@ -14,15 +14,22 @@ class ResourceSerializer(serializers.ModelSerializer):
     
     Utilisé pour la suppression de ressources. 
     """
-    name = serializers.SerializerMethodField('get_name')
-    content = serializers.SerializerMethodField('get_content')
+    name = serializers.SerializerMethodField()
+    rendered = serializers.SerializerMethodField()
     class Meta:
         model = models.Resource
-        fields = ('name','content',)
+        fields = ('name','rendered',)
     def get_name(self,obj):
         return "<a href='" + obj.get_absolute_url() + "'>" + obj.name + "</a>"
-    def get_content(self,obj):
-        return "<p>" + obj.name + "</p><p>" + obj.description + "</p>"
+    def get_rendered(self,obj):
+        args = { 'resource_type': obj.resource_type, 
+             'resource_source': 'internal',
+             'resource_name': obj.name,
+             'resource_description' : obj.preview(),
+             'resource_tooltip' : obj.description,
+             'resource_url': obj.get_absolute_url(),
+        }
+        return render_to_string('catalog/resource.html',args)
     
 def make_content_serializer(content_type):
     class HOP(serializers.ModelSerializer):

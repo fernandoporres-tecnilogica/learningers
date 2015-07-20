@@ -11,45 +11,42 @@
 		{{ version.revision.comment }}
 	{% endfor %}
 	</div>
-	<div class='ap-tab' id='ap-charter-tab' style='display:none;'>
 	
-	
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-{% for category in comment_categories %}
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="heading{{forloop.counter0}}">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter0}}" aria-expanded="true" aria-controls="collapse{{forloop.counter0}}">
-          {% trans category.name %}
-        </a>
-      </h4>
-    </div>
-    <div id="collapse{{forloop.counter0}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{forloop.counter0}}">
-      <div class="panel-body">
-      {% for comment in category.queryset %}
-		{% include 'catalog/comment.html' %}
-      {% endfor %}
-      <form class='comment-form' style="display:none;">
-		<textarea class='form-control comment-text'></textarea>
-		<select class='form-control comment-colour'>
-		{% for colour in resource.comments.model.COLOUR_CHOICES %}
-		<option value="{{colour.0}}">{{colour.1}}</option>
-		{% endfor %}
-		</select>
-		<button type="button" data-category='{{forloop.counter0}}' class="comment-submit btn btn-default">{% trans 'Poster' %}</button>
-	  </form>
-      <span class='comment-add' >{% trans 'Ajouter un commentaire...' %}</span>
-
-      </div>
-    </div>
-  </div>
-{% endfor %}  
-</div>
-	
-	
+	<div class='ap-tab' id='ap-charter-tab' style='display:none;'>	
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+		{% for category in comment_categories %}
+		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="heading{{forloop.counter0}}">
+		      <h4 class="panel-title">
+		        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter0}}" aria-expanded="true" aria-controls="collapse{{forloop.counter0}}">
+		          {% trans category.name %}
+		        </a>
+		      </h4>
+		    </div>
+		    <div id="collapse{{forloop.counter0}}" clas0s="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{forloop.counter0}}">
+		      <div class="panel-body">
+		      {% for comment in category.queryset %}
+				{% include 'catalog/comment.html' %}
+		      {% endfor %}
+		      <form class='comment-form' style="display:none;">
+				<textarea class='form-control comment-text'></textarea>
+				<select class='form-control comment-colour'>
+				{% for colour in resource.comments.model.COLOUR_CHOICES %}
+				<option value="{{colour.0}}">{{colour.1}}</option>
+				{% endfor %}
+				</select>
+				<button type="button" data-category='{{forloop.counter0}}' class="comment-submit btn btn-default">{% trans 'Poster' %}</button>
+			  </form>
+		      <span class='comment-add' >{% trans 'Ajouter un commentaire...' %}</span>
+		
+		      </div>
+		    </div>
+		  </div>
+		{% endfor %}  
+		</div>
 	</div>
-	<div class='ap-tab' id='ap-info-tab'>		
-		<p>{{ resource.user_friendly_type }}</p>
+
+	<div class='ap-tab' id='ap-info-tab'>	
 		{% with 'catalog/'|add:resource.resource_type|add:'/info.html' as resource_info %}
 		{% include resource_info %}
 		{% endwith %}

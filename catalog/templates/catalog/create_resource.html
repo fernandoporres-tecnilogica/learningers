@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block main %}
-<div style="text-align:justify;margin-left:10em;margin-right:10em;">
+<div style="margin-left:10em;margin-right:10em;">
 {% blocktrans %}
 <p>Bonjour!</p>
 <p>Quel type de resource souhaitez vous ajouter au catalogue?</p>
@@ -25,7 +25,7 @@
 <a href="{% url 'catalog:'|add:type.name|add:'-create' %}">
 {% endif %}
 <div class='ap-select-resource-type' title="{{type.help_text|safe}}">
-	<p>{{type.user_friendly_name}}</p>
+	<p class="ap-select-resource-title"	>{{type.user_friendly_name}}</p>
 	<p>
 	<div class="ap-select-resource-icon">
 		<img style="width:100%;height:100%;" src="{% static 'catalog/'|add:type.name|add:'/icon.png' %}"/>

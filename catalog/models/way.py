@@ -68,6 +68,7 @@ class SessionWay(Way):
             kwargs['name'] = _('Ajouter un titre...')
         if 'parent' in kwargs:
             raise ValidationError('SessionWay cannot have a parent!')
+        kwargs['public'] = False
         super(SessionWay, self).__init__(*args, **kwargs)
     def save(self,*args,**kwargs):
         if not self.pk:
@@ -77,4 +78,4 @@ class SessionWay(Way):
         return reverse('catalog:sessionway-view')            
 
 register_resource(Way)
-register_resource(SessionWay)
+#register_resource(SessionWay)

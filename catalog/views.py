@@ -44,7 +44,6 @@ class CatalogView(generic.ListView):
         context['search_form'] = initialize_search_form(self.request.GET)
         context['resources'] = Resource.objects.select_subclasses()
         return context
-    
 
 class ResourceDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -122,6 +121,7 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
             if(qs.count() == 0):
                 try:
                     obj = self.model.make_from_slug(self.request.way,self.kwargs['slug'])
+                    obj.public = False
                     obj.full_clean()
                 except ValidationError as e:
                     raise Http404(e)
@@ -141,6 +141,7 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
                 if(qs.count() == 0):
                     try:
                         obj = self.model.make_from_slug(self.request.way,self.kwargs['slug'])
+                        obj.public = False
                         obj.full_clean()
                     except ValidationError as e:
                         raise Http404(e)
@@ -149,15 +150,15 @@ class BaseResourceView(View,generic.base.TemplateResponseMixin):
                 else:
                     return qs.get()
       
-def make_resource_view(_resource_type):
+def make_resource_view(_resource_model):
     """
     Construit dynamiquement une vue spécifique à un type de resource, en dérivant de la vue générique ci-dessus.
     """      
     class HOP(BaseResourceView):
-        model = available_resource_models[_resource_type]
-        url = 'catalog:' + _resource_type
-        template_name = 'catalog/' + _resource_type + '/view.html'
-        resource_type = _resource_type
+        model = _resource_model
+        url = 'catalog:' + _resource_model.resource_type
+        template_name = 'catalog/' + _resource_model.resource_type + '/view.html'
+        resource_type = _resource_model.resource_type
     return HOP.as_view()
     
 class PublishView(generic.RedirectView):

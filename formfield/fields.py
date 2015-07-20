@@ -96,9 +96,7 @@ class FormField(forms.MultiValueField):
                 form = self.form.__class__(instance.__dict__)
         else:  
             data = dict((bf.name, value[i]) for i, bf in enumerate(self.form) if value[i])
-            print "data : %s" % data
             files = dict((k,v) for k, v in data.iteritems() if isinstance(v,UploadedFile))
-            print files
             form = self.form.__class__(data,files=files)
         try:
             form.full_clean()
