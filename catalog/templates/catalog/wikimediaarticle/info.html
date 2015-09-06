@@ -2,6 +2,6 @@
 {% load inplace_edit i18n %}
 
 {% block info %}
-<p>{% trans "Wiki d'origine" %}: {{ resource.wiki }}</p>
-<p>{% trans "Titre d'origine" %} : {{ resource.title }}</p>
+<dt>{% trans "Wiki d'origine" %}</dt><dd><a href="{{resource.wiki.url}}">{{ resource.wiki }}</a></dd>
+<dt>{% trans "Titre d'origine" %}</dt><dd><a href="{{resource.source_url}}">{{ resource.title }}</a></dd>
 {% endblock %}

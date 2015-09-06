@@ -2,5 +2,5 @@
 {% load inplace_edit i18n %}
 
 {% block info %}
-<p>{% if tooltip %}{{resource.geo}}{%else%}{% inplace_edit "resource.geo" %}{% endif%}</p>
+<p>{% if tooltip %}{{resource.geo}}{%else%}{% inplace_edit "resource.geo" %}{%endif%}</p>
 {% endblock %}

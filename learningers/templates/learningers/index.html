@@ -44,14 +44,14 @@ body {
   Ce site a pour but de répertorier les possibilités d'apprentissage libre partout, tout le temps. 
   Il fonctionne comme un wiki et est donc alimenté par ses utilisatrices et utilisateurs. 
   Pour les nouv-eaux-elles venu-e-s, nous avons préparé un petit <a href='{{ guide_url }}'>guide d'utilisation</a>. 
-  Les contenus répertoriés sont censés respecter la <a href='{{ charte_url }}'>charte de l'apprentissage libre</a>.
+  Les contenus répertoriés sont censés respecter la <a href='{{ charter_url }}'>charte de l'apprentissage libre</a>.
   {% endblocktrans %}
   </li>
 </ol>
 {% endblock %}
 
 {% url 'guide' as guide_url %}
-{% url 'charte' as charte_url %}
+{% url 'charter' as charter_url %}
 
 {% block js %}
 {{block.super}}

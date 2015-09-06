@@ -15,7 +15,7 @@
 <hr/>
 <h3>{% trans "Participant-e-s" %}</h3>
 <hr/>
-{% if not resource.participants.exist %}
+{% if not resource.participants.count %}
 <p style="text-align:center;font-style:italics;">{% trans "Personne pour le moment..." %}</p>
 {% else %}
 {% for participant in resource.participants.all %}
@@ -24,12 +24,12 @@
 {% endwith %}
 {% endfor %}
 {% endif %}
-<p style="text-align:center;font-style:italics;">
-<a href='#' id='ap-event-signup'>{% trans "S'inscrire!" %}</a>
+{% if not request.user in resource.participants.all %}
+<a href='#' id='ap-event-signup'><div class='ap-resource'><div class='ap-resource-like-button'><img src="{% static 'catalog/toolbar-icons/signup.png' %}"/><br>{% trans "S'inscrire!" %}</div></div></a>
+{% endif %}
 <div id='ap-event-signup-dialog1' style='display:none;' title='{% trans "Inscription" %}'>
 {% trans "Pour t'inscrire à la rencontre, il te faut un compte sur le site. Est-ce que tu souhaites le créer maintenant ?" %}
 </div> 
-</p>
 <hr/>
 <!-- the map -->
 <div id="ap-osm-map"></div>
@@ -46,7 +46,7 @@
 {% endblock %}
 
 {% block annotations %}
-<p>{% trans "Qu'as tu appris lors de cette rencontre ?" %}</p>
+<p style="font-style:italic;"	>{% trans "Qu'as tu appris lors de cette rencontre ?" %}</p>
 {% for annotation in resource.annotations.select_subclasses %}
 {% include 'catalog/annotation.html' %}
 {% endfor %}
@@ -54,7 +54,8 @@
 <textarea class='form-control annotation-text'></textarea>
 <button type="button" class="annotation-submit btn btn-default">{% trans 'Poster' %}</button>
 </form>
-<span class='annotation-add' >{% trans 'Ajouter une annotation...' %}</span>
+<hr/>
+<span class='annotation-add btn btn-success' >{% trans 'Ajouter une annotation...' %}</span>
 
 {% endblock %}
 
@@ -64,15 +65,20 @@
 <script src="{% static 'catalog/map.js' %}"></script>
 <script src="{% static 'catalog/calendar.js' %}"></script>
 <script>
-var marker_data = [{
-	"x" : {{ resource.geo.location.x|unlocalize }}, 
-	"y" : {{ resource.geo.location.y|unlocalize }},
-	"address" : '{{ resource.geo.address|escapejs }}',
-	"title" : "{{ resource.name|escapejs }}",
-}];
+var marker_data = [
+{% for place in resource.places.all %}
+{
+	"x" : {{ place.geo.location.x|unlocalize }}, 
+	"y" : {{ place.geo.location.y|unlocalize }},
+	"address" : '{{ place.geo.address|escapejs }}',
+	"title" : "{{ place.name|escapejs }}",
+},
+{% endfor %}
+];
 var is_lazy = {% if request.user|is_lazy_user %} 1 {% else %} 0 {% endif %} ;
+var month_update_url = "{% url 'catalog:calendar-data' pk=resource.parent.pk size="regular" period="month" %}";
 $(window).load(function() {
-	update_calendar("{% url 'catalog:calendar-data' pk=resource.parent.pk size="small" %}");
+	update_calendar(month_update_url);
 	initialize_map(marker_data);
 });
 </script>
@@ -94,7 +100,13 @@ $(window).load(function() {
 		    success: function (data) {
 				form.hide();
 				form.parent().find('.annotation-add').show();
-				form.before($(data['rendered']));	
+				var uuu = $(data['rendered']).tooltip({
+					content: $(data['rendered']).find('.annotation-details').html(),
+					show:true,
+					track:false,
+					hide:2000 
+					});
+				form.before(uuu);			
 		    },
 		    error: function(data) {
 		    	alert("{% trans 'Erreur, réessayez' %}");
@@ -143,12 +155,34 @@ $(window).load(function() {
 			});
 		} else {
 		// sign up
-		
-		
+		$.ajax({
+		    url: "{% url 'catalog:meeting-register' %}",
+		    type: "POST",
+		    data: {
+		    	'resource': {{resource.pk}}, 
+			},
+		    success: function (data) {
+				document.location.reload();
+		    },
+		    error: function(data) {
+		    	alert("{% trans "Erreur, impossible de s'inscrire: " %}" + data['errors'] );
+		    }
+		});
 		}
 	});
 });
-
+$(document).ready(function() {
+	$(document).tooltip({
+		items: '.annotation',
+		hide:2000,
+		content: function() {
+			//alert($(this).find('.annotation-details').html());
+			return $(this).find('.annotation-details').html();
+		},
+		show: true,
+		track: false,
+    });
+});
 </script>
 
 {% endblock %}

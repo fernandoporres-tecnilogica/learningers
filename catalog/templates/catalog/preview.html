@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load staticfiles %}
+
+{% if resource.description %}
+{{ resource.description }}
+{% else %}
+<div style="text-align:center;">
+<img style="border:none;" src="{% static  'catalog/'|add:resource.resource_type|add:'/icon.png' %}"/>
+</div>
+{% endif %}       
+
+{% block info %}
+
+{% endblock %}

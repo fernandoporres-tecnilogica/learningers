@@ -19,6 +19,7 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.conf import settings
 from imaging.models import Image
+from django.template.loader import render_to_string
 
 # for GeoLocation
 from django.contrib.gis.db.models import GeoManager, PointField
@@ -96,8 +97,6 @@ class Resource(TimeStampedModel,ForkableModel):
     # To manage inheritance
     objects = InheritanceManager()    
     
-    def clean(self):
-        pass
     def save(self,*args,**kwargs):
         if not self.pk:
             if not self.slug:
@@ -115,18 +114,15 @@ class Resource(TimeStampedModel,ForkableModel):
         return self.name
     def get_absolute_url(self):
         if self.parent:
-            print "toto1 : %s" % self.resource_type
+            #print "toto1 : %s" % self.resource_type
             return self.parent.get_absolute_url() + self.resource_type + '/' + self.slug + '/'
         else:
             print "prout : %s" % self.name
             raise Http404
     def preview(self):
         "return HTML code to display a small preview of this resource"
-        if self.description:
-            return self.description
-        else:
-            return '<div style="text-align:center;"><img style="border:none;" src="' + settings.STATIC_URL + ('catalog/' + self.resource_type + '/icon.png') + '" title="Source:{{ resource_source }}"/></div>'       
-
+        return render_to_string('catalog/' + self.resource_type + '/preview.html', { 'resource' : self })
+    
 class GeoLocation(models.Model):
     """
     La localisation géographique d'une ressource
@@ -160,6 +156,8 @@ def register_resource(resource_model):
     available_resource_models[resource_type] = resource_model
     # Register external search engines if any are found
     if hasattr(resource_model,'ExternalSearch'):
+        resource_model.ExternalSearch.name = resource_type
+        resource_model.ExternalSearch.user_friendly_name = resource_model._meta.verbose_name
         available_search_engines[resource_type] = resource_model.ExternalSearch
 
 @receiver_subclasses(post_save, Resource,'resource-language')

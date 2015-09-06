@@ -3,7 +3,7 @@
 {% load staticfiles %}
 <div class='annotation' pk="{{annotation.pk}}">
 {% inplace_edit "annotation.text" %}
-<div class='annotation-details'>
+<div class='annotation-details' style='display:none;'>
 {% for author in annotation.authors.all %}
 {{author}}, 
 {% endfor %}

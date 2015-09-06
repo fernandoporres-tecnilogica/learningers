@@ -1,0 +1,32 @@
+{% load scheduletags i18n %}
+
+{% block body %}
+
+<div class="tablewrapper">
+<nav class="prevnext navbar navbar-default">
+<div class="container-fluid">
+    <button type="button" class="btn btn-default btn-sm navbar-btn navbar-left" id='ap-calendar-prev'>
+  	<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+	</button>
+    <button type="button" class="btn btn-default btn-sm navbar-btn navbar-left" id='ap-calendar-top'>
+  	<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+	</button>
+    <p class="navbar-text"><b>{{period.start|date:"j F Y"}}</b></p>
+    <button type="button" class="btn btn-default btn-sm navbar-btn navbar-right" id='ap-calendar-next'>
+  	<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+	</button>
+</div>
+</nav>
+
+<div class="occ_column">
+<table class="table table-striped">
+{% for occ in occurrences %}
+<tr><td>
+{{occ.start|time}} - {{occ.end|time}}</td>
+<td><a href="{{occ.meeting_url}}">{{occ.title}}</a><p>{{occ.description}}</p>
+</td></tr>
+{% endfor %}
+</table>
+</div>
+  
+{% endblock %}

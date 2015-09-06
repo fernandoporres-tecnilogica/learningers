@@ -17,6 +17,7 @@ from django.core.exceptions import ValidationError
 from django import template
 from django.template.defaultfilters import stringfilter
 from urllib2 import URLError
+from urlparse import urlsplit
 
 register = template.Library()
  
@@ -155,10 +156,10 @@ class Wiki(models.Model):
             for idx,d in enumerate(data):
                 description = "<img src='" + urls[idx] + "'/>"
                 dummy,name = string.split(d['title'],':') 
-                yield {'resource_type':Wiki.NAMESPACE_TYPES[Wiki.IMAGE_NAMESPACE], 'resource_source': self.shortname, 'name': name, 'slug': self.slugify(name), 'description': description }
+                yield {'resource_type':Wiki.NAMESPACE_TYPES[Wiki.IMAGE_NAMESPACE], 'resource_source': 'external', 'name': name, 'slug': self.slugify(name), 'description': description }
         else:
             for d in data:
-                yield {'resource_type':Wiki.NAMESPACE_TYPES[Wiki.MAIN_NAMESPACE], 'resource_source': self.shortname, 'resource_name': d['title'], 'resource_url' : reverse('catalog:wikimediaarticle-view',kwargs={'slug':self.slugify(d['title'])}), 'resource_description': d['snippet'], 'resource_tooltip': d['snippet']}
+                yield {'resource_type':Wiki.NAMESPACE_TYPES[Wiki.MAIN_NAMESPACE], 'resource_source': 'external', 'resource_name': d['title'], 'resource_url' : reverse('catalog:wikimediaarticle-view',kwargs={'slug':self.slugify(d['title'])}), 'resource_description': d['snippet'], 'resource_tooltip': d['snippet'] + '<br><e>' + _(u'Source') + ': ' + self.shortname + '</e>'}
         
     # retrieve the url of a given image, if it exists on the wiki, otherwise raise 404 error
     def get_image_info(self,name):
@@ -194,7 +195,12 @@ class WikimediaArticle(Resource):
         wiki,name,snippet = Wiki.make_from_slug(slug)
         return WikimediaArticle(name=name,wiki=wiki,title=name,parent=parent,description=snippet)    
     def data(self):
+        """Returns raw HTML data of the article fetched using the Wikimedia API"""
         return {'html': self.wiki.get_page(self.title) }
+    def source_url(self):
+        """Returns the URL of the article on the source Wiki"""
+        p = urlsplit(self.wiki.url)
+        return 'http://' + p.netloc + '/wiki/' + wiki_slugify(self.title) 
     class ExternalSearch:
         "Search for articles matching a given query on available wikis"
         sources = staticmethod(Wiki.list_all_wikis)

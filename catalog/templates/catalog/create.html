@@ -23,7 +23,7 @@
 {% endblock %}
 </div>
 <div class='panel-body' style="padding:1em;">
-<form id='ap-create-form' action='.' method="POST" style="display:none;">
+<form id='ap-create-form' action='.' method="POST" style="display:none;" enctype="multipart/form-data">
 {% csrf_token %}
 <input type="hidden" name="next" value="{{ parent.get_absolute_url }}"/>
 {% bootstrap_form form %}

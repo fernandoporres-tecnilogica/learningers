@@ -34,7 +34,9 @@ urlpatterns = patterns('',
     url(r'^comment/(?P<pk>\d+)/$', views.CommentDetailView.as_view(), name='comment-data'),
     url(r'^comment/$', views.CommentCreateView.as_view(), name='comment-data'),
     url(r'^create/$', views.CreateResourceView.as_view(), name='resource-create'),
-    url(r'^calendar/(?P<pk>\d+)/(?P<size>(regular|small))$', views.CalendarRenderView.as_view(), name='calendar-data'),
+    url(r'^calendar/(?P<pk>\d+)/(?P<size>(regular|small))/(?P<period>(month|day))/$', views.CalendarRenderView.as_view(), name='calendar-data'),
+    
+    url(r'^meeting/register/$', views.MeetingRegisterParticipantView.as_view(), name='meeting-register'),
 )
 
 for resource_type in available_resource_models:

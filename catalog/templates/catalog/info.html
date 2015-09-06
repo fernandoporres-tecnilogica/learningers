@@ -5,22 +5,27 @@
 <div class="ap-resource-logo"><img style="width:100%;height:100%;" src="{% static 'catalog/'|add:resource.resource_type|add:'/icon.png' %}" title="{{resource.user_friendly_type}}"/></div>
 <ul>	
 <li id="ap-resource-type-big">{{ resource.user_friendly_type }}</li>
-<li id="ap-resource-title-big">{% inplace_edit "resource.name" %}</li>
+<li class="ap-resource-title-big">
+{% if tooltip %}{{ resource.name }}{% else %}{% inplace_edit "resource.name" %}{% endif %}</li>
 <li id="ap-resource-description-big">
-<script src="{% static 'commons/external/tinymce/tinymce.min.js' %}"></script>
 {% trans 'Ajouter une description...' as add_desc %}
-{% inplace_edit "resource.description" adaptor="html", edit_empty_value=add_desc %}
+{% if tooltip %}{{resource.description|safe}}{% else %}{% inplace_edit "resource.description" adaptor="html", edit_empty_value=add_desc %}{%endif%}
 </li>
+{% if resource.avatar %}
+<img src="{{ resource.avatar.get_absolute_url }}"/>
+{% endif %}
+</ul>
+<dl>
 {% if resource.languages.all %}
-<li>{% trans 'Langue(s)' %} : {% for lang in resource.languages.all %} {{ lang }} {% endfor %}</li>
+<dt>{% trans 'Langue(s)' %}</dt><dd>{% for lang in resource.languages.all %} {{ lang }} {% endfor %}</dd>
 {% endif %}
 {% if resource.parent %}
-<li>{% trans 'Parcours' %} : <a href="{{ resource.parent.get_absolute_url }}">{{ resource.parent }}</a></li>
-{% endif %}
-{% if resource.see_also.select_subclasses.all %}
-<li>{% trans 'Voir aussi' %} : {% for link in resource.see_also.select_subclasses.all %} <a href="{{ link.get_absolute_url }}">{{ link.name }}</a>{% endfor %}</li>
+<dt>{% trans 'Parcours' %}</dt><dd><a href="{{ resource.parent.get_absolute_url }}">{{ resource.parent }}</a></dd>
 {% endif %}
 {% block info %}
 {% endblock %}
-</ul>
+{% if resource.see_also.select_subclasses.all %}
+<dt>{% trans 'Voir aussi' %}</dt><dd>{% for link in resource.see_also.select_subclasses.all %} <a href="{{ link.get_absolute_url }}">{{ link.name }}</a>{% endfor %}</dd>
+{% endif %}
+</dl>
 </div>

@@ -98,11 +98,7 @@ class FormField(forms.MultiValueField):
             data = dict((bf.name, value[i]) for i, bf in enumerate(self.form) if value[i])
             files = dict((k,v) for k, v in data.iteritems() if isinstance(v,UploadedFile))
             form = self.form.__class__(data,files=files)
-        try:
-            form.full_clean()
-        except ValidationError:
-            pass
-        
+       
         if not form.is_valid():
             error_dict = form.errors.items()
             errors = striptags(
@@ -113,7 +109,8 @@ class FormField(forms.MultiValueField):
             form.save()
             return form.instance
         else:
-            return [ form.cleaned_data.get(f,None) for f in form.fields ]
+            #return [ form.cleaned_data.get(f,None) for f in form.fields ]
+            return form.cleaned_data
 
 class ModelFormField(JSONField):
     """The json backed field we can use in our models"""

@@ -28,6 +28,7 @@
 #ap-recurrence-container {
 	display:none;
 	position:absolute;
+	z-index:1000;
 }
 
 
@@ -50,7 +51,7 @@
 	margin:0.2em;
 }
 
-.ap-resource-info ul {
+.ap-resource-info ul, #ap-versions-tab ul {
 	list-style-type: none;
 	padding-left:0;
 	margin-left:0;
@@ -123,7 +124,7 @@ div.ap-select-resource-icon {
 }
 
 .ap-resource-description {
-	font-size:80%;
+	font-size:90%;
 	padding-left:0.5em;
 	padding-right:0.5em;
 	text-align:justify;
@@ -154,6 +155,18 @@ div.ap-resource-logo {
 	right:0px;
 	display:block;
 	z-index:100;
+}
+
+/* Buttons looking like resource */
+.ap-resource-like-button {
+	top:2em;
+	font-size:150%;
+	position:relative;
+}
+
+.ap-resource-like-button > img {
+	width:3em;
+	max-height:5em;
 }
 
 /* Resource tooltips */
@@ -196,11 +209,12 @@ div.ap-resource-logo {
 	font-style:italic;
 }
 
-#ap-resource-title-big {
+.ap-resource-title-big {
 	font-size:150%;
 }
 
 #ap-resource-description-big {
+	text-align:center;
 }
 
 .help-block {
@@ -215,9 +229,9 @@ div.ap-resource-logo {
 	font-style:normal;
 }
 
-.annotation:hover > .annotation-details {
+/*.annotation:hover > .annotation-details {
 	display:inline;
-}
+}*/
 
 .annotation {
 	position:relative;

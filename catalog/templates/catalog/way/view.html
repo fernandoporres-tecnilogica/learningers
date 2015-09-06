@@ -50,7 +50,7 @@
 {{block.super}}
 <script src="{% static 'catalog/calendar.js' %}"></script>
 <script>
-$(window).load(function() { update_calendar("{% url 'catalog:calendar-data' pk=resource.pk size="small" %}"); });
+$(window).load(function() { update_calendar("{% url 'catalog:calendar-data' pk=resource.pk size="small" period="month" %}"); });
 </script>
 <script src="{% static 'openlayers/openlayers3.js' %}"></script>
 <script src="{% static 'catalog/map.js' %}"></script>

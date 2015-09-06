@@ -5,6 +5,7 @@
 	width:48%;
 	height:21em;
 	left:0em;
+	display:inline-block;
 }
 
 .ap-annotation-edit {
@@ -13,12 +14,10 @@
 
 #ap-calendar {
 	/*border : 1px solid black;*/
-	position:relative;
 	margin:0.5em;
 	width:48%;
 	height:21em;
-	left:50%;
-	top:-21.5em;
+	display:inline-block;
 }
 
 #ap-calendar .tablewrapper {
@@ -32,6 +31,14 @@
 #ap-calendar .daysofweek {
 	font-size:80%;
 	height:0.8em;
+}
+
+#ap-calendar .busy {
+	background-color : #FFDDDD;
+}
+
+#ap-calendar .daycell {
+	font-size:90%;
 }
 
 .prevnext {

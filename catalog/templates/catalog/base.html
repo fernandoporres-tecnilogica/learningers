@@ -33,6 +33,7 @@
 {% block js %}
 {{block.super}}
 <script src="{% static 'commons/ap-utils.js' %}"></script>
+<script src="{% static 'commons/external/jquery-ui.js' %}"></script>
 <script src="{% static 'catalog/catalog.js' %}"></script>
 <script>
 $(document).ready(function() { $("#ap-sidebar").resizable({handles : "e" }); });

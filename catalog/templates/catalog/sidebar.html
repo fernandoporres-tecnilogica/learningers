@@ -1,15 +1,16 @@
-{% load i18n %}
+{% load i18n lazysignup_tags %}
 {% load staticfiles %}
 {% load inplace_edit %}
 
 <div id='ap-tabs'>
 	<div class='ap-tab' id='ap-versions-tab' style='display:none;'>
-	<h2>{% trans 'Versions précédentes' %}</h2>
+	<ul>
+	<li class="ap-resource-title-big">{% trans 'Versions précédentes' %}</li>
 	{% for version in versions %}
-		<a href="{{ resource.get_absolute_url }}?version={{version.pk }}">{{ version.revision.date_created | date:"SHORT_DATETIME_FORMAT" }} </a> ({{ version.revision.user }}) :
-		<br>
-		{{ version.revision.comment }}
+		<li><a href="{{ resource.get_absolute_url }}?version={{version.pk }}">{{ version.revision.date_created | date:"SHORT_DATETIME_FORMAT" }} </a> 
+		{% if not version.revision.user|is_lazy_user %}(<e>{% trans 'Par' %} {{ version.revision.user }}</e>) {% endif %}</li>
 	{% endfor %}
+	</ul>
 	</div>
 	
 	<div class='ap-tab' id='ap-charter-tab' style='display:none;'>	

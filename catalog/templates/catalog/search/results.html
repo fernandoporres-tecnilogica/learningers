@@ -7,9 +7,47 @@
 {% endblock %}
 
 {% block sidebar %}
-	<p>{% trans 'Affiner la recherche' %}</p>
-	<form id="ap-affiner-recherche" >
-	</form>
+<div class="panel panel-default">
+<div class='panel-heading'>
+{% trans 'Affiner la recherche' %}
+</div>
+<div class='panel-body' style="padding:1em;">
+<form id="ap-affiner-recherche" >
+<div class='panel-group' id="accordion" role="tablist" aria-multiselectable="true">
+	<div class='panel panel-default'>
+		<div class="panel-heading" role="tab" id="headingOne">
+		<h4 class='panel-title'>
+		<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Types de résultats</a>
+		</h4>
+		</div>
+		<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+		<ul>
+			{% for type in resource_types %}
+			<li><input type="checkbox" id='ap-filter-{{type.name}}-internal-resource' checked>{{type.user_friendly_name}}</input></li>
+			{% endfor %}
+		</ul>
+		</div></div>
+	</div>
+	<div class="panel panel-default">
+    	<div class="panel-heading" role="tab" id="headingTwo">
+      	<h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Sources externes</a>
+		</h4>
+		</div>
+		<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+        <div class="panel-body">
+		<ul>
+	{% for source in available_search_engines.values %}
+	<li><input type="checkbox" id='ap-filter-{{ source.name }}-external-resource' checked>{{ source.user_friendly_name }}</input></li>
+	{% endfor %}
+		</ul>
+		</div></div>
+	</div>
+</div>
+</form>
+</div>
+</div>
 {% endblock %}
 
 {% block entries %}
@@ -18,22 +56,19 @@
 
 {% block js %}
 {{block.super}}
-<script src="{% static 'catalog/search.js' %}"></script>
 <script>
-$(document).ready(function () {
-//	update_search_results("{% url 'catalog:search-data' %}");
-	$('#ap-small-searchform-submit').attr('type','button');
-	var search_urls = [ "{% url 'catalog:search-data' %}", 
+var resource_types = [ 	
+{% for type in resource_types %} '{{type.name}}-internal-resource', {% endfor %} 
+{% for type in available_search_engines %} '{{type}}-external-resource', {% endfor %}
+];
+
+var search_urls = [ "{% url 'catalog:search-data' %}", 
 	{% for engine_name in available_search_engines %}
 	{% with 'catalog:externalsearch-'|add:engine_name as engine_url %} 
 	"{% url engine_url %}",
 	{% endwith %}
 	{% endfor %}
-	];
-	$('#ap-small-searchform-submit').on('click', function() { update_search_results(search_urls); });
-	$("#a,#q").keyup(function(event){ if(event.keyCode == 13){  $('#ap-small-searchform-submit').click(); }});
-	$('#ap-small-searchform-submit').click();
-});
+];
 </script>
-
+<script src="{% static 'catalog/search.js' %}"></script>
 {% endblock %}

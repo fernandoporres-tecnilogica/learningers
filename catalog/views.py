@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from catalog import forms, serializers
-from catalog.models import available_resource_models, SessionWay, Resource, Way, available_search_engines, available_annotation_ranges, available_annotation_contents, Comment
+from catalog.models import available_resource_models, SessionWay, Resource, Way, available_search_engines, available_annotation_ranges, available_annotation_contents, Comment, Meeting
 from django.views.generic.base import View
 from django.views import generic
 from django.http import HttpResponsePermanentRedirect
@@ -23,6 +23,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import filters
 from django.utils.text import slugify
+from rest_framework.response import Response
 
 def initialize_search_form(geget):
     ret = forms.ResourceSearchForm()
@@ -242,6 +243,8 @@ class SearchResultsView(generic.TemplateView):
         form =  forms.ResourceSearchForm(self.request.GET)
         context['search_form'] = form
         context['available_search_engines'] = available_search_engines
+        context['resource_types'] = [ { 'name': resource_type, 'user_friendly_name': model._meta.verbose_name.title(), 'help_text': model.__doc__ } for resource_type,model in available_resource_models.items() ]
+
         return context
     
 class RequestMoreSearchResults(rest_framework.views.APIView):
@@ -251,17 +254,11 @@ class RequestMoreSearchResults(rest_framework.views.APIView):
     serializer_class = serializers.ResourceSerializer
     def get(self,request,*args,**kwargs):
         # pass the search form to keep its contents
-        print "request"
-        print self.request.GET
         f = forms.ResourceSearchForm(self.request.GET)
         if(f.is_valid()):
-            print "data"
-            print f.cleaned_data
             val = f.search().values('rendered')
             return Response(list(val))
         else:
-            print "not valid!!"
-            print f['t'].errors
             return Response([])
 
 class CalendarRenderView(rest_framework.views.APIView):
@@ -281,17 +278,32 @@ class CalendarRenderView(rest_framework.views.APIView):
                 raise Http404
         else:
             date = timezone.now()
-        period = way.get_month(date)
-        args = { 'calendar':way.calendar, 'period':period, 'size':kwargs['size']  }
-        prev_date = period.prev().start
-        next_date = period.next().start
-        val = {'rendered':render_to_string('schedule/calendar_month_compact.html',args),
-               'prev_date': { 'year':prev_date.year, 'month':prev_date.month, 'day':prev_date.day, 'hour':prev_date.hour, 'minute':prev_date.minute,'second':prev_date.second },
-               'next_date': { 'year':next_date.year, 'month':next_date.month, 'day':next_date.day, 'hour':next_date.hour, 'minute':next_date.minute,'second':next_date.second }
-               }
+        if(kwargs['period'] == 'month'):
+            period = way.get_month(date)
+            args = { 'calendar':way.calendar, 'period':period, 'size':kwargs['size']  }
+            prev_date = period.prev().start
+            next_date = period.next().start
+            val = {'rendered':render_to_string('schedule/calendar_month_compact.html',args),
+                   'prev_date': { 'year':prev_date.year, 'month':prev_date.month, 'day':prev_date.day, 'hour':prev_date.hour, 'minute':prev_date.minute,'second':prev_date.second },
+                   'next_date': { 'year':next_date.year, 'month':next_date.month, 'day':next_date.day, 'hour':next_date.hour, 'minute':next_date.minute,'second':next_date.second }
+                   }
+        elif(kwargs['period'] == 'day'):
+            period = way.get_day(date)
+            up_date = way.get_month(date).start
+            occurrences = period.get_occurrences()
+            for occ in occurrences:
+                occ.meeting_url = Meeting.objects.get(event_ptr_id=occ.event.pk).get_absolute_url()
+            args = { 'calendar':way.calendar, 'period':period, 'size':kwargs['size'], 'occurrences':occurrences  }
+            prev_date = period.prev().start
+            next_date = period.next().start
+            val = {'rendered':render_to_string('schedule/calendar_myday.html',args),
+                   'prev_date': { 'year':prev_date.year, 'month':prev_date.month, 'day':prev_date.day, 'hour':prev_date.hour, 'minute':prev_date.minute,'second':prev_date.second },
+                   'next_date': { 'year':next_date.year, 'month':next_date.month, 'day':next_date.day, 'hour':next_date.hour, 'minute':next_date.minute,'second':next_date.second },
+                   'up_date': { 'year':up_date.year, 'month':up_date.month, 'day':up_date.day, 'hour':up_date.hour, 'minute':up_date.minute,'second':up_date.second }
+            }
+                        
         return Response(val)        
         
-
 def make_annotation_viewset(content_type,range_type):
     """Generate a Viewset to load annotations via AJAX"""
     class AnnotationViewSet(viewsets.ModelViewSet):
@@ -315,3 +327,15 @@ def make_externalsearch_view(SearchClass):
             search_results = list({ 'rendered': render_to_string('catalog/resource.html', result) } for result in self.search(querystring,queryloc,querylang))
             return HttpResponse(json.dumps(search_results, ensure_ascii=False), content_type='application/json; charset=UTF-8',)
     return HOP.as_view()
+
+class MeetingRegisterParticipantView(rest_framework.views.APIView):
+    """Register user to a meeting"""
+    def post(self,request):
+        meeting_pk = request.POST['resource']
+        meeting = get_object_or_404(Meeting,pk=meeting_pk)
+        meeting.participants.add(request.user)
+        meeting.save()
+        return HttpResponse()
+        
+        
+        

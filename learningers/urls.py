@@ -14,7 +14,9 @@ js_info_dict = {
 
 urlpatterns = patterns('',
     url(r'^$', views.HomeView.as_view(), name='home'),
-    url(r'^charter/$', TemplateView.as_view(template_name='learningers/charte.html'), name='charter'),
+    url(r'^charter/$', TemplateView.as_view(template_name='learningers/charter.html'), name='charter'),
+    url(r'^about/$', TemplateView.as_view(template_name='learningers/about.html'), name='about'),
+    url(r'^guide/$', TemplateView.as_view(template_name='learningers/guide.html'), name='guide'),
     # admin interface
     url(r'^admin/', include(admin.site.urls)),
     # user registration

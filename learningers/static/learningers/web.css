@@ -34,6 +34,10 @@ a:hover,a.hover { text-decoration: underline; }
     background-color: white;
 }
 
+form li {
+	list-style-type: none;
+}
+
 /**************************************
 ---------------HOMEPAGE---------------- 
 ***************************************/

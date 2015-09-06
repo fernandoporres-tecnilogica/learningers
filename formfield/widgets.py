@@ -11,15 +11,13 @@ class FormFieldWidget(forms.MultiWidget):
         self.fields = fields
         self.form_media = form_media
         # Retreive each field widget for the form
-        widgets = [f.widget for f in self.fields.values()]
-        
+        widgets = [f.widget for f in self.fields.values()]        
         super(FormFieldWidget, self).__init__(widgets, attrs)
 
     def value_from_datadict(self, data, files, name):
         N = len(name)
         subdata = dict( (k[N+1:],v) for k,v in  data.items() if k[0:N] == name)
         tmp = [ f.widget.value_from_datadict(subdata, files, k) for k,f in self.fields.items() ]
-        print "tmp : %s" % tmp
         return tmp 
 
     def render(self, name, value, attrs=None):

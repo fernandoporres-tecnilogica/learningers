@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "learningers/base2.html" %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -10,8 +10,29 @@ body {
 }
 </style>
 {% endblock %}
-{% block main %}
 
-<h1>{% trans "Petit guide d'utilisation" %}</h1>
+{% block title %}
+{% trans "Guide d'utilisation du site" %}
+{% endblock %}
+
+{% block body %}
+
+<p>Cette page explique les premiers pas à effectuer pour se mettre à l'aise avec les apprentisseurses.</p>
+
+<p><b>Les apprentisseurses est un répertoire de ressources d'apprentissage</b>.
+De nombreux types de ressources peuvent déjà y être répertoriées : articles wiki, lieux, personnes, rencontres,
+et cette liste s'allongera à l'avenir, avec l'accès aux médias vidéo, audio, etc.
+L'objectif principal du site est de faciliter l'accès à ces ressources, 
+et de mettre à disposition des outils numériques faciles d'utilisation
+pour les personnes qui pratiquent l'apprentissage libre.
+</p>
+
+<p><b>Les apprentisseurses est aussi un site militant</b>, 
+développé et animé par des êtres humains qui souhaitent radicalement transformer le rapport à l'apprentissage.
+Pas la peine de développer les aspects politiques maintenant, 
+nous espérons que le contenu du site sera assez parlant de lui-même.</p>
+
+<p>Sur la page d'accueil, on peut effectuer une recherche thématique </p>
+ 
 
 {% endblock %}

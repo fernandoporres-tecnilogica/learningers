@@ -1,0 +1,39 @@
+{% extends "learningers/base2.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block css %}
+{{block.super}}
+<style type="text/css">
+body {
+	overflow:auto;
+}
+</style>
+{% endblock %}
+
+{% block title %}
+{% trans "À propos des Apprentisseurses..." %}
+{% endblock %}
+
+{% block body %}
+
+<p>
+{% url 'guide' as guide_url %}
+{% url 'charter' as charter_url %}
+
+  {% blocktrans %}
+  Ce site a pour but de répertorier les possibilités d'apprentissage libre partout, tout le temps. 
+  Il fonctionne comme un wiki et est donc alimenté par ses utilisatrices et utilisateurs. 
+  Pour les nouv-eaux-elles venu-e-s, nous avons préparé un petit <a href='{{guide_url}}'>guide d'utilisation</a>. 
+  Les contenus répertoriés sont censés respecter la <a href='{{charter_url}}'>charte de l'apprentissage libre</a>.
+  {% endblocktrans %}
+</p>
+
+<p>
+Le site lesapprentisseurses.org est basé sur la plateforme "Learningers" qui est disponible librement sur <a href="https://github.com/linux2400/learningers">Github</a>
+en licence GPL3.
+Toute contribution est la bienvenue.
+
+</p>
+
+{% endblock %}

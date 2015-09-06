@@ -2,5 +2,15 @@
 {% load inplace_edit i18n %}
 
 {% block info %}
-<li>{% inplace_edit "resource.geo.address" %}</li>
+{% if resource.places.count %}
+<dt>{% trans 'Lieu(x) de rendez-vous' %}</dt><dd>{%if tooltip %}<ul>{% for p in resource.places.all %}<li>{{p.name}}</li>{%endfor%}</ul>{%else%}{% inplace_edit "resource.places" adaptor="m2mcomma" %}{%endif%}</dd>
+{% endif %}
+<dt>{% trans 'Participan-t-e-s inscrit-e-s' %}</dt><dd>{{resource.participants.count}}</dd>
+<dt>{% trans 'Non-mixité' %}</dt><dd>{% if tooltip %}{{resource.mixite}}{%else%}{% inplace_edit "resource.mixite" %}{%endif%}</dd>
+<dt>{% trans 'Début' %}</dt><dd>{% inplace_edit "resource.start" %}</dd>
+<dt>{% trans 'Fin' %}</dt><dd>{% inplace_edit "resource.end" %}</dd>
+<dt>{% trans 'Répétition' %}</dt><dd>{{resource.rule.get_frequency_display}}</dd>
+{% if resource.end_recurring_period %}
+<dt>{% trans 'Dernière occurrence' %}</dt><dd>{{resource.end_recurring_period}}</dd>
+{% endif %}
 {% endblock %}

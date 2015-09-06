@@ -16,7 +16,7 @@ class ResourceIndexBase(indexes.SearchIndex):
                  'resource_source': 'internal',
                  'resource_name': obj.name,
                  'resource_description' : obj.preview(),
-                 'resource_tooltip' : obj.description,
+                 'resource_tooltip' : render_to_string('catalog/' + obj.resource_type + '/info.html', { 'resource':obj, 'tooltip': True }),
                  'resource_url': obj.get_absolute_url(),
                 }
         return render_to_string('catalog/resource.html',args)

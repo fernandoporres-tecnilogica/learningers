@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from commons.templatetags.slug import deslugify
 from django.utils import timezone
 import pytz
-from schedule.periods import Month
+from schedule.periods import Month, Day
 from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_lazy as __
 from django.utils.text import slugify
@@ -53,6 +53,12 @@ class Way(Resource):
             date = timezone.now()
         local_timezone = pytz.timezone('UTC')
         return Month(self.get_events(), date, None, None, local_timezone)
+    def get_day(self,date=None):
+        if date is None:
+            date = timezone.now()
+        local_timezone = pytz.timezone('UTC')
+        return Day(self.get_events(), date, None, None, local_timezone)
+
                             
 class SessionWay(Way):
     """

@@ -2,5 +2,5 @@
 {% load inplace_edit i18n %}
 
 {% block info %}
-<p>{% inplace_edit "resource.listname" %}</p>
+<p>{%if tooltip%}{{resource.listname}}{%else%}{% inplace_edit "resource.listname" %}{%endif%}</p>
 {% endblock %}

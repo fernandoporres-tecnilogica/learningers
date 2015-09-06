@@ -2,7 +2,6 @@
 {% load inplace_edit i18n %}
 
 {% block info %}
-<p>{% trans "Adresse du flux" %}: {{ resource.url }}</p>
-<p>{% trans "Adresse de l'article" %}: {{ resource.link }}</p>
-<p>{% trans "Titre d'origine" %}: {{ resource.title }}</p>
+<dt>{% trans "Article d'origine" %}<dt><dd><a href="{{ resource.site_url }}{{ resource.link }}">{{ resource.title }}</a></dd>
+<dt><a href="{{ resource.url }}">{% trans "Lien vers le flux" %}</a></dt>
 {% endblock %}
