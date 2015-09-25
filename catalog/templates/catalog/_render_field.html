@@ -1,0 +1,13 @@
+{% load inplace_edit %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% if verbosity >= field_verbosity %}
+{% if field_title %}
+<dt>{% trans field_title %}</dt>
+{% endif %}
+{% if inplace_edit_on and field_is_inplace_editable %}
+ {% inplace_edit full_field_name empty_value=field_empty_value, adaptor=field_adaptor %}
+ {% else %}
+ {{ field_value }}
+{% endif %}

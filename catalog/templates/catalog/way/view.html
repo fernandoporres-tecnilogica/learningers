@@ -53,7 +53,6 @@
 $(window).load(function() { update_calendar("{% url 'catalog:calendar-data' pk=resource.pk size="small" period="month" %}"); });
 </script>
 <script src="{% static 'openlayers/openlayers3.js' %}"></script>
-<script src="{% static 'catalog/map.js' %}"></script>
 <script src="{% static 'catalog/way/view.js' %}"></script>
 <script>
 var marker_data = [
@@ -61,8 +60,8 @@ var marker_data = [
 ];
 
 $(window).load(function() {
-	initialize_map(marker_data);
 	initialize_toolbar();
 });
 </script>
+<script src="{% static 'catalog/map.js' %}"></script>
 {% endblock %}

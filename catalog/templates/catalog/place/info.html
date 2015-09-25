@@ -2,5 +2,7 @@
 {% load inplace_edit i18n %}
 
 {% block info %}
-<p>{% if tooltip %}{{resource.geo}}{%else%}{% inplace_edit "resource.geo" %}{%endif%}</p>
+<dt>{% trans 'Adresse' %}</dt><dd>{% if tooltip %}{{resource.geo}}{%else%}{% inplace_edit "resource.geo" %}{%endif%}</dd>
+<dt>{% trans 'Téléphone' %}</dt><dd>{% if tooltip %}{{resource.phone_number}}{%else%}{% inplace_edit "resource.phone_number" adaptor="phone_number" %}{%endif%}</dd>
+<dt>{% trans 'Horaires' %}</dt><dd>{% if tooltip %}{{resource.opening_times}}{%else%}{% inplace_edit "resource.opening_times" %}{%endif%}</dd>
 {% endblock %}

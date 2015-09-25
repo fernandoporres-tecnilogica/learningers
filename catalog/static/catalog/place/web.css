@@ -1,0 +1,9 @@
+#ap-osm-map {
+    border: 1px solid #ccc;
+	position:relative;
+	margin:0.5em;
+	width:48%;
+	height:21em;
+	left:0em;
+	display:inline-block;
+}

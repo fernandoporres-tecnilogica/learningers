@@ -67,3 +67,7 @@ function initialize_map(marker_data) {
 	view.fitExtent(extent,map.getSize());
 //	map.zoomToExtent(annotations.getDataExtent());
 }
+
+$(window).load(function() {
+	initialize_map(marker_data);
+});

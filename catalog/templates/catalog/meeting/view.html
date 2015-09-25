@@ -62,7 +62,6 @@
 {% block js %}
 {{block.super}}
 <script src="{% static 'openlayers/openlayers3.js' %}"></script>
-<script src="{% static 'catalog/map.js' %}"></script>
 <script src="{% static 'catalog/calendar.js' %}"></script>
 <script>
 var marker_data = [
@@ -79,7 +78,6 @@ var is_lazy = {% if request.user|is_lazy_user %} 1 {% else %} 0 {% endif %} ;
 var month_update_url = "{% url 'catalog:calendar-data' pk=resource.parent.pk size="regular" period="month" %}";
 $(window).load(function() {
 	update_calendar(month_update_url);
-	initialize_map(marker_data);
 });
 </script>
 <script>
@@ -184,6 +182,7 @@ $(document).ready(function() {
     });
 });
 </script>
+<script src="{% static 'catalog/map.js' %}"></script>
 
 {% endblock %}
 

@@ -275,6 +275,7 @@ ADAPTOR_INPLACEEDIT = {
 #                       'html': 'inplaceeditform.fields.AdaptorTextAreaField',
                        'html': 'inplaceeditform_extra_fields.fields.AdaptorSimpleTinyMCEField',
                        'm2mcomma': 'inplaceeditform_extra_fields.fields.AdaptorAutoCompleteManyToManyField',
+                       'phone_number' : 'commons.adaptors.AdaptorPhoneNumberField'
                        }
 # Giza conf
 GIZA_DOCS_ROOT = '/home/rnguyen/cpp/learningers/doc/source'

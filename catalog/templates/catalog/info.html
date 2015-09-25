@@ -1,6 +1,7 @@
 {% load inplace_edit %}
 {% load i18n %}
 {% load staticfiles %}
+{% if verbosity %}
 <div class='ap-resource-info'>
 <div class="ap-resource-logo"><img style="width:100%;height:100%;" src="{% static 'catalog/'|add:resource.resource_type|add:'/icon.png' %}" title="{{resource.user_friendly_type}}"/></div>
 <ul>	

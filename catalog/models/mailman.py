@@ -13,6 +13,11 @@ from commons.webcall import MultipartPostHandler
 
 logger = logging.getLogger(__name__)    
 
+import sys  
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
+
 # Mailman-Messages for a successfull subscription
 SUBSCRIBE_MSG = (
     u'Erfolgreich eingetragen', # de
@@ -145,18 +150,21 @@ class MailmanList(Resource):
         return (msg, member)
 
     def __parse_member_content(self, content, encoding='iso-8859-1'):
+        #content = unicode(content,encoding)
         if not content:
             raise Exception('No valid Content!')
         members = []
-        letters = re.findall('letter=\w{1}', content)
-        chunks = re.findall('chunk=\d+', content)
-        input = re.findall('name=".+_realname" type="TEXT" value=".*" size="[0-9]+" >', content)
+        letters = re.findall(ur'letter=\w{1}', content)
+        chunks = re.findall(ur'chunk=\d+', content)
+        input = re.findall(ur'name=".+_realname" type="TEXT" value=".*" size="[0-9]+" >', content, re.UNICODE)
         for member in input:
-            info = member.split('" ')
+            print encoding
+            #member = member.decode(encoding)
+            info = member.split(u'" ')
             email = re.search('(?<=name=").+(?=_realname)', info[0]).group(0)
             realname = re.search('(?<=value=").*', info[2]).group(0)
-            email = unicode(email, encoding)
-            realname = unicode(realname, encoding)
+            #email = unicode(email, encoding)
+            #realname = unicode(realname, encoding)
             members.append([realname, email])
         letters = set(letters)
         return (letters, members, chunks)
