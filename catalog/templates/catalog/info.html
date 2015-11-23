@@ -1,32 +1,33 @@
 {% load inplace_edit %}
 {% load i18n %}
 {% load staticfiles %}
-{% if verbosity %}
+{% load catalogtags %}
 <div class='ap-resource-info'>
+{# LOGO #}
+{% if verbosity > 0 %}
 <div class="ap-resource-logo"><img style="width:100%;height:100%;" src="{% static 'catalog/'|add:resource.resource_type|add:'/icon.png' %}" title="{{resource.user_friendly_type}}"/></div>
-<ul>	
+{% endif %}
+
+<ul>
+{# TITRE #}	
+{% if verbosity > 0 %}
 <li id="ap-resource-type-big">{{ resource.user_friendly_type }}</li>
 <li class="ap-resource-title-big">
-{% if tooltip %}{{ resource.name }}{% else %}{% inplace_edit "resource.name" %}{% endif %}</li>
+{% if verbosity <= 1 %}{{ resource.name }}{% else %}{% inplace_edit "resource.name" %}{% endif %}</li>
+{% endif %}
+{# DESCRIPTION #}
 <li id="ap-resource-description-big">
 {% trans 'Ajouter une description...' as add_desc %}
-{% if tooltip %}{{resource.description|safe}}{% else %}{% inplace_edit "resource.description" adaptor="html", edit_empty_value=add_desc %}{%endif%}
+{% if verbosity <= 1 %}{{resource.description|safe}}{% else %}{% inplace_edit "resource.description" adaptor="html", edit_empty_value=add_desc %}{%endif%}
 </li>
-{% if resource.avatar %}
-<img src="{{ resource.avatar.get_absolute_url }}"/>
-{% endif %}
 </ul>
+
 <dl>
-{% if resource.languages.all %}
-<dt>{% trans 'Langue(s)' %}</dt><dd>{% for lang in resource.languages.all %} {{ lang }} {% endfor %}</dd>
-{% endif %}
-{% if resource.parent %}
-<dt>{% trans 'Parcours' %}</dt><dd><a href="{{ resource.parent.get_absolute_url }}">{{ resource.parent }}</a></dd>
-{% endif %}
 {% block info %}
 {% endblock %}
-{% if resource.see_also.select_subclasses.all %}
-<dt>{% trans 'Voir aussi' %}</dt><dd>{% for link in resource.see_also.select_subclasses.all %} <a href="{{ link.get_absolute_url }}">{{ link.name }}</a>{% endfor %}</dd>
-{% endif %}
+{% render_field resource "languages" %}
+{% render_field resource "parent" %}	
+{% render_field resource "see_also" %}
 </dl>
+
 </div>

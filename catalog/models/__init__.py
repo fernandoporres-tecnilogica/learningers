@@ -13,8 +13,10 @@ from catalog.models.base import available_resource_models, available_search_engi
 import reversion
 import sys
 
+""" Perform some general initialization stuff for all catalog models """
 for model in available_resource_models.values():
     if model is not SessionWay:
+        "Reversion version management registration"
         reversion.register(model, follow=['resource_ptr'])
     setattr(sys.modules[__name__],model.__name__, model)
     

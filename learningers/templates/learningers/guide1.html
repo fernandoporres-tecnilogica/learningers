@@ -1,0 +1,37 @@
+{% extends "learningers/base2.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block css %}
+{{block.super}}
+<style type="text/css">
+body {
+	overflow:auto;
+}
+</style>
+{% endblock %}
+
+{% block title %}
+{% trans "Les ressources" %}
+{% endblock %}
+
+{% block body %}
+
+<p>Sur la page d'accueil, on peut effectuer une recherche thématique et géographique.</p>
+<p>Lors d'une recherche, deux catégories de resources seront obtenues:
+<ol>
+<li>des ressources précédemment répertoriées par les utilisat.eur.rice.s.,</li>
+<li>des ressources suggérées obtenues en moissonnant du contenu sur différents sites extérieurs, comme Wikipédia.</li>
+</ol>
+<p>
+Ces ressources sont également classées par type, voici les types reconnus pour le moment:
+<dl>
+{% for type in resource_types %}
+<dt>{{type.user_friendly_name}}</dt><dd>{{type.help_text|safe}}</dd>
+{% endfor %}
+</dl>
+</p>
+
+<p>Suite du guide: <a href="{% url 'guide2' %}">les parcours</a>.</p>
+
+{% endblock %}

@@ -1,14 +1,13 @@
 {% extends "catalog/info.html" %}
 {% load inplace_edit i18n %}
+{% load catalogtags %}
 
 {% block info %}
-{% if resource.places.count %}
-<dt>{% trans 'Lieu(x) de rendez-vous' %}</dt><dd>{%if tooltip %}<ul>{% for p in resource.places.all %}<li>{{p.name}}</li>{%endfor%}</ul>{%else%}{% inplace_edit "resource.places" adaptor="m2mcomma" %}{%endif%}</dd>
-{% endif %}
+{% render_field resource "places" %}
 <dt>{% trans 'Participan-t-e-s inscrit-e-s' %}</dt><dd>{{resource.participants.count}}</dd>
-<dt>{% trans 'Non-mixité' %}</dt><dd>{% if tooltip %}{{resource.mixite}}{%else%}{% inplace_edit "resource.mixite" %}{%endif%}</dd>
-<dt>{% trans 'Début' %}</dt><dd>{% inplace_edit "resource.start" %}</dd>
-<dt>{% trans 'Fin' %}</dt><dd>{% inplace_edit "resource.end" %}</dd>
+{% render_field resource "mixite" %}
+{% render_field resource "start" %}
+{% render_field resource "end" %}
 <dt>{% trans 'Répétition' %}</dt><dd>{{resource.rule.get_frequency_display}}</dd>
 {% if resource.end_recurring_period %}
 <dt>{% trans 'Dernière occurrence' %}</dt><dd>{{resource.end_recurring_period}}</dd>

@@ -1,0 +1,27 @@
+{% extends "learningers/base2.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block css %}
+{{block.super}}
+<style type="text/css">
+body {
+	overflow:auto;
+}
+</style>
+{% endblock %}
+
+{% block title %}
+{% trans "Les parcours" %}
+{% endblock %}
+
+{% block body %}
+
+<p>
+</p>
+
+<p>Les dernières nouveautés sont directement accessibles.</p> 
+
+<p>Suite du guide: <a href="{% url 'guide3' %}">les annotations</a>.</p>
+
+{% endblock %}

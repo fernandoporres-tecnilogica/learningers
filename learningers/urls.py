@@ -16,7 +16,10 @@ urlpatterns = patterns('',
     url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^charter/$', TemplateView.as_view(template_name='learningers/charter.html'), name='charter'),
     url(r'^about/$', TemplateView.as_view(template_name='learningers/about.html'), name='about'),
-    url(r'^guide/$', TemplateView.as_view(template_name='learningers/guide.html'), name='guide'),
+    url(r'^guide/0/$', TemplateView.as_view(template_name='learningers/guide.html'), name='guide'),
+    url(r'^guide/1/$', views.Guide1View.as_view(), name='guide1'),
+    url(r'^guide/2/$', TemplateView.as_view(template_name='learningers/guide2.html'), name='guide2'),
+    url(r'^guide/3/$', TemplateView.as_view(template_name='learningers/guide3.html'), name='guide3'),
     # admin interface
     url(r'^admin/', include(admin.site.urls)),
     # user registration

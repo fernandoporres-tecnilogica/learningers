@@ -6,8 +6,16 @@
 {% if field_title %}
 <dt>{% trans field_title %}</dt>
 {% endif %}
+
 {% if inplace_edit_on and field_is_inplace_editable %}
  {% inplace_edit full_field_name empty_value=field_empty_value, adaptor=field_adaptor %}
  {% else %}
- {{ field_value }}
+	 {% if field_is_many %}
+		 {% if field_value.count %}
+		 <ul>{% for p in field_value.all %}<li>{{p.name}}</li>{%endfor%}</ul>
+		 {% endif %}
+	 {% else %}
+ 	{{ field_value }}
+	{% endif %}
 {% endif %}
+{% endif %}	

@@ -60,10 +60,18 @@
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 {% trans 'Aide' %}
 <span class="caret"></span></a>
-<ul class='dropdown-menu' role='menu'>
+<ul class='dropdown-menu multi-level' role='menu'>
 <li><a href="{% url 'charter' %}">{% trans 'Charte' %}</a></li>
-<li><a href="{% url 'guide' %}">{% trans "Guide d'utilisation" %}</a></li>
-<li><a href="{% url 'about' %}">{% trans 'À propos' %}</a></li>
+<li class='dropdown-submenu'>
+	<a href="{% url 'guide' %}" tabindex="-1">
+	{% trans 'Guide' %}</a>
+	<ul class='dropdown-menu'>
+		<li><a href="{% url 'guide' %}">{% trans "Introduction" %}</a></li>
+		<li><a href="{% url 'guide1' %}">{% trans "Les ressources" %}</a></li>
+		<li><a href="{% url 'guide2' %}">{% trans "Les parcours" %}</a></li>
+	</ul>
+</li>
+	<li><a href="{% url 'about' %}">{% trans 'À propos' %}</a></li>
 </ul>
 </li>
 {% include 'registration/logged_in.html' %}

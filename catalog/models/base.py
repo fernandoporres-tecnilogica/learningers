@@ -15,6 +15,7 @@ from django.core.exceptions import ValidationError
 from commons.signals import receiver_subclasses
 import geopy
 import reversion
+import re # regular expressions
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -117,12 +118,14 @@ class Resource(TimeStampedModel,ForkableModel):
             #print "toto1 : %s" % self.resource_type
             return self.parent.get_absolute_url() + self.resource_type + '/' + self.slug + '/'
         else:
-            print "prout : %s" % self.name
             raise Http404
     def preview(self):
         "return HTML code to display a small preview of this resource"
-        return render_to_string('catalog/' + self.resource_type + '/preview.html', { 'resource' : self })
-    
+        print('hi bitch')
+        return render_to_string('catalog/' + self.resource_type + '/info.html', { 'resource' : self })
+
+re_latitude_longitude = re.compile(r'([0-9.]+),([0-9.])+')
+            
 class GeoLocation(models.Model):
     """
     La localisation géographique d'une ressource
@@ -142,7 +145,19 @@ class GeoLocation(models.Model):
         except geopy.exc.GeocoderServiceError:
             self.location = fromstr("POINT(0 0)")
             print "WARNING: could not geocode %s !!" % self.address            
-        super(GeoLocation, self).save(*args,**kwargs)                
+        super(GeoLocation, self).save(*args,**kwargs)
+    @staticmethod
+    def make_from_slug(slug):
+        g = geocoders.Nominatim() # this should be changed to openstreetmap
+        m = re_latitude_longitude.match(slug)
+        lat = m.group(1)
+        lng = m.group(2)
+        location = fromstr("POINT(%s %s)" % (lng, lat))
+        address = g.reverse("%s, %s" %(lat,lng),exactly_one=1)
+        return GeoLocation(address=address,location=location)
+    @property
+    def slug(self):
+        return "%s, %s" %(self.location.get_x(),self.location.get_y())           
     def __unicode__(self):
         return self.address
 

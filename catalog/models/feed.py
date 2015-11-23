@@ -69,7 +69,7 @@ class FeedBase(Model):
         abstract = True
             
 class Feed(Resource,FeedBase):
-    'An external syndication feed, in any format supported by feedparser'
+    """Un flux en provenance d'un site extérieur, au format RSS ou Atom"""
     class Meta:
         verbose_name = __(u"Flux")
         verbose_name_plural = __(u"Flux")
@@ -108,7 +108,7 @@ class Feed(Resource,FeedBase):
         return ret
   
 class FeedEntry(Resource,FeedBase):
-    'An entry in an external syndication feed, in any format supported by feedparser'
+    """Une entrée provenant d'un flux extérieur au format RSS ou Atom"""
     link = models.CharField(max_length=2048,verbose_name=__('Chemin de l\'article'),help_text=__("Le chemin de l'article, tel qu'il est présenté dans le flux, par exemple /2015/03/03/abrogation-de-la-circulaire-chatel-circulaire-n-2012-056-du-27-3-2012/"))
     class Meta:
         verbose_name = __(u"Entrée de flux")
